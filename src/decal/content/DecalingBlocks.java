@@ -1,0 +1,178 @@
+package decal.content;
+
+import arc.*;
+import arc.util.*;
+import arc.math.*;
+import arc.struct.*;
+import arc.graphics.*;
+import arc.graphics.g2d.*;
+import decal.world.blocks.distribution.*;
+import decal.graphics.*;
+import mindustry.gen.*;
+import mindustry.type.*;
+import mindustry.world.*;
+import mindustry.content.*;
+import mindustry.graphics.*;
+import mindustry.world.meta.*;
+import mindustry.world.draw.*;
+import mindustry.world.blocks.*;
+import mindustry.entities.part.*;
+import mindustry.entities.bullet.*;
+import mindustry.entities.pattern.*;
+import mindustry.world.blocks.units.*;
+import mindustry.world.blocks.power.*;
+import mindustry.world.blocks.liquid.*;
+import mindustry.world.blocks.storage.*;
+import mindustry.world.blocks.defense.*;
+import mindustry.world.blocks.production.*;
+import mindustry.world.blocks.environment.*;
+import mindustry.world.blocks.distribution.*;
+import mindustry.world.blocks.defense.turrets.*;
+
+import static mindustry.type.ItemStack.*;
+
+public class DecalingBlocks {
+    public static Block
+
+    //environment
+    decayfloor, decaywall, oreFragment,
+
+    //defence
+    decalwall, decalwalllarge,
+
+    //crafting
+    changer,
+
+    //distribution
+    lightLink,
+
+    //turrets
+    cluster,
+
+    //units
+    timeFactory, timeRefabricator, timeAssembler;
+
+    public void load() {
+        //environment
+        decayfloor = new Floor("decay-floor"){{
+            itemDrop = DecalingItems.oldmateria;
+            playerUnmineable = true;
+            status = DecalingStatus.decaling;
+            statusDuration = 180f;
+            variants = 3;
+        }};
+        decaywall = new StaticWall("decay-wall"){{
+        variants = 3;
+        }};
+         oreFragment = new OreBlock(DecalingItems.timefragment);
+        //defence
+    decalwall = new Wall("decalwall"){{
+            requirements(Category.defense, with(DecalingItems.oldmateria, 6));
+            health = 620;
+        }};
+    decalwalllarge = new Wall("decalwall-large"){{
+            requirements(Category.defense, with(DecalingItems.oldmateria, 24));
+            size = 2;
+            health = 620 * 4;
+        }};
+        //crafting
+        changer = new GenericCrafter("changer") {{
+        requirements(Category.crafting, with(
+            DecalingItems.oldmateria, 60,
+            Items.graphite, 48,
+            Items.silicon, 34
+            ));
+            health = 140;
+            craftEffect = Fx.smeltsmoke;
+            outputItem = new ItemStack(DecalingItems.decaygraphite, 1);
+            craftTime = 64f;
+            size = 3;
+            itemCapacity = 12;
+            drawer = new DrawMulti(new DrawDefault(), new DrawFlame());
+
+            consumeItems(with(Items.graphite, 1, DecalingItems.oldmateria, 3));
+        }};
+        //distribution
+        lightLink = new TransferLink("light-link") {{
+            requirements(Category.distribution, ItemStack.with(
+                DecalingItems.oldmateria, 5,
+                Items.graphite, 2
+                ));
+        }};
+        //turrets
+        cluster = new ItemTurret("cluster"){{
+            requirements(Category.turret, with(
+                DecalingItems.oldmateria, 78,
+                Items.lead, 45,
+                Items.graphite, 60
+                ));
+                health = 570;
+                size = 2;
+                reload = 50f;
+                range = 146f;
+                recoil = 1.2f;
+                shoot = new ShootSpread(3, 26f);
+                coolant = consumeCoolant(0.2f);
+                outlineColor = Color.valueOf("232323");
+                ammo(
+                    DecalingItems.oldmateria, new BasicBulletType(){{
+                    height = 9f;
+                    width = 7f;
+                    speed = 4f;
+                    lifetime = 36.5f;
+                    ammoMultiplier = 2.2f;
+                    damage = 8f;
+                    homingPower = 0.08f;
+                    homingRange = 9f;
+                    status = DecalingStatus.decaling;
+                    statusDuration = 60f * 2f;
+                    }});
+                drawer = new DrawTurret(){{
+                parts.add(new RegionPart("-recoil"){{
+                    progress = PartProgress.reload;
+                    moveY = -2.3f;
+                    mirror = false;
+                    heatColor = Color.red;
+                }});
+            }};
+        }};
+        timeFactory = new UnitFactory("time-factory"){{
+            requirements(Category.units, with(Items.silicon, 200, Items.graphite, 300, DecalingItems.timefragment, 60));
+            size = 3;
+            configurable = false;
+            plans.add(new UnitPlan(DecalingUnits.hour, 60f * 40f, with(DecalingItems.timefragment, 20, Items.silicon, 40)));
+            regionSuffix = "-dark";
+            fogRadius = 3;
+            researchCostMultiplier = 0.65f;
+            consumePower(2.6f);
+        }};
+
+        timeRefabricator = new Reconstructor("time-refabricator"){{
+            requirements(Category.units, with(DecalingItems.oldmateria, 200, DecalingItems.timefragment, 80, Items.silicon, 100));
+            regionSuffix = "-dark";
+
+            size = 3;
+            consumePower(4.2f);
+            consumeItems(with(DecalingItems.decaygraphite, 65, DecalingItems.timefragment, 40));
+
+            constructTime = 60f * 30f;
+            researchCostMultiplier = 0.75f;
+
+            upgrades.addAll(
+            new UnitType[]{DecalingUnits.hour, DecalingUnits.clock}
+            );
+        }};
+        timeAssembler = new UnitAssembler("time-assembler"){{
+            requirements(Category.units, with(DecalingItems.decaygraphite, 200, DecalingItems.oldmateria, 600, DecalingItems.timefragment, 200, Items.graphite, 500, Items.silicon, 900));
+            regionSuffix = "-dark";
+            size = 3;
+            plans.add(
+            new AssemblerUnitPlan(DecalingUnits.timer, 60f * 60f, PayloadStack.list(DecalingUnits.hour, 4, DecalingBlocks.decalwalllarge, 10)),
+            new AssemblerUnitPlan(DecalingUnits.day, 60f * 60f * 3f, PayloadStack.list(DecalingUnits.clock, 6, Blocks.carbideWallLarge, 20))
+            );
+            consumePower(3f);
+            areaSize = 8;
+        }};
+
+    }
+}
