@@ -44,7 +44,7 @@ public class DecalingUnits {
     constructor = UnitEntity::create;
     engineOffset = 5.65f;
     engineSize = 1.7f;
-    outlineColor = Color.valueOf("232323");
+    outlineColor = DecalPal.decalOutline;
     weapons.add(
         new Weapon("main-hour-weap"){{
             reload = 28.8f;
@@ -74,7 +74,7 @@ public class DecalingUnits {
     constructor = UnitEntity::create;
     engineOffset = 8.95f;
     engineSize = 2.4f;
-    outlineColor = Color.valueOf("232323");
+    outlineColor = DecalPal.decalOutline;
     weapons.add(
         new Weapon("main-clock-weap"){{
             reload = 32f;
@@ -102,7 +102,7 @@ public class DecalingUnits {
     constructor = UnitEntity::create;
     engineOffset = 12.4f;
     engineSize = 4.8f;
-    outlineColor = Color.valueOf("232323");
+    outlineColor = DecalPal.decalOutline;
     weapons.add(
         new Weapon("main-timer-weap"){{
             reload = 158.8f;
@@ -145,7 +145,7 @@ public class DecalingUnits {
     constructor = UnitEntity::create;
     engineOffset = 12.4f;
     engineSize = 4.8f;
-    outlineColor = Color.valueOf("232323");
+    outlineColor = DecalPal.decalOutline;
     weapons.add(new Weapon("main-day-weap"){{
             reload = 98.8f;
             x = 0f;
@@ -163,11 +163,12 @@ public class DecalingUnits {
                     statusDuration = 65f;
             }};
         }});
-        weapons.add(new Weapon("sub-day-weap"){{
+        weapons.add(new Weapon("decal-sub-day-weap"){{
             reload = 189.8f;
             x = 23f;
             y = 0f;
             top = true;
+            rotate = true;
             continuous = true;
             bullet = new ContinuousLaserBulletType(){{
                     length = 136;

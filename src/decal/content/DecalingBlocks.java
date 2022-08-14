@@ -38,10 +38,10 @@ public class DecalingBlocks {
     decayfloor, decaywall, oreFragment,
 
     //defence
-    decalwall, decalwalllarge,
+    decalwall, decalwalllarge, timewall, timewallLarge,
 
     //crafting
-    changer,
+    changer, repairer,
 
     //distribution
     lightLink,
@@ -75,6 +75,15 @@ public class DecalingBlocks {
             size = 2;
             health = 620 * 4;
         }};
+        timewall = new Wall("timewall"){{
+            requirements(Category.defense, with(DecalingItems.timefragment, 6));
+            health = 960;
+        }};
+    timewallLarge = new Wall("timewall-large"){{
+            requirements(Category.defense, with(DecalingItems.timefragment, 24));
+            size = 2;
+            health = 960 * 4;
+        }};
         //crafting
         changer = new GenericCrafter("changer") {{
         requirements(Category.crafting, with(
@@ -91,6 +100,21 @@ public class DecalingBlocks {
             drawer = new DrawMulti(new DrawDefault(), new DrawFlame());
 
             consumeItems(with(Items.graphite, 1, DecalingItems.oldmateria, 3));
+        }};
+        repairer = new Separator("repairer"){{
+            requirements(Category.crafting, with(DecalingItems.oldmateria, 80));
+            results = with(
+                Items.lead, 5,
+                Items.graphite, 3,
+                Items.silicon, 2,
+                DecalingItems.timefragment, 1
+            );
+            hasPower = true;
+            craftTime = 48f;
+            size = 2;
+
+            consumePower(0.7f);
+            consumeItem(DecalingItems.oldmateria, 4);
         }};
         //distribution
         lightLink = new TransferLink("light-link") {{
@@ -113,7 +137,7 @@ public class DecalingBlocks {
                 recoil = 1.2f;
                 shoot = new ShootSpread(3, 26f);
                 coolant = consumeCoolant(0.2f);
-                outlineColor = Color.valueOf("232323");
+                outlineColor = DecalPal.decalOutline;
                 ammo(
                     DecalingItems.oldmateria, new BasicBulletType(){{
                     height = 9f;
@@ -136,12 +160,13 @@ public class DecalingBlocks {
                 }});
             }};
         }};
+        //units
         timeFactory = new UnitFactory("time-factory"){{
             requirements(Category.units, with(Items.silicon, 200, Items.graphite, 300, DecalingItems.timefragment, 60));
             size = 3;
             configurable = false;
             plans.add(new UnitPlan(DecalingUnits.hour, 60f * 40f, with(DecalingItems.timefragment, 20, Items.silicon, 40)));
-            regionSuffix = "-dark";
+            regionSuffix = "-decay";
             fogRadius = 3;
             researchCostMultiplier = 0.65f;
             consumePower(2.6f);
@@ -149,7 +174,7 @@ public class DecalingBlocks {
 
         timeRefabricator = new Reconstructor("time-refabricator"){{
             requirements(Category.units, with(DecalingItems.oldmateria, 200, DecalingItems.timefragment, 80, Items.silicon, 100));
-            regionSuffix = "-dark";
+            regionSuffix = "-decay";
 
             size = 3;
             consumePower(4.2f);
@@ -164,14 +189,14 @@ public class DecalingBlocks {
         }};
         timeAssembler = new UnitAssembler("time-assembler"){{
             requirements(Category.units, with(DecalingItems.decaygraphite, 200, DecalingItems.oldmateria, 600, DecalingItems.timefragment, 200, Items.graphite, 500, Items.silicon, 900));
-            regionSuffix = "-dark";
+            regionSuffix = "-decay";
             size = 3;
             plans.add(
             new AssemblerUnitPlan(DecalingUnits.timer, 60f * 60f, PayloadStack.list(DecalingUnits.hour, 4, DecalingBlocks.decalwalllarge, 10)),
-            new AssemblerUnitPlan(DecalingUnits.day, 60f * 60f * 3f, PayloadStack.list(DecalingUnits.clock, 6, Blocks.carbideWallLarge, 20))
+            new AssemblerUnitPlan(DecalingUnits.day, 60f * 60f * 3f, PayloadStack.list(DecalingUnits.clock, 6, DecalingBlocks.timewallLarge, 20))
             );
-            consumePower(3f);
-            areaSize = 8;
+            consumePower(3.7f);
+            areaSize = 15;
         }};
 
     }
