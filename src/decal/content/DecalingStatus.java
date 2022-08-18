@@ -14,7 +14,7 @@ import static mindustry.Vars.*;
 
 public class DecalingStatus {
         public static StatusEffect
-        decaling, timeswap1, timeswap2, rush;
+        decaling, timeswap1, timeswap2, timeswap3, rush;
    public static void load(){
     decaling = new StatusEffect("decaying"){{
             color = Color.valueOf("3a3a3a");
@@ -30,6 +30,10 @@ public class DecalingStatus {
             timeswap2 = new StatusEffect("time-swap2"){{
             color = DecalPal.darkTime;
             speedMultiplier = -0.5f;
+            }};
+            timeswap3 = new StatusEffect("time-swap3"){{
+            color = DecalPal.darkTime;
+            speedMultiplier = -1f;
             }};
             rush = new StatusEffect("rush"){{
                 color = DecalPal.rushCol;

@@ -21,6 +21,7 @@ import mindustry.type.ammo.*;
 import mindustry.type.unit.*;
 import mindustry.type.weapons.*;
 import mindustry.world.meta.*;
+import mindustry.content.*;
 import decal.graphics.*;
 
 import static arc.graphics.g2d.Draw.*;
@@ -30,13 +31,14 @@ import static mindustry.Vars.*;
 
 public class DecalingUnits {
  public static UnitType
- hour, clock, timer, day;
+ hour, clock, timer, day, year;
  public static void load(){
     //air time units
     hour = new UnitType("hour"){{
     health = 185;
     speed = 3.75f;
     hitSize = 8f;
+    drag = 0.03f;
     flying = true;
     range = 60f;
     faceTarget = false;
@@ -45,8 +47,7 @@ public class DecalingUnits {
     engineOffset = 5.65f;
     engineSize = 1.7f;
     outlineColor = DecalPal.decalOutline;
-    weapons.add(
-        new Weapon("main-hour-weap"){{
+    weapons.add(new Weapon("main-hour-weap"){{
             reload = 28.8f;
             x = 0f;
             y = 1.8f;
@@ -69,6 +70,7 @@ public class DecalingUnits {
     health = 625;
     speed = 2.3f;
     hitSize = 22f;
+    drag = 0.011f;
     flying = true;
     range = 82f;
     constructor = UnitEntity::create;
@@ -97,6 +99,7 @@ public class DecalingUnits {
     health = 860;
     speed = 1.86f;
     hitSize = 28.4f;
+    drag = 0.06f;
     flying = true;
     range = 260f;
     constructor = UnitEntity::create;
@@ -140,6 +143,7 @@ public class DecalingUnits {
     health = 8900;
     speed = 1.26f;
     hitSize = 36.5f;
+    drag = 0.09f;
     flying = true;
     range = 320f;
     constructor = UnitEntity::create;
@@ -151,7 +155,7 @@ public class DecalingUnits {
             x = 0f;
             y = 9f;
             top = false;
-            shoot = new ShootSpread(8, 16f);
+            shoot = new ShootSpread(9, 8f);
             shoot.shotDelay = 3;
             bullet = new BasicBulletType(){{
                     height = 15f;
@@ -165,20 +169,130 @@ public class DecalingUnits {
         }});
         weapons.add(new Weapon("decal-sub-day-weap"){{
             reload = 189.8f;
-            x = 23f;
+            x = 18f;
             y = 0f;
             top = true;
             rotate = true;
             continuous = true;
+            shootY = 1.3f;
             bullet = new ContinuousLaserBulletType(){{
                     length = 136;
                     lifetime = 98f;
                     damage = 25f;
-                    drawSize = 270f;
+                    drawSize = 80f;
                     colors = new Color[]{DecalPal.darkTime.cpy().a(.2f), DecalPal.darkTime.cpy().a(.5f), DecalPal.darkTime.cpy().mul(1.2f), Color.white};
             }};
             shootStatus = DecalingStatus.rush;
             shootStatusDuration = 120f;
+        }});
+    }};
+    year = new UnitType("year"){{
+    health = 18600;
+    armor = 6;
+    speed = 0.78f;
+    drag = 0.06f;
+    hitSize = 46f;
+    flying = true;
+    range = 355f;
+    constructor = UnitEntity::create;
+    engineOffset = 19.4f;
+    engineSize = 6.8f;
+    outlineColor = DecalPal.decalOutline;
+        weapons.add(new Weapon("main-year-weap"){{
+            shootSound = Sounds.laserblast;
+            chargeSound = Sounds.lasercharge;
+            reload = 350f;
+            x = 16f;
+            y = 7f;
+            top = true;
+            mirror = false;
+            shootY = 1.3f;
+            shoot.firstShotDelay = DecalingFx.timeLaserCharge.lifetime;
+            shootStatus = StatusEffects.unmoving;
+            shootStatusDuration = 120f;
+            cooldownTime = 350f;
+            bullet = new LaserBulletType(){{
+                    length = 380f;
+                    damage = 400f;
+                    width = 30f;
+
+                    lifetime = 65f;
+
+                    lightningSpacing = 50f;
+                    lightningLength = 3;
+                    lightningDelay = 0.8f;
+                    lightningLengthRand = 15;
+                    lightningDamage = 780;
+                    lightningAngleRand = 40f;
+                    largeHit = true;
+                    lightColor = lightningColor = DecalPal.darkTime;
+
+                    status = DecalingStatus.timeswap3;
+                    statusDuration = 65f;
+
+                    chargeEffect = DecalingFx.timeLaserCharge;
+                    sideAngle = 15f;
+                    sideWidth = 0f;
+                    sideLength = 0f;
+                    colors = new Color[]{DecalPal.darkTime.cpy().a(0.4f), DecalPal.darkTime, Color.white};
+                }};
+        }});
+        weapons.add(new Weapon("main-year-weap"){{
+            shootSound = Sounds.laserblast;
+            chargeSound = Sounds.lasercharge;
+            reload = 350f;
+            x = -16f;
+            y = 7f;
+            top = true;
+            mirror = false;
+            shootY = 1.3f;
+            shoot.firstShotDelay = DecalingFx.timeLaserCharge.lifetime;
+            shootStatus = StatusEffects.unmoving;
+            shootStatusDuration = 120f;
+            cooldownTime = 350f;
+            bullet = new LaserBulletType(){{
+                    length = 380f;
+                    damage = 400f;
+                    width = 30f;
+
+                    lifetime = 65f;
+
+                    lightningSpacing = 50f;
+                    lightningLength = 3;
+                    lightningDelay = 0.8f;
+                    lightningLengthRand = 15;
+                    lightningDamage = 780;
+                    lightningAngleRand = 40f;
+                    largeHit = true;
+                    lightColor = lightningColor = DecalPal.darkTime;
+
+                    status = DecalingStatus.timeswap3;
+                    statusDuration = 65f;
+
+                    chargeEffect = DecalingFx.timeLaserCharge;
+                    sideAngle = 15f;
+                    sideWidth = 0f;
+                    sideLength = 0f;
+                    colors = new Color[]{DecalPal.darkTime.cpy().a(0.4f), DecalPal.darkTime, Color.white};
+                }};
+        }});
+        weapons.add(new Weapon("decal-sub-year-weap"){{
+            reload = 74.7f;
+            x = 12f;
+            y = -7.6f;
+            top = false;
+            shoot.shots = 4;
+            shoot.shotDelay = 3;
+            bullet = new ContinuousFlameBulletType(){{
+                damage = 13.65f;
+                length = -47f;
+                speed = 5f;
+                lifetime = 71f;
+                colors = new Color[]{Color.valueOf("b8ccf2").a(0.35f), Color.valueOf("c0d6ff").a(0.5f), Color.valueOf("ffffff").a(0.6f), Color.valueOf("ffffff"), Color.white};
+                flareColor = Color.valueOf("ffffff");
+
+                lightColor = hitColor = flareColor;
+            }};
         }});
     }};
  }

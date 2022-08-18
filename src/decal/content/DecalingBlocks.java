@@ -35,13 +35,16 @@ public class DecalingBlocks {
     public static Block
 
     //environment
-    decayfloor, decaywall, oreFragment,
+    decayfloor, decaywall, oreFragment, decaystone,
 
     //defence
     decalwall, decalwalllarge, timewall, timewallLarge,
 
     //crafting
     changer, repairer,
+
+    //production
+    test,
 
     //distribution
     lightLink,
@@ -64,6 +67,9 @@ public class DecalingBlocks {
         decaywall = new StaticWall("decay-wall"){{
         variants = 3;
         }};
+        decaystone = new Floor("decay-stone"){{
+        variants = 3;
+        }};
          oreFragment = new OreBlock(DecalingItems.timefragment);
         //defence
     decalwall = new Wall("decalwall"){{
@@ -76,11 +82,17 @@ public class DecalingBlocks {
             health = 620 * 4;
         }};
         timewall = new Wall("timewall"){{
-            requirements(Category.defense, with(DecalingItems.timefragment, 6));
+            requirements(Category.defense, with(
+                DecalingItems.oldmateria, 12,
+                DecalingItems.timefragment, 6
+                ));
             health = 960;
         }};
     timewallLarge = new Wall("timewall-large"){{
-            requirements(Category.defense, with(DecalingItems.timefragment, 24));
+            requirements(Category.defense, with(
+                DecalingItems.oldmateria, 48,                
+                DecalingItems.timefragment, 24
+                ));
             size = 2;
             health = 960 * 4;
         }};
@@ -116,6 +128,8 @@ public class DecalingBlocks {
             consumePower(0.7f);
             consumeItem(DecalingItems.oldmateria, 4);
         }};
+        //production
+        
         //distribution
         lightLink = new TransferLink("light-link") {{
             requirements(Category.distribution, ItemStack.with(
@@ -193,7 +207,8 @@ public class DecalingBlocks {
             size = 3;
             plans.add(
             new AssemblerUnitPlan(DecalingUnits.timer, 60f * 60f, PayloadStack.list(DecalingUnits.hour, 4, DecalingBlocks.decalwalllarge, 10)),
-            new AssemblerUnitPlan(DecalingUnits.day, 60f * 60f * 3f, PayloadStack.list(DecalingUnits.clock, 6, DecalingBlocks.timewallLarge, 20))
+            new AssemblerUnitPlan(DecalingUnits.day, 60f * 60f * 3f, PayloadStack.list(DecalingUnits.clock, 6, DecalingBlocks.timewallLarge, 20)),
+            new AssemblerUnitPlan(DecalingUnits.year, 60f * 60f * 6f, PayloadStack.list(DecalingUnits.hour, 8, DecalingUnits.clock, 8, DecalingBlocks.decalwalllarge, 20, DecalingBlocks.timewallLarge, 20))
             );
             consumePower(3.7f);
             areaSize = 15;
