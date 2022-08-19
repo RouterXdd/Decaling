@@ -64,10 +64,10 @@ public class HybridDrill extends LiquidBlock{
     public boolean drawRim = false;
     public boolean drawSpinSprite = true;
     public Color heatColor = Color.valueOf("ff5512");
-    public TextureRegion rimRegion;
-    public TextureRegion rotatorRegion;
-    public TextureRegion topRegion;
-    public TextureRegion itemRegion;
+    public TextureRegion rimRegion = Core.atlas.find(this.name + "-rim");
+    public TextureRegion rotatorRegion = Core.atlas.find(this.name + "-rotator");
+    public TextureRegion topRegion = Core.atlas.find(this.name + "-top");
+    public TextureRegion itemRegion = Core.atlas.find(this.name + "-item");
 
     public HybridDrill(String name) {
         super(name);
@@ -160,7 +160,6 @@ public class HybridDrill extends LiquidBlock{
 
     @Override
     public TextureRegion[] icons(){
-        return drawer.finalIcons(this);
          return new TextureRegion[]{region, rotatorRegion, topRegion};
     }
 

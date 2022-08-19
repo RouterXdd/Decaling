@@ -31,7 +31,8 @@ import static mindustry.Vars.*;
 
 public class DecalingUnits {
  public static UnitType
- hour, clock, timer, day, year;
+ //time
+ hour, clock, timer, day, year, timeAssemblyDrone;
  public static void load(){
     //air time units
     hour = new UnitType("hour"){{
@@ -191,7 +192,7 @@ public class DecalingUnits {
     armor = 6;
     speed = 0.78f;
     drag = 0.06f;
-    hitSize = 46f;
+    hitSize = 53f;
     flying = true;
     range = 355f;
     constructor = UnitEntity::create;
@@ -202,8 +203,8 @@ public class DecalingUnits {
             shootSound = Sounds.laserblast;
             chargeSound = Sounds.lasercharge;
             reload = 350f;
-            x = 16f;
-            y = 7f;
+            x = 7f;
+            y = -2f;
             top = true;
             mirror = false;
             shootY = 1.3f;
@@ -213,7 +214,7 @@ public class DecalingUnits {
             cooldownTime = 350f;
             bullet = new LaserBulletType(){{
                     length = 380f;
-                    damage = 400f;
+                    damage = 300f;
                     width = 30f;
 
                     lifetime = 65f;
@@ -222,7 +223,7 @@ public class DecalingUnits {
                     lightningLength = 3;
                     lightningDelay = 0.8f;
                     lightningLengthRand = 15;
-                    lightningDamage = 780;
+                    lightningDamage = 680;
                     lightningAngleRand = 40f;
                     largeHit = true;
                     lightColor = lightningColor = DecalPal.darkTime;
@@ -241,8 +242,8 @@ public class DecalingUnits {
             shootSound = Sounds.laserblast;
             chargeSound = Sounds.lasercharge;
             reload = 350f;
-            x = -16f;
-            y = 7f;
+            x = -7f;
+            y = -2f;
             top = true;
             mirror = false;
             shootY = 1.3f;
@@ -252,7 +253,7 @@ public class DecalingUnits {
             cooldownTime = 350f;
             bullet = new LaserBulletType(){{
                     length = 380f;
-                    damage = 400f;
+                    damage = 300f;
                     width = 30f;
 
                     lifetime = 65f;
@@ -261,7 +262,7 @@ public class DecalingUnits {
                     lightningLength = 3;
                     lightningDelay = 0.8f;
                     lightningLengthRand = 15;
-                    lightningDamage = 780;
+                    lightningDamage = 680;
                     lightningAngleRand = 40f;
                     largeHit = true;
                     lightColor = lightningColor = DecalPal.darkTime;
@@ -278,9 +279,9 @@ public class DecalingUnits {
         }});
         weapons.add(new Weapon("decal-sub-year-weap"){{
             reload = 74.7f;
-            x = 12f;
-            y = -7.6f;
-            top = false;
+            x = 13f;
+            y = -11.7f;
+            top = true;
             shoot.shots = 4;
             shoot.shotDelay = 3;
             bullet = new ContinuousFlameBulletType(){{
@@ -295,5 +296,31 @@ public class DecalingUnits {
             }};
         }});
     }};
+    timeAssemblyDrone = new UnitType("time-assembly-drone"){{
+            controller = u -> new AssemblerAI();
+
+            flying = true;
+            drag = 0.06f;
+            accel = 0.11f;
+            speed = 1.3f;
+            health = 120;
+            engineSize = 2.3f;
+            engineOffset = 6.5f;
+            payloadCapacity = 0f;
+            targetable = false;
+            constructor = UnitEntity::create;
+
+            outlineColor = DecalPal.decalOutline;
+            isEnemy = false;
+            hidden = true;
+            useUnitCap = false;
+            logicControllable = false;
+            playerControllable = false;
+            allowedInPayloads = false;
+            createWreck = false;
+            envEnabled = Env.any;
+            envDisabled = Env.none;
+            abilities.add(new ForceFieldAbility(50f, 4f, 800f, 60f * 3));
+        }};
  }
 }

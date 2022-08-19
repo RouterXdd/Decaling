@@ -53,7 +53,7 @@ public class DecalingBlocks {
     cluster,
 
     //units
-    timeFactory, timeRefabricator, timeAssembler;
+    timeFactory, timeRefabricator, timeAssembler, decayModule, decayModuleT2;
 
     public void load() {
         //environment
@@ -204,6 +204,7 @@ public class DecalingBlocks {
         timeAssembler = new UnitAssembler("time-assembler"){{
             requirements(Category.units, with(DecalingItems.decaygraphite, 200, DecalingItems.oldmateria, 600, DecalingItems.timefragment, 200, Items.graphite, 500, Items.silicon, 900));
             regionSuffix = "-decay";
+            droneType = DecalingUnits.timeAssemblyDrone;
             size = 3;
             plans.add(
             new AssemblerUnitPlan(DecalingUnits.timer, 60f * 60f, PayloadStack.list(DecalingUnits.hour, 4, DecalingBlocks.decalwalllarge, 10)),
@@ -213,6 +214,19 @@ public class DecalingBlocks {
             consumePower(3.7f);
             areaSize = 15;
         }};
+        decayModule = new UnitAssemblerModule("decay-module"){{
+            requirements(Category.units, with(Items.lead, 500, DecalingItems.oldmateria, 300, DecalingItems.decaygraphite, 200));
+            consumePower(2f);
+            regionSuffix = "-decay";
 
+            size = 3;
+        }};
+        decayModuleT2 = new UnitAssemblerModule("decay-modulet2"){{
+            requirements(Category.units, with(Items.lead, 800, DecalingItems.oldmateria, 600, DecalingItems.decaygraphite, 400, DecalingItems.timefragment, 250));
+            consumePower(3.7f);
+            regionSuffix = "-decay";
+            tier = 2;
+            size = 5;
+        }};
     }
 }
