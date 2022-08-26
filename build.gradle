@@ -66,6 +66,7 @@ jar{
     from("assets/"){
         include "**"
     }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 task deploy(type: Jar){
