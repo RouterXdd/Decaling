@@ -1,4 +1,7 @@
-package decal.world.blocks.production;
+package decal.world.blocks.storage;
+
+
+import mindustry.world.blocks.storage.CoreBlock;
 
 import arc.*;
 import arc.graphics.*;
@@ -18,47 +21,43 @@ import mindustry.type.*;
 import mindustry.ui.*;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
-import mindustry.world.blocks.liquid.*;
-import mindustry.world.draw.*;
 import mindustry.world.meta.*;
 
-
 import static mindustry.Vars.*;
-/*
-public class HybridDrill extends LiquidBlock{
-    public float pumpAmount = 0.2f;
-    public float consumeTime = 60f * 5f;
-    public DrawBlock drawer = new DrawMulti(new DrawDefault(), new DrawPumpLiquid());
-        public float hardnessDrillMultiplier = 50f;
+
+
+public class DrillCore extends CoreBlock {
+    public float hardnessDrillMultiplier = 50f;
 
     protected final ObjectIntMap<Item> oreCount = new ObjectIntMap<>();
     protected final Seq<Item> itemArray = new Seq<>();
 
-
+    /** Maximum tier of blocks this drill can mine. */
     public int tier;
-
+    /** Base time to drill one ore, in frames. */
     public float drillTime = 300;
-
+    /** How many times faster the drill will progress when boosted by liquid. */
     public float liquidBoostIntensity = 1.6f;
-
+    /** Speed at which the drill speeds up. */
     public float warmupSpeed = 0.015f;
-
+    /** Special exemption item that this drill can't mine. */
     public @Nullable Item blockedItem;
 
-
+    //return variables for countOre
     protected @Nullable Item returnItem;
     protected int returnCount;
 
+    /** Whether to draw the item this drill is mining. */
     public boolean drawMineItem = true;
- 
+    /** Effect played when an item is produced. This is colored. */
     public Effect drillEffect = Fx.mine;
-
+    /** Drill effect randomness. Block size by default. */
     public float drillEffectRnd = -1f;
-
+    /** Speed the drill bit rotates at. */
     public float rotateSpeed = 2f;
-
+    /** Effect randomly played while drilling. */
     public Effect updateEffect = Fx.pulverizeSmall;
-
+    /** Chance the update effect will appear. */
     public float updateEffectChance = 0.02f;
 
     public boolean drawRim = false;
@@ -69,32 +68,49 @@ public class HybridDrill extends LiquidBlock{
     public TextureRegion topRegion = Core.atlas.find(this.name + "-top");
     public TextureRegion itemRegion = Core.atlas.find(this.name + "-item");
 
-    public HybridDrill(String name) {
+    public DrillCore(String name){
         super(name);
-        floating = true;
         update = true;
         solid = true;
-        group = BlockGroup.drills;
         hasLiquids = true;
         liquidCapacity = 5f;
         hasItems = true;
         ambientSound = Sounds.drill;
         ambientSoundVolume = 0.018f;
-
+        //drills work in space I guess
         envEnabled |= Env.space;
     }
+
     @Override
-    public void setStats(){
-        super.setStats();
-        stats.add(Stat.output, 60f * pumpAmount * size * size, StatUnit.liquidSecond);
-
-        stats.add(Stat.drillTier, StatValues.blocks(b -> b instanceof Floor f && !f.wallOre && f.itemDrop != null &&
-            f.itemDrop.hardness <= tier && f.itemDrop != blockedItem && (indexer.isBlockPresent(f) || state.isMenu())));
-
-        stats.add(Stat.drillSpeed, 60f / drillTime * size * size, StatUnit.itemsSecond);
-        if(liquidBoostIntensity != 1){
-            stats.add(Stat.boostEffect, liquidBoostIntensity * liquidBoostIntensity, StatUnit.timesSpeed);
+    public void init(){
+        super.init();
+        if(drillEffectRnd < 0) drillEffectRnd = size;
     }
+
+    @Override
+    public void drawPlanConfigTop(BuildPlan plan, Eachable<BuildPlan> list){
+        if(!plan.worldContext) return;
+        Tile tile = plan.tile();
+        if(tile == null) return;
+
+        countOre(tile);
+        if(returnItem == null || !drawMineItem) return;
+
+        Draw.color(returnItem.color);
+        Draw.rect(itemRegion, plan.drawx(), plan.drawy());
+        Draw.color();
+    }
+
+    @Override
+    public void setBars(){
+        super.setBars();
+
+        addBar("drillspeed", (DrillCoreBuild e) ->
+                new Bar(() -> Core.bundle.format("bar.drillspeed", Strings.fixed(e.lastDrillSpeed * 60 * e.timeScale(), 2)), () -> Pal.ammo, () -> e.warmup));
+    }
+
+    public Item getDrop(Tile tile){
+        return tile.drop();
     }
 
     @Override
@@ -104,30 +120,7 @@ public class HybridDrill extends LiquidBlock{
         Tile tile = world.tile(x, y);
         if(tile == null) return;
 
-        float amount = 0f;
-        Liquid liquidDrop = null;
-
-        for(Tile other : tile.getLinkedTilesAs(this, tempTiles)){
-            if(canPump(other)){
-                if(liquidDrop != null && other.floor().liquidDrop != liquidDrop){
-                    liquidDrop = null;
-                    break;
-                }
-                liquidDrop = other.floor().liquidDrop;
-                amount += other.floor().liquidMultiplier;
-            }
-        }
-
-        if(liquidDrop != null){
-            float width = drawPlaceText(Core.bundle.formatFloat("bar.pumpspeed", amount * pumpAmount * 60f, 0), x, y, valid);
-            float dx = x * tilesize + offset - width/2f - 4f, dy = y * tilesize + offset + size * tilesize / 2f + 5, s = iconSmall / 4f;
-            float ratio = (float)liquidDrop.fullIcon.width / liquidDrop.fullIcon.height;
-            Draw.mixcol(Color.darkGray, 1f);
-            Draw.rect(liquidDrop.fullIcon, dx, dy - 1, s * ratio, s);
-            Draw.reset();
-            Draw.rect(liquidDrop.fullIcon, dx, dy, s * ratio, s);
-        }
-                countOre(tile);
+        countOre(tile);
 
         if(returnItem != null){
             float width = drawPlaceText(Core.bundle.formatFloat("bar.drillspeed", 60f / getDrillTime(returnItem) * returnCount, 2), x, y, valid);
@@ -149,153 +142,29 @@ public class HybridDrill extends LiquidBlock{
                 drawPlaceText(Core.bundle.get("bar.drilltierreq"), x, y, valid);
             }
         }
-
     }
-
-    @Override
-    public void load(){
-        super.load();
-        drawer.load(this);
-    }
-
-    @Override
-    public TextureRegion[] icons(){
-         return new TextureRegion[]{region, rotatorRegion, topRegion};
-    }
-
-    @Override
-    public boolean canPlaceOn(Tile tile, Team team, int rotation){
-        if(isMultiblock()){
-            Liquid last = null;
-            for(Tile other : tile.getLinkedTilesAs(this, tempTiles)){
-                if(other.floor().liquidDrop == null) continue;
-                if(other.floor().liquidDrop != last && last != null) return false;
-                last = other.floor().liquidDrop;
-            }
-            return last != null;
-        }else{
-            return canPump(tile);
-        }
-        if(isMultiblock()){
-            for(Tile other : tile.getLinkedTilesAs(this, tempTiles)){
-                if(canMine(other)){
-                    return true;
-                }
-            }
-            return false;
-        }else{
-            return canMine(tile);
-        }
-    }
-
-    @Override
-    public void setBars(){
-        super.setBars();
-
-
-        addBar("drillspeed", (DrillBuild e) ->
-             new Bar(() -> Core.bundle.format("bar.drillspeed", Strings.fixed(e.lastDrillSpeed * 60 * e.timeScale(), 2)), () -> Pal.ammo, () -> e.warmup));
-        addLiquidBar((HybridDrillBuild build) -> build.liquidDrop);
-    }
-
-    protected boolean canPump(Tile tile){
-        return tile != null && tile.floor().liquidDrop != null;
-    }
-
-    public class HybridDrillBuild extends LiquidBuild{
-        public float consTimer;
-        public float amount = 0f;
-        public @Nullable Liquid liquidDrop = null;
-
-        @Override
-        public void draw(){
-            drawer.draw(this);
-        }
-
-        @Override
-        public void drawLight(){
-            super.drawLight();
-            drawer.drawLight(this);
-        }
-
-        @Override
-        public void pickedUp(){
-            amount = 0f;
-        }
-
-        @Override
-        public double sense(LAccess sensor){
-            if(sensor == LAccess.totalLiquids) return liquidDrop == null ? 0f : liquids.get(liquidDrop);
-            return super.sense(sensor);
-        }
-
-        @Override
-        public void onProximityUpdate(){
-            super.onProximityUpdate();
-
-            amount = 0f;
-            liquidDrop = null;
-
-            for(Tile other : tile.getLinkedTiles(tempTiles)){
-                if(canPump(other)){
-                    liquidDrop = other.floor().liquidDrop;
-                    amount += other.floor().liquidMultiplier;
-                }
-            }
-        }
-
-        @Override
-        public boolean shouldConsume(){
-            return liquidDrop != null && liquids.get(liquidDrop) < liquidCapacity - 0.01f && enabled;
-        }
-
-        @Override
-        public void updateTile(){
-            if(efficiency > 0 && liquidDrop != null){
-                float maxPump = Math.min(liquidCapacity - liquids.get(liquidDrop), amount * pumpAmount * edelta());
-                liquids.add(liquidDrop, maxPump);
-
-
-                if((consTimer += delta()) >= consumeTime){
-                    consume();
-                    consTimer = 0f;
-                }
-            }
-
-            if(liquidDrop != null){
-                dumpLiquid(liquidDrop);
-            }
-        }
-    }
-    @Override
-    public void init(){
-        super.init();
-        if(drillEffectRnd < 0) drillEffectRnd = size;
-    }
-
-    @Override
-    public void drawPlanConfigTop(BuildPlan plan, Eachable<BuildPlan> list){
-        if(!plan.worldContext) return;
-        Tile tile = plan.tile();
-        if(tile == null) return;
-
-        countOre(tile);
-        if(returnItem == null || !drawMineItem) return;
-
-        Draw.color(returnItem.color);
-        Draw.rect(itemRegion, plan.drawx(), plan.drawy());
-        Draw.color();
-    }
-
-    public Item getDrop(Tile tile){
-        return tile.drop();
-    }
-
 
     public float getDrillTime(Item item){
         return drillTime + hardnessDrillMultiplier * item.hardness;
     }
 
+    @Override
+    public void setStats(){
+        super.setStats();
+
+        stats.add(Stat.drillTier, StatValues.blocks(b -> b instanceof Floor f && !f.wallOre && f.itemDrop != null &&
+                f.itemDrop.hardness <= tier && f.itemDrop != blockedItem && (indexer.isBlockPresent(f) || state.isMenu())));
+
+        stats.add(Stat.drillSpeed, 60f / drillTime * size * size, StatUnit.itemsSecond);
+        if(liquidBoostIntensity != 1){
+            stats.add(Stat.boostEffect, liquidBoostIntensity * liquidBoostIntensity, StatUnit.timesSpeed);
+        }
+    }
+
+    @Override
+    public TextureRegion[] icons(){
+        return new TextureRegion[]{region, rotatorRegion, topRegion};
+    }
 
     protected void countOre(Tile tile){
         returnItem = null;
@@ -336,7 +205,7 @@ public class HybridDrill extends LiquidBlock{
         return drops != null && drops.hardness <= tier && drops != blockedItem;
     }
 
-    public class DrillBuild extends Building{
+    public class DrillCoreBuild extends CoreBuild{
         public float progress;
         public float warmup;
         public float timeDrilled;
@@ -386,13 +255,19 @@ public class HybridDrill extends LiquidBlock{
         }
 
         @Override
+        public Object senseObject(LAccess sensor){
+            if(sensor == LAccess.firstItem) return dominantItem;
+            return super.senseObject(sensor);
+        }
+
+        @Override
         public void updateTile(){
-            if(dominantItem == null){
-                return;
+            if(timer(timerDump, dumpTime)){
+                dump(dominantItem != null && items.has(dominantItem) ? dominantItem : null);
             }
 
-            if(timer(timerDump, dumpTime)){
-                dump(items.has(dominantItem) ? dominantItem : null);
+            if(dominantItem == null){
+                return;
             }
 
             timeDrilled += warmup * delta();
@@ -424,8 +299,13 @@ public class HybridDrill extends LiquidBlock{
         }
 
         @Override
+        public float progress(){
+            return dominantItem == null ? 0f : Mathf.clamp(progress / getDrillTime(dominantItem));
+        }
+
+        @Override
         public double sense(LAccess sensor){
-            if(sensor == LAccess.progress && dominantItem != null) return Mathf.clamp(progress / getDrillTime(dominantItem));
+            if(sensor == LAccess.progress && dominantItem != null) return progress;
             return super.sense(sensor);
         }
 
@@ -491,6 +371,4 @@ public class HybridDrill extends LiquidBlock{
             }
         }
     }
-
 }
-*/

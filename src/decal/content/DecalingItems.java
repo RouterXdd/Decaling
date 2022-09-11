@@ -9,7 +9,7 @@ import static mindustry.content.Items.*;
 
 public class DecalingItems {
      public static Item
-    oldmateria, decaygraphite, timefragment;
+    oldmateria, decaygraphite, timefragment, viliniteAlloy;
     public static void load(){
         oldmateria = new Item("oldmateria", Color.valueOf("1a1a1a")){{
             hardness = 1;
@@ -22,6 +22,10 @@ public class DecalingItems {
         timefragment = new Item("time-fragment", Color.valueOf("b8ccf2")){{
             hardness = 3;
             cost = 1.8f;
+        }};
+        viliniteAlloy = new Item("vilinite-alloy", Color.valueOf("1a7000")){{
+            hardness = 4;
+            cost = 2.4f;
         }};
     }
 }

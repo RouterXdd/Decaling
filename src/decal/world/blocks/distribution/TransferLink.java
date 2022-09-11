@@ -171,7 +171,7 @@ public class TransferLink extends Block {
         }
     }
 
-    //like normal int, but tells the block that the config shouldnt be invalidated
+    //like normal int, but tells the block that the config shouldn't be invalidated
     public static class LinkData {
         public int pos;
 
@@ -211,8 +211,9 @@ public class TransferLink extends Block {
             transferCounter += edelta();
             while (transferCounter >= transferTime) {
                 Item item = items.take();
-                if (item != null && other.acceptItem(this, item)) {
+                if (item != null && other != null && other.acceptItem(this, item)) {
                     other.handleItem(this, item);
+
                 } else if (item != null) {
                     items.add(item, 1);
                     items.undoFlow(item);

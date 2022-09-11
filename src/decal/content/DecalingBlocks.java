@@ -7,6 +7,8 @@ import arc.struct.*;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import decal.world.blocks.distribution.*;
+import decal.world.blocks.defence.*;
+import decal.world.blocks.storage.*;
 import decal.graphics.*;
 import mindustry.gen.*;
 import mindustry.type.*;
@@ -35,43 +37,63 @@ public class DecalingBlocks {
     public static Block
 
     //environment
-    decayfloor, decaywall, oreFragment, decaystone,
+    decayfloor, decaywall, oreFragment, decaystone, oreMateria, decaystoneWall,
 
     //defence
     decalwall, decalwalllarge, timewall, timewallLarge,
 
+    //breackers
+
+
     //crafting
-    changer, repairer,
+    changer, repairer, recreator, vilineForge,
 
     //production
-    test,
+    test, oreCrusher,
+
+    //power
+    decayconsider, wire, largeWire,
+
+    //storage
+    coreDry,
 
     //distribution
-    lightLink,
+    lightLink, mediumLink, heavyLink ,mover, test2,
 
     //turrets
-    cluster, starflood, interleet,
+    cluster, starflood, interleet, confronter,
+
     //units
-    timeFactory, timeRefabricator, timeAssembler, decayModule, decayModuleT2,
+    timeFactory, decayFactory, timeRefabricator, decayRefabricator,timeAssembler, decayModule, decayModuleT2,
+
     //for modmakers
     airStrike;
 
     public void load() {
         //environment
         decayfloor = new Floor("decay-floor"){{
+            attributes.set(DecalingAttributes.decay, 1f);
             itemDrop = DecalingItems.oldmateria;
             playerUnmineable = true;
             status = DecalingStatus.decaling;
             statusDuration = 180f;
             variants = 3;
         }};
-        decaywall = new StaticWall("decay-wall"){{
+        decaywall = new StaticWall("decay-floor-wall"){{
         variants = 3;
+        }};
+        decaystoneWall = new StaticWall("decay-stone-wall"){{
+            variants = 3;
         }};
         decaystone = new Floor("decay-stone"){{
         variants = 3;
         }};
-         oreFragment = new OreBlock(DecalingItems.timefragment);
+         oreFragment = new OreBlock(DecalingItems.timefragment){{
+             oreDefault = true;
+         }};
+         oreMateria = new OreBlock(DecalingItems.oldmateria){{
+             oreDefault = true;
+         }};
         //defence
     decalwall = new Wall("decalwall"){{
             requirements(Category.defense, with(DecalingItems.oldmateria, 6));
@@ -129,14 +151,147 @@ public class DecalingBlocks {
             consumePower(0.7f);
             consumeItem(DecalingItems.oldmateria, 4);
         }};
+        recreator = new Separator("recreator"){{
+            requirements(Category.crafting, with(DecalingItems.oldmateria, 130,DecalingItems.timefragment, 60, DecalingItems.decaygraphite, 35));
+            results = with(
+                    Items.lead, 3,
+                    Items.graphite, 4,
+                    Items.silicon, 4,
+                    DecalingItems.timefragment, 2
+            );
+            hasPower = true;
+            craftTime = 28f;
+            size = 3;
+            itemCapacity = 20;
+
+            consumePower(1.4f);
+            consumeItem(DecalingItems.oldmateria, 5);
+        }};
+        vilineForge = new GenericCrafter("viline-forge") {{
+            requirements(Category.crafting, with(
+                    DecalingItems.oldmateria, 100,
+                    DecalingItems.decaygraphite, 35,
+                    Items.silicon, 60
+            ));
+            health = 210;
+            craftEffect = Fx.smeltsmoke;
+            outputItem = new ItemStack(DecalingItems.viliniteAlloy, 1);
+            craftTime = 64f;
+            size = 3;
+            itemCapacity = 10;
+            drawer = new DrawMulti(new DrawDefault(),new DrawPistons(){{sinMag = 8f;}}, new DrawFlame());
+
+            consumePower(2.1f);
+            consumeItems(with(Items.graphite, 2, Items.silicon, 3, DecalingItems.timefragment, 2));
+        }};
         //production
-        
+        test = new Drill("driller"){{
+            requirements(Category.production, with(DecalingItems.oldmateria, 25));
+            size = 2;
+            tier = 2;
+            researchCost = with(DecalingItems.oldmateria, 125);
+        }};
+        oreCrusher = new BurstDrill("ore-Crusher"){{
+            requirements(Category.production, with(DecalingItems.oldmateria, 40, Items.silicon, 15));
+            size = 3;
+            tier = 3;
+        }};
+        //power
+        decayconsider = new ThermalGenerator("decay-consider"){{
+            requirements(Category.power, with(DecalingItems.oldmateria, 40));
+            attribute = DecalingAttributes.decay;
+            powerProduction = 2f / 8.4f;
+            displayEfficiency = false;
+            generateEffect = Fx.turbinegenerate;
+            effectChance = 0.04f;
+            size = 1;
+            ambientSound = Sounds.hum;
+            ambientSoundVolume = 0.06f;
+
+            drawer = new DrawMulti(new DrawDefault(),
+            new DrawPistons(){{
+                sinMag = 1f;
+            }});
+
+            fogRadius = 3;
+            researchCost = with(DecalingItems.oldmateria, 30);
+        }};
+        wire = new Wall("wire"){{
+            requirements(Category.power, with(
+                    DecalingItems.oldmateria, 5,
+                    Items.silicon, 2
+            ));
+            health = 30;
+            group = BlockGroup.power;
+            consumesPower = outputsPower = true;
+            consumePowerBuffered(5f);
+            researchCost = with(DecalingItems.oldmateria, 20,Items.silicon, 16);
+        }};
+        largeWire = new Wall("large-wire"){{
+            requirements(Category.power, with(
+                    DecalingItems.oldmateria, 20,
+                    Items.silicon, 8
+            ));
+            size = 2;
+            health = 120;
+            group = BlockGroup.power;
+            consumesPower = outputsPower = true;
+            consumePowerBuffered(20f);
+        }};
+        //storage
+        coreDry = new DrillCore("core-dry"){{
+            requirements(Category.effect, BuildVisibility.editorOnly, with(DecalingItems.oldmateria, 1200, Items.graphite, 600, Items.lead, 800));
+            alwaysUnlocked = true;
+
+            tier = 2;
+            isFirstTier = true;
+            unitType = DecalingUnits.decray;
+            health = 1000;
+            itemCapacity = 3500;
+            size = 3;
+
+            unitCapModifier = 10;
+        }};
         //distribution
         lightLink = new TransferLink("light-link") {{
             requirements(Category.distribution, ItemStack.with(
                 DecalingItems.oldmateria, 5,
                 Items.graphite, 2
                 ));
+        }};
+        mediumLink = new TransferLink("medium-link") {{
+            requirements(Category.distribution, ItemStack.with(
+                    DecalingItems.oldmateria, 10,
+                    DecalingItems.decaygraphite, 3
+            ));
+            size = 2;
+            linkRange = 73;
+            maxLinks = 3;
+            arrowSpacing = 10f;
+            arrowSpeed = 0.6f;
+            transferTime = 0.6f;
+        }};
+        heavyLink = new TransferLink("heavy-link") {{
+            requirements(Category.distribution, ItemStack.with(
+                    DecalingItems.oldmateria, 40,
+                    DecalingItems.timefragment, 15,
+                    DecalingItems.decaygraphite, 20
+            ));
+            size = 3;
+            linkRange = 154;
+            maxLinks = 1;
+            arrowSpacing = 16f;
+            arrowSpeed = 0.8f;
+            transferTime = 0.8f;
+        }};
+        mover = new Duct("mover"){{
+            requirements(Category.distribution, with(DecalingItems.oldmateria, 1));
+            health = 120;
+            speed = 2f;
+            researchCost = with(DecalingItems.oldmateria, 10);
+        }};
+        test2 = new LiquidDriver("test"){{
+            requirements(Category.distribution, with(DecalingItems.oldmateria, 1));
         }};
         //turrets
         cluster = new ItemTurret("cluster"){{
@@ -174,6 +329,7 @@ public class DecalingBlocks {
                     heatColor = Color.red;
                 }});
             }};
+            researchCost = with(DecalingItems.oldmateria, 100, Items.lead, 100, Items.silicon, 100);
         }};
         starflood = new PowerTurret("starflood"){{
             requirements(Category.turret, with(
@@ -236,6 +392,7 @@ public class DecalingBlocks {
                 outlineColor = DecalPal.decalOutline;
                 shootY = 0f;
                 drawer = new DrawTurret("decay-");
+                shoot.shots = 2;
                 shoot = new ShootSummon(0f, 0f, 240f, 360f);
                     shootType = new ContinuousFlameBulletType(){{
                 damage = 20f;
@@ -252,12 +409,53 @@ public class DecalingBlocks {
                 statusDuration = 80f;
             }};
         }};
+        confronter = new ContinuousTurret("confronter"){{
+            requirements(Category.turret, with(
+                    DecalingItems.oldmateria, 120,
+                    Items.silicon, 90,
+                    DecalingItems.decaygraphite, 75,
+                    DecalingItems.timefragment, 58
+            ));
+            scaledHealth = 130;
+            size = 2;
+            reload = 20f;
+            range = 96f;
+            recoil = 0f;
+            targetHealing = true;
+            coolant = consumeCoolant(0.2f);
+            consumePower(3.6f);
+            outlineColor = DecalPal.decalOutline;
+            shootY = -1.8f;
+            drawer = new DrawTurret("decay-");
+            shootType = new ContinuousFlameBulletType(){{
+                damage = 4f;
+                length = 96f;
+                healPercent = 3f;
+                collidesTeam = true;
+                lifetime = 45f;
+                pierceCap = 0;
+                colors = new Color[]{Color.valueOf("b8ccf2").a(0.35f), Color.valueOf("c0d6ff").a(0.5f), Color.valueOf("ffffff").a(0.6f), Color.valueOf("ffffff"), Color.white};
+                flareColor = Color.valueOf("ffffff");
+
+                lightColor = hitColor = flareColor;
+
+            }};
+        }};
         //units
         timeFactory = new UnitFactory("time-factory"){{
             requirements(Category.units, with(Items.silicon, 200, Items.graphite, 300, DecalingItems.timefragment, 60));
             size = 3;
             configurable = false;
             plans.add(new UnitPlan(DecalingUnits.hour, 60f * 40f, with(DecalingItems.timefragment, 20, Items.silicon, 40)));
+            regionSuffix = "-decay";
+            fogRadius = 3;
+            researchCostMultiplier = 0.65f;
+            consumePower(2.6f);
+        }};
+        decayFactory = new UnitFactory("decay-factory"){{
+            requirements(Category.units, with(Items.silicon, 220, Items.graphite, 270, DecalingItems.oldmateria, 140));
+            size = 3;
+            plans.add(new UnitPlan(DecalingUnits.clear, 60f * 34f, with(DecalingItems.oldmateria, 35, Items.silicon, 30)));
             regionSuffix = "-decay";
             fogRadius = 3;
             researchCostMultiplier = 0.65f;
@@ -272,11 +470,26 @@ public class DecalingBlocks {
             consumePower(4.2f);
             consumeItems(with(DecalingItems.decaygraphite, 65, DecalingItems.timefragment, 40));
 
-            constructTime = 60f * 30f;
+            constructTime = 60f * 42f;
             researchCostMultiplier = 0.75f;
 
             upgrades.addAll(
             new UnitType[]{DecalingUnits.hour, DecalingUnits.clock}
+            );
+        }};
+        decayRefabricator = new Reconstructor("decay-refabricator"){{
+            requirements(Category.units, with(DecalingItems.oldmateria, 220, DecalingItems.decaygraphite, 90, Items.silicon, 140));
+            regionSuffix = "-decay";
+
+            size = 3;
+            consumePower(4.2f);
+            consumeItems(with(DecalingItems.decaygraphite, 40, DecalingItems.oldmateria, 50));
+
+            constructTime = 60f * 35f;
+            researchCostMultiplier = 0.75f;
+
+            upgrades.addAll(
+                    new UnitType[]{DecalingUnits.clear, DecalingUnits.remove}
             );
         }};
         timeAssembler = new UnitAssembler("time-assembler"){{
@@ -293,14 +506,14 @@ public class DecalingBlocks {
             areaSize = 15;
         }};
         decayModule = new UnitAssemblerModule("decay-module"){{
-            requirements(Category.units, with(Items.lead, 500, DecalingItems.oldmateria, 300, DecalingItems.decaygraphite, 200));
+            requirements(Category.units, with(Items.lead, 500, DecalingItems.oldmateria, 300, DecalingItems.decaygraphite, 200,DecalingItems.viliniteAlloy, 150));
             consumePower(2f);
             regionSuffix = "-decay";
 
             size = 3;
         }};
         decayModuleT2 = new UnitAssemblerModule("decay-modulet2"){{
-            requirements(Category.units, with(Items.lead, 800, DecalingItems.oldmateria, 600, DecalingItems.decaygraphite, 400, DecalingItems.timefragment, 250));
+            requirements(Category.units, with(Items.lead, 800, DecalingItems.oldmateria, 600, DecalingItems.decaygraphite, 400, DecalingItems.timefragment, 250,DecalingItems.viliniteAlloy, 260));
             consumePower(3.7f);
             regionSuffix = "-decay";
             tier = 2;

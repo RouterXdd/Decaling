@@ -1,0 +1,112 @@
+package decal.content;
+
+import arc.struct.*;
+import arc.util.*;
+import mindustry.content.*;
+import mindustry.entities.bullet.*;
+import mindustry.game.Objectives.*;
+import mindustry.type.*;
+import mindustry.type.unit.*;
+import mindustry.world.blocks.defense.turrets.*;
+
+import static mindustry.Vars.*;
+import static mindustry.content.TechTree.*;
+import static decal.content.DecalingSectors.*;
+
+public class DecalinTechTree {
+    public void load(){
+        DecalingPlanets.decalin.techTree = nodeRoot("decalin", DecalingBlocks.coreDry, true, () -> {
+            nodeProduce(DecalingItems.oldmateria, () -> {
+                nodeProduce(DecalingItems.timefragment, () -> {
+                });
+
+                nodeProduce(Items.silicon, () -> {
+                    nodeProduce(DecalingItems.viliniteAlloy, () -> {
+                    });
+                });
+                nodeProduce(Items.graphite, () -> {
+                    nodeProduce(DecalingItems.decaygraphite, () -> {
+                    });
+                });
+                nodeProduce(Items.lead, () -> {
+                });
+            });
+            node(DecalingBlocks.repairer, Seq.with(new Produce(DecalingItems.oldmateria)), () -> {
+                node(DecalingBlocks.changer, Seq.with(new SectorComplete(forgotLand)),() -> {
+                    node(DecalingBlocks.recreator, () -> {
+                    });
+                    node(DecalingBlocks.vilineForge, () -> {
+
+                    });
+                });
+            });
+            node(DecalingBlocks.decalwall, Seq.with(new Produce(DecalingItems.oldmateria)), () -> {
+                node(DecalingBlocks.timewall, Seq.with(new Produce(DecalingItems.timefragment)), () -> {
+                    node(DecalingBlocks.timewallLarge, () -> {
+
+                    });
+                });
+                node(DecalingBlocks.decalwalllarge, () -> {
+                });
+            });
+            node(DecalingBlocks.cluster, () -> {
+                node(DecalingBlocks.starflood, Seq.with(new Produce(DecalingItems.timefragment)), () -> {
+                    node(DecalingBlocks.interleet, Seq.with(new SectorComplete(forgotLand)), () -> {
+                        node(DecalingBlocks.confronter, Seq.with(new Produce(DecalingItems.viliniteAlloy)),() -> {
+                        });
+                    });
+                });
+            });
+            node(DecalingBlocks.decayconsider, () -> {
+                node(DecalingBlocks.wire, () -> {
+                    node(DecalingBlocks.largeWire, () -> {
+                    });
+                });
+            });
+            node(DecalingBlocks.mover, () -> {
+                node(DecalingBlocks.lightLink, () -> {
+                    node(DecalingBlocks.mediumLink, Seq.with(new SectorComplete(forgotLand)),() -> {
+                        node(DecalingBlocks.heavyLink, () -> {
+                        });
+                    });
+                });
+            });
+            node(DecalingBlocks.decayFactory, Seq.with(new SectorComplete(forgotLand)),() -> {
+                node(DecalingBlocks.decayModule, () -> {
+                    node(DecalingBlocks.decayModuleT2, () -> {
+                    });
+                });
+                node(DecalingBlocks.decayRefabricator, () -> {
+                    node(DecalingUnits.remove, () -> {
+                    });
+                });
+                node(DecalingUnits.clear, () -> {
+                });
+                node(DecalingBlocks.timeFactory, Seq.with(new SectorComplete(forgotLand)),() -> {
+                    node(DecalingUnits.hour, () -> {
+                    });
+                    node(DecalingBlocks.timeRefabricator, () -> {
+                        node(DecalingUnits.clock, () -> {
+                        });
+                        node(DecalingBlocks.timeAssembler, () -> {
+                            node(DecalingUnits.hour, () -> {
+                            });
+                            node(DecalingUnits.day, Seq.with(new Research(DecalingBlocks.decayModule)),() -> {
+                            });
+                            node(DecalingUnits.year, Seq.with(new Research(DecalingBlocks.decayModuleT2)),() -> {
+                            });
+                        });
+                    });
+                });
+            });
+            node(DecalingBlocks.test, () -> {
+                node(DecalingBlocks.oreCrusher, () -> {
+
+                });
+            });
+            node(DecalingSectors.forgotLand, () -> {
+
+            });
+        });
+    }
+}

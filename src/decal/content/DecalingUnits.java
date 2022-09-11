@@ -1,38 +1,25 @@
 package decal.content;
 
 import arc.graphics.*;
-import arc.graphics.g2d.*;
-import arc.math.*;
-import arc.math.geom.*;
-import arc.struct.*;
-import arc.util.*;
-import mindustry.ai.*;
 import mindustry.ai.types.*;
-import mindustry.entities.*;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
-import mindustry.entities.effect.*;
-import mindustry.entities.part.*;
 import mindustry.entities.pattern.*;
 import mindustry.gen.*;
-import mindustry.graphics.*;
 import mindustry.type.*;
-import mindustry.type.ammo.*;
-import mindustry.type.unit.*;
-import mindustry.type.weapons.*;
 import mindustry.world.meta.*;
 import mindustry.content.*;
 import decal.graphics.*;
-
-import static arc.graphics.g2d.Draw.*;
-import static arc.graphics.g2d.Lines.*;
-import static arc.math.Angles.*;
-import static mindustry.Vars.*;
+import decal.world.abilities.*;
 
 public class DecalingUnits {
  public static UnitType
  //time
- hour, clock, timer, day, year, timeAssemblyDrone;
+ hour, clock, timer, day, year, timeAssemblyDrone,
+ //core
+ decray,
+ //decay
+    clear, remove, destroy, obliterate, annihilate;
  public static void load(){
     //air time units
     hour = new UnitType("hour"){{
@@ -45,6 +32,7 @@ public class DecalingUnits {
     faceTarget = false;
     circleTarget = true;
     constructor = UnitEntity::create;
+    immunities.add(DecalingStatus.decaling);
     engineOffset = 5.65f;
     engineSize = 1.7f;
     outlineColor = DecalPal.decalOutline;
@@ -71,10 +59,11 @@ public class DecalingUnits {
     health = 625;
     speed = 2.3f;
     hitSize = 22f;
-    drag = 0.011f;
+    drag = 0.008f;
     flying = true;
     range = 82f;
     constructor = UnitEntity::create;
+    immunities.add(DecalingStatus.decaling);
     engineOffset = 8.95f;
     engineSize = 2.4f;
     outlineColor = DecalPal.decalOutline;
@@ -107,6 +96,7 @@ public class DecalingUnits {
     engineOffset = 12.4f;
     engineSize = 4.8f;
     outlineColor = DecalPal.decalOutline;
+    immunities.add(DecalingStatus.decaling);
     weapons.add(
         new Weapon("main-timer-weap"){{
             reload = 158.8f;
@@ -144,10 +134,11 @@ public class DecalingUnits {
     health = 8900;
     speed = 1.26f;
     hitSize = 36.5f;
-    drag = 0.09f;
+    drag = 0.04f;
     flying = true;
     range = 320f;
     constructor = UnitEntity::create;
+    immunities.add(DecalingStatus.decaling);
     engineOffset = 12.4f;
     engineSize = 4.8f;
     outlineColor = DecalPal.decalOutline;
@@ -191,11 +182,12 @@ public class DecalingUnits {
     health = 18600;
     armor = 6;
     speed = 0.78f;
-    drag = 0.06f;
+    drag = 0.03f;
     hitSize = 53f;
     flying = true;
     range = 355f;
     constructor = UnitEntity::create;
+    immunities.add(DecalingStatus.decaling);
     engineOffset = 19.4f;
     engineSize = 6.8f;
     outlineColor = DecalPal.decalOutline;
@@ -309,7 +301,7 @@ public class DecalingUnits {
             payloadCapacity = 0f;
             targetable = false;
             constructor = UnitEntity::create;
-
+            immunities.add(DecalingStatus.decaling);
             outlineColor = DecalPal.decalOutline;
             isEnemy = false;
             hidden = true;
@@ -322,5 +314,98 @@ public class DecalingUnits {
             envDisabled = Env.none;
             abilities.add(new ForceFieldAbility(50f, 4f, 800f, 60f * 3));
         }};
+    decray = new UnitType("decray"){{
+        controller = u -> new BuilderAI();
+        flying = true;
+        drag = 0.05f;
+        accel = 0.13f;
+        range = 115f;
+        speed = 2.3f;
+        health = 200;
+        mineSpeed = 5f;
+        mineTier = 2;
+        buildSpeed = 0.85f;
+        engineSize = 2.1f;
+        engineOffset = 5.3f;
+        constructor = UnitEntity::create;
+        immunities.add(DecalingStatus.decaling);
+        outlineColor = DecalPal.decalOutline;
+        weapons.add(new Weapon("main-decray-weap"){{
+                reload = 12f;
+                x = 0f;
+                y = 0f;
+                top = false;
+                bullet = new BasicBulletType(){{
+                height = 12f;
+                width = 6f;
+                speed = 4f;
+                lifetime = 34f;
+                damage = 12f;
+                homingPower = 0.08f;
+                homingRange = 12f;
+                status = DecalingStatus.decaling;
+                statusDuration = 34f * 2f;
+                buildingDamageMultiplier = 0.1f;
+            }};
+        }});
+    }};
+    clear = new UnitType("clear"){{
+        speed = 0.6f;
+        hitSize = 9f;
+        health = 190;
+        constructor = MechUnit::create;
+        immunities.add(DecalingStatus.decaling);
+        abilities.add(new DecayField(36f, 0.8f));
+        weapons.add(new Weapon("decay-weapon"){{
+            reload = 22f;
+            x = 4f;
+            y = 0f;
+            top = false;
+            ejectEffect = Fx.casing1;
+            bullet = new BasicBulletType(2.5f, 9){{
+                width = 7f;
+                height = 9f;
+                lifetime = 60f;
+                status = DecalingStatus.decaling;
+                statusDuration = 16f;
+            }};
+        }});
+    }};
+     remove = new UnitType("remove"){{
+         speed = 0.48f;
+         hitSize = 16f;
+         health = 340;
+         constructor = MechUnit::create;
+         immunities.add(DecalingStatus.decaling);
+         abilities.add(new DecayField(58f, 1.2f));
+         weapons.add(new Weapon("decay-weapon"){{
+             reload = 30f;
+             x = 7f;
+             y = 0f;
+             top = false;
+             ejectEffect = Fx.casing1;
+             bullet = new BasicBulletType(3f, 12){{
+                 width = 7f;
+                 height = 10f;
+                 lifetime = 60f;
+                 status = DecalingStatus.decaling;
+                 statusDuration = 16f;
+             }};
+         }});
+         weapons.add(new Weapon("decay-weapon"){{
+             reload = 42f;
+             x = 4f;
+             y = 3f;
+             top = true;
+             ejectEffect = Fx.casing1;
+             bullet = new BasicBulletType(3.5f, 20){{
+                 width = 8f;
+                 height = 10f;
+                 lifetime = 68f;
+                 status = DecalingStatus.decaling;
+                 statusDuration = 20f;
+             }};
+         }});
+     }};
  }
 }
