@@ -6,6 +6,7 @@ import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.pattern.*;
 import mindustry.gen.*;
+import mindustry.graphics.Pal;
 import mindustry.type.*;
 import mindustry.world.meta.*;
 import mindustry.content.*;
@@ -24,7 +25,7 @@ public class DecalingUnits {
     //air time units
     hour = new UnitType("hour"){{
     health = 185;
-    speed = 3.75f;
+    speed = 2.65f;
     hitSize = 8f;
     drag = 0.03f;
     flying = true;
@@ -86,7 +87,7 @@ public class DecalingUnits {
         }});
     }};
     timer = new UnitType("timer"){{
-    health = 860;
+    health = 1260;
     speed = 1.86f;
     hitSize = 28.4f;
     drag = 0.06f;
@@ -345,14 +346,14 @@ public class DecalingUnits {
                 homingRange = 12f;
                 status = DecalingStatus.decaling;
                 statusDuration = 34f * 2f;
-                buildingDamageMultiplier = 0.1f;
+                buildingDamageMultiplier = 0.01f;
             }};
         }});
     }};
     clear = new UnitType("clear"){{
         speed = 0.6f;
         hitSize = 9f;
-        health = 190;
+        health = 260;
         constructor = MechUnit::create;
         immunities.add(DecalingStatus.decaling);
         abilities.add(new DecayField(36f, 0.8f));
@@ -374,7 +375,7 @@ public class DecalingUnits {
      remove = new UnitType("remove"){{
          speed = 0.48f;
          hitSize = 16f;
-         health = 340;
+         health = 740;
          constructor = MechUnit::create;
          immunities.add(DecalingStatus.decaling);
          abilities.add(new DecayField(58f, 1.2f));
@@ -404,6 +405,31 @@ public class DecalingUnits {
                  lifetime = 68f;
                  status = DecalingStatus.decaling;
                  statusDuration = 20f;
+             }};
+         }});
+     }};
+     destroy = new UnitType("destroy"){{
+         speed = 0.34f;
+         hitSize = 31f;
+         health = 1470;
+         constructor = MechUnit::create;
+         immunities.add(DecalingStatus.decaling);
+         abilities.add(new DecayField(94f, 1.7f));
+         weapons.add(new Weapon("artillery-decay-weapon"){{
+             reload = 174f;
+             x = 0f;
+             y = 0f;
+             top = false;
+             mirror = false;
+             ejectEffect = Fx.casing1;
+             bullet = new ArtilleryBulletType(2.6f, 30){{
+                 width = 18f;
+                 height = 18f;
+                 lifetime = 60f;
+                 splashDamage = 176;
+                 splashDamageRadius = 56;
+                 status = DecalingStatus.decaling;
+                 statusDuration = 30f;
              }};
          }});
      }};

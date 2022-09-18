@@ -23,9 +23,9 @@ public class DecalingPlanets {
             generator = new DecalinPlanetGenerator();
             meshLoader = () -> new HexMesh(this, 5);
              cloudMeshLoader = () -> new MultiMesh(
-                     new HexSkyMesh(this, 6, 0.1f, 0.28f, 5, Color.valueOf("393939").a(0.75f), 2, 0.45f, 1.13f, 0.45f),
-                     new HexSkyMesh(this, 3, 0.2f, 0.23f, 5, Color.valueOf("555555").a(0.65f), 3, 0.25f, 1.22f, 0.45f),
-                     new HexSkyMesh(this, 2, 0.3f, 0.32f, 5, Color.valueOf("686868").a(0.55f), 4, 0.35f, 1.35f, 0.45f)
+                     new HexSkyMesh(this, 6, 0.1f, 0.23f, 5, Color.valueOf("393939").a(0.75f), 2, 0.45f, 1.13f, 0.45f),
+                     new HexSkyMesh(this, 3, 0.2f, 0.19f, 5, Color.valueOf("555555").a(0.65f), 3, 0.25f, 1.22f, 0.45f),
+                     new HexSkyMesh(this, 2, 0.3f, 0.27f, 5, Color.valueOf("686868").a(0.55f), 4, 0.35f, 1.35f, 0.45f)
              );
             accessible = true;
             alwaysUnlocked = true;
@@ -43,6 +43,5 @@ public class DecalingPlanets {
             };
              unlockedOnLand.add(DecalingBlocks.coreDry);
         }};
-
 
 }}

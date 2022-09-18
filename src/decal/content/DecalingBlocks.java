@@ -1,36 +1,35 @@
 package decal.content;
 
-import arc.*;
-import arc.util.*;
-import arc.math.*;
-import arc.struct.*;
 import arc.graphics.*;
-import arc.graphics.g2d.*;
 import decal.world.blocks.distribution.*;
-import decal.world.blocks.defence.*;
 import decal.world.blocks.storage.*;
 import decal.graphics.*;
+import mindustry.entities.*;
+import mindustry.ai.types.*;
+import mindustry.entities.abilities.*;
+import mindustry.entities.bullet.*;
+import mindustry.entities.effect.*;
+import mindustry.entities.part.*;
+import mindustry.entities.part.DrawPart.*;
+import mindustry.entities.pattern.*;
 import mindustry.gen.*;
 import mindustry.type.*;
+import mindustry.type.unit.MissileUnitType;
 import mindustry.world.*;
 import mindustry.content.*;
 import mindustry.graphics.*;
 import mindustry.world.meta.*;
 import mindustry.world.draw.*;
-import mindustry.world.blocks.*;
-import mindustry.entities.part.*;
-import mindustry.entities.bullet.*;
-import mindustry.entities.pattern.*;
 import mindustry.world.blocks.units.*;
 import mindustry.world.blocks.power.*;
-import mindustry.world.blocks.liquid.*;
-import mindustry.world.blocks.storage.*;
 import mindustry.world.blocks.defense.*;
 import mindustry.world.blocks.production.*;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.blocks.distribution.*;
 import mindustry.world.blocks.defense.turrets.*;
 
+
+import static mindustry.Vars.*;
 import static mindustry.type.ItemStack.*;
 
 public class DecalingBlocks {
@@ -61,7 +60,7 @@ public class DecalingBlocks {
     lightLink, mediumLink, heavyLink ,mover, test2,
 
     //turrets
-    cluster, starflood, interleet, confronter,
+    cluster, starflood, interleet, confronter, missileter,
 
     //units
     timeFactory, decayFactory, timeRefabricator, decayRefabricator,timeAssembler, decayModule, decayModuleT2,
@@ -86,6 +85,7 @@ public class DecalingBlocks {
             variants = 3;
         }};
         decaystone = new Floor("decay-stone"){{
+        attributes.set(DecalingAttributes.decay, 0.4f);
         variants = 3;
         }};
          oreFragment = new OreBlock(DecalingItems.timefragment){{
@@ -189,12 +189,14 @@ public class DecalingBlocks {
             requirements(Category.production, with(DecalingItems.oldmateria, 25));
             size = 2;
             tier = 2;
+            drillTime = 160;
             researchCost = with(DecalingItems.oldmateria, 125);
         }};
         oreCrusher = new BurstDrill("ore-Crusher"){{
             requirements(Category.production, with(DecalingItems.oldmateria, 40, Items.silicon, 15));
             size = 3;
             tier = 3;
+            drillTime = 470;
         }};
         //power
         decayconsider = new ThermalGenerator("decay-consider"){{
@@ -248,6 +250,7 @@ public class DecalingBlocks {
             unitType = DecalingUnits.decray;
             health = 1000;
             itemCapacity = 3500;
+            drillTime = 80;
             size = 3;
 
             unitCapModifier = 10;
@@ -289,9 +292,11 @@ public class DecalingBlocks {
             health = 120;
             speed = 2f;
             researchCost = with(DecalingItems.oldmateria, 10);
+            speed = 5f;
         }};
         test2 = new LiquidDriver("test"){{
             requirements(Category.distribution, with(DecalingItems.oldmateria, 1));
+            range = 8;
         }};
         //turrets
         cluster = new ItemTurret("cluster"){{
@@ -348,7 +353,7 @@ public class DecalingBlocks {
                 outlineColor = DecalPal.decalOutline;
                 drawer = new DrawTurret("decay-");
                     shootType = new ContinuousFlameBulletType(){{
-                damage = 16f;
+                damage = 14f;
                 length = -30f;
                 speed = 6f;
                 lifetime = 33f;
@@ -392,7 +397,6 @@ public class DecalingBlocks {
                 outlineColor = DecalPal.decalOutline;
                 shootY = 0f;
                 drawer = new DrawTurret("decay-");
-                shoot.shots = 2;
                 shoot = new ShootSummon(0f, 0f, 240f, 360f);
                     shootType = new ContinuousFlameBulletType(){{
                 damage = 20f;
@@ -440,6 +444,56 @@ public class DecalingBlocks {
                 lightColor = hitColor = flareColor;
 
             }};
+        }};
+        missileter = new ItemTurret("missileter"){{
+            requirements(Category.turret, with(
+                    DecalingItems.oldmateria, 120,
+                    Items.silicon, 75,
+                    Items.graphite, 60,
+                    DecalingItems.viliniteAlloy, 30
+            ));
+            targetHealing = true;
+            scaledHealth = 190;
+            size = 2;
+            reload = 26f;
+            range = 190f;
+            recoil = 0f;
+            shoot = new ShootSummon(0f, 0f, 0f, 360f);
+            coolant = consumeCoolant(0.45f);
+            outlineColor = DecalPal.decalOutline;
+            ammo(
+                    DecalingItems.viliniteAlloy, new BasicBulletType(){{
+                        ammoMultiplier = 1f;
+                        damage = 0f;
+                        collidesTeam = true;
+                        spawnUnit = new MissileUnitType("heal-missile"){{
+                            speed = 5.6f;
+                            rotateSpeed = 4f;
+                            maxRange = 6f;
+                            lifetime = 60f * 1.55f;
+                            outlineColor = Pal.darkOutline;
+                            engineColor = trailColor = DecalPal.vilinite;
+                            health = 60;
+                            loopSoundVolume = 0.1f;
+                            constructor = TimedKillUnit::create;
+                            immunities.add(DecalingStatus.decaling);
+                            collidesTeam = true;
+
+                            weapons.add(new Weapon() {{
+                                shootCone = 360f;
+                                mirror = false;
+                                reload = 1f;
+                                shootOnDeath = true;
+                                bullet = new ExplosionBulletType(50f, 20f) {{
+                                    shootEffect = Fx.massiveExplosion;
+                                    healPercent = 3;
+                                    collidesTeam = true;
+                                }};
+                            }});
+                        }};
+                    }});
+            drawer = new DrawTurret("decay-");
+            researchCost = with(DecalingItems.oldmateria, 600, Items.silicon, 375, Items.graphite, 300, DecalingItems.viliniteAlloy, 150);
         }};
         //units
         timeFactory = new UnitFactory("time-factory"){{

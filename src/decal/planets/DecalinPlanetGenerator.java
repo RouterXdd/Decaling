@@ -24,6 +24,7 @@ import static mindustry.Vars.*;
 public class DecalinPlanetGenerator extends PlanetGenerator {
 
 	String launchSchem = "bXNjaAF4nGNgZmBmZmDJS8xNZeB0zi9KtVJwKapk4E5JLU4uyiwoyczPY2BgYMtJTErNKWZgio5lZOBLSU1OzNFNBirWTQGqZWBgBCEgBADe6xIK";
+	BaseGenerator basegen = new BaseGenerator();
 	public static final int seed = 27;
 	public static int widthSeed = 1, heightSeed = 2, roomSeed = 3, strokeSeed = 4;
 
@@ -216,6 +217,8 @@ public class DecalinPlanetGenerator extends PlanetGenerator {
 		});*/
 
 		// put core and enemy spawn in the map
+		Schematics.placeLaunchLoadout(spawnX, spawnY);
+
 		tiles.getn(r.get(1).x, r.get(1).y).setOverlay(Blocks.spawn);
 
 		state.rules.waveSpacing = Mathf.lerp(60 * 65 * 2, 60f * 60f * 1f, Math.max(sector.threat - 0.4f, 0f));
@@ -224,10 +227,18 @@ public class DecalinPlanetGenerator extends PlanetGenerator {
 		state.rules.waves = sector.info.waves = true;
 		state.rules.env = sector.planet.defaultEnv;
 	}
+
 	@Override
 	public Schematic getDefaultLoadout() {
 		return Schematics.readBase64(launchSchem);
 	}
+
+	@Override
+	public void postGenerate(Tiles tiles) {
+		if (sector.hasEnemyBase())
+			basegen.postGenerate();
+	}
+
 	public class Room {
 		int x, y, size;
 		Room connected;

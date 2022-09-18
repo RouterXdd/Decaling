@@ -35,15 +35,15 @@ public class DecalinTechTree {
                 node(DecalingBlocks.changer, Seq.with(new SectorComplete(forgotLand)),() -> {
                     node(DecalingBlocks.recreator, () -> {
                     });
-                    node(DecalingBlocks.vilineForge, () -> {
+                    node(DecalingBlocks.vilineForge, Seq.with(new SectorComplete(repairTerminal)),() -> {
 
                     });
                 });
             });
             node(DecalingBlocks.decalwall, Seq.with(new Produce(DecalingItems.oldmateria)), () -> {
                 node(DecalingBlocks.timewall, Seq.with(new Produce(DecalingItems.timefragment)), () -> {
-                    node(DecalingBlocks.timewallLarge, () -> {
 
+                    node(DecalingBlocks.timewallLarge, () -> {
                     });
                 });
                 node(DecalingBlocks.decalwalllarge, () -> {
@@ -52,7 +52,10 @@ public class DecalinTechTree {
             node(DecalingBlocks.cluster, () -> {
                 node(DecalingBlocks.starflood, Seq.with(new Produce(DecalingItems.timefragment)), () -> {
                     node(DecalingBlocks.interleet, Seq.with(new SectorComplete(forgotLand)), () -> {
-                        node(DecalingBlocks.confronter, Seq.with(new Produce(DecalingItems.viliniteAlloy)),() -> {
+                        node(DecalingBlocks.confronter, Seq.with(new SectorComplete(repairTerminal)),() -> {
+                            node(DecalingBlocks.missileter, Seq.with(new Produce(DecalingItems.viliniteAlloy)),() -> {
+
+                            });
                         });
                     });
                 });
@@ -76,7 +79,7 @@ public class DecalinTechTree {
                     node(DecalingBlocks.decayModuleT2, () -> {
                     });
                 });
-                node(DecalingBlocks.decayRefabricator, () -> {
+                node(DecalingBlocks.decayRefabricator, Seq.with(new SectorComplete(sectureBase)),() -> {
                     node(DecalingUnits.remove, () -> {
                     });
                 });
@@ -85,11 +88,11 @@ public class DecalinTechTree {
                 node(DecalingBlocks.timeFactory, Seq.with(new SectorComplete(forgotLand)),() -> {
                     node(DecalingUnits.hour, () -> {
                     });
-                    node(DecalingBlocks.timeRefabricator, () -> {
+                    node(DecalingBlocks.timeRefabricator, Seq.with(new SectorComplete(sectureBase)),() -> {
                         node(DecalingUnits.clock, () -> {
                         });
                         node(DecalingBlocks.timeAssembler, () -> {
-                            node(DecalingUnits.hour, () -> {
+                            node(DecalingUnits.timer, () -> {
                             });
                             node(DecalingUnits.day, Seq.with(new Research(DecalingBlocks.decayModule)),() -> {
                             });
@@ -105,7 +108,11 @@ public class DecalinTechTree {
                 });
             });
             node(DecalingSectors.forgotLand, () -> {
+                node(DecalingSectors.sectureBase, Seq.with(new SectorComplete(forgotLand)),() -> {
+                    node(DecalingSectors.repairTerminal, Seq.with(new SectorComplete(sectureBase)),() -> {
 
+                    });
+                });
             });
         });
     }
