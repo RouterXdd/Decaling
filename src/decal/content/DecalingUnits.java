@@ -357,9 +357,9 @@ public class DecalingUnits {
         constructor = MechUnit::create;
         immunities.add(DecalingStatus.decaling);
         abilities.add(new DecayField(36f, 0.8f));
-        weapons.add(new Weapon("decay-weapon"){{
+        weapons.add(new Weapon("decal-decay-weapon"){{
             reload = 22f;
-            x = 4f;
+            x = 5f;
             y = 0f;
             top = false;
             ejectEffect = Fx.casing1;
@@ -379,7 +379,7 @@ public class DecalingUnits {
          constructor = MechUnit::create;
          immunities.add(DecalingStatus.decaling);
          abilities.add(new DecayField(58f, 1.2f));
-         weapons.add(new Weapon("decay-weapon"){{
+         weapons.add(new Weapon("decal-decay-weapon"){{
              reload = 30f;
              x = 7f;
              y = 0f;
@@ -393,7 +393,7 @@ public class DecalingUnits {
                  statusDuration = 16f;
              }};
          }});
-         weapons.add(new Weapon("decay-weapon"){{
+         weapons.add(new Weapon("decal-decay-weapon"){{
              reload = 42f;
              x = 4f;
              y = 3f;
@@ -415,7 +415,7 @@ public class DecalingUnits {
          constructor = MechUnit::create;
          immunities.add(DecalingStatus.decaling);
          abilities.add(new DecayField(94f, 1.7f));
-         weapons.add(new Weapon("artillery-decay-weapon"){{
+         weapons.add(new Weapon("decal-artillery-decay-weapon"){{
              reload = 174f;
              x = 0f;
              y = 0f;

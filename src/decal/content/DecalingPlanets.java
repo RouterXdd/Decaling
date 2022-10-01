@@ -11,6 +11,7 @@ import mindustry.graphics.g3d.*;
 import mindustry.type.*;
 import mindustry.world.meta.*;
 import decal.planets.*;
+import decal.content.*;
 
 
 public class DecalingPlanets {
