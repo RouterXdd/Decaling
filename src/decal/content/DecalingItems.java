@@ -9,7 +9,14 @@ import static mindustry.content.Items.*;
 
 public class DecalingItems {
      public static Item
-    oldmateria, decaygraphite, timefragment, viliniteAlloy, timeEssence, reliteplate;
+    oldmateria;
+    public static Item decaygraphite;
+    public static Item timefragment;
+    public static Item viliniteAlloy;
+    public static Item timeEssence;
+    public static Item reliteplate;
+
+    public static final Seq<Item> decalinItems = new Seq<>();
     public static void load(){
         oldmateria = new Item("oldmateria", Color.valueOf("1a1a1a")){{
             hardness = 1;
@@ -39,5 +46,8 @@ public class DecalingItems {
             cost = 4.1f;
             healthScaling = 2.1f;
         }};
+        decalinItems.addAll(
+                oldmateria, timefragment, decaygraphite, lead, silicon, graphite, viliniteAlloy, timeEssence, reliteplate
+        );
     }
 }

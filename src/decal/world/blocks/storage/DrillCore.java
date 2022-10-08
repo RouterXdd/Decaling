@@ -160,6 +160,13 @@ public class DrillCore extends CoreBlock {
             stats.add(Stat.boostEffect, liquidBoostIntensity * liquidBoostIntensity, StatUnit.timesSpeed);
         }
     }
+    @Override
+    public void load() {
+        super.load();
+        itemRegion = Core.atlas.find(this.name + "-item");
+        topRegion = Core.atlas.find(this.name + "-top");
+        rotatorRegion = Core.atlas.find(this.name + "-rotator");
+    }
 
     @Override
     public TextureRegion[] icons(){
@@ -320,6 +327,7 @@ public class DrillCore extends CoreBlock {
         public void draw(){
             float s = 0.3f;
             float ts = 0.6f;
+            super.draw();
 
             Draw.rect(region, x, y);
             Draw.z(Layer.blockCracks);

@@ -5,6 +5,7 @@ import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import decal.content.*;
+import decal.graphics.*;
 import mindustry.content.*;
 import mindustry.entities.*;
 import mindustry.entities.abilities.*;
@@ -33,8 +34,6 @@ public class DecayField extends Ability {
     @Override
     public void draw(Unit unit) {
         super.draw(unit);
-
-        Draw.color(Color.valueOf("232323"));
-        Drawf.circles(unit.x, unit.y, range);
+        Drawf.circles(unit.x, unit.y, range, new Color(Color.valueOf("232323")));
     }
 }

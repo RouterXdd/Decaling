@@ -16,7 +16,7 @@ import decal.world.abilities.*;
 public class DecalingUnits {
  public static UnitType
  //time
- hour, clock, timer, day, year, timeAssemblyDrone,
+ hour, clock, timer, day, year, timeAssemblyDrone, decayAssemblyDrone,
  //core
  decray,
  //decay
@@ -315,6 +315,32 @@ public class DecalingUnits {
             envDisabled = Env.none;
             abilities.add(new ForceFieldAbility(50f, 4f, 800f, 60f * 3));
         }};
+     decayAssemblyDrone = new UnitType("decay-assembly-drone"){{
+         controller = u -> new AssemblerAI();
+
+         flying = true;
+         drag = 0.06f;
+         accel = 0.11f;
+         speed = 1.3f;
+         health = 120;
+         engineSize = 2.3f;
+         engineOffset = 6.5f;
+         payloadCapacity = 0f;
+         targetable = false;
+         constructor = UnitEntity::create;
+         immunities.add(DecalingStatus.decaling);
+         outlineColor = DecalPal.decalOutline;
+         isEnemy = false;
+         hidden = true;
+         useUnitCap = false;
+         logicControllable = false;
+         playerControllable = false;
+         allowedInPayloads = false;
+         createWreck = false;
+         envEnabled = Env.any;
+         envDisabled = Env.none;
+         abilities.add(new DecayField(26f, 0.5f));
+     }};
     decray = new UnitType("decray"){{
         controller = u -> new BuilderAI();
         flying = true;
@@ -354,6 +380,7 @@ public class DecalingUnits {
         speed = 0.6f;
         hitSize = 9f;
         health = 260;
+        outlineColor = DecalPal.decalOutline;
         constructor = MechUnit::create;
         immunities.add(DecalingStatus.decaling);
         abilities.add(new DecayField(36f, 0.8f));
@@ -376,6 +403,7 @@ public class DecalingUnits {
          speed = 0.48f;
          hitSize = 16f;
          health = 740;
+         outlineColor = DecalPal.decalOutline;
          constructor = MechUnit::create;
          immunities.add(DecalingStatus.decaling);
          abilities.add(new DecayField(58f, 1.2f));
@@ -412,6 +440,7 @@ public class DecalingUnits {
          speed = 0.34f;
          hitSize = 31f;
          health = 1470;
+         outlineColor = DecalPal.decalOutline;
          constructor = MechUnit::create;
          immunities.add(DecalingStatus.decaling);
          abilities.add(new DecayField(94f, 1.7f));

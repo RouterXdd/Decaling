@@ -2,19 +2,16 @@ package decal.content;
 
 import arc.graphics.*;
 import decal.world.blocks.distribution.*;
+import decal.world.blocks.power.*;
 import decal.world.blocks.storage.*;
 import decal.graphics.*;
-import mindustry.entities.*;
-import mindustry.ai.types.*;
-import mindustry.entities.abilities.*;
+import decal.world.blocks.defence.*;
 import mindustry.entities.bullet.*;
-import mindustry.entities.effect.*;
 import mindustry.entities.part.*;
-import mindustry.entities.part.DrawPart.*;
 import mindustry.entities.pattern.*;
 import mindustry.gen.*;
 import mindustry.type.*;
-import mindustry.type.unit.MissileUnitType;
+import mindustry.type.unit.*;
 import mindustry.world.*;
 import mindustry.content.*;
 import mindustry.graphics.*;
@@ -29,7 +26,6 @@ import mindustry.world.blocks.distribution.*;
 import mindustry.world.blocks.defense.turrets.*;
 
 
-import static mindustry.Vars.*;
 import static mindustry.type.ItemStack.*;
 
 public class DecalingBlocks {
@@ -51,7 +47,7 @@ public class DecalingBlocks {
     test, oreCrusher,
 
     //power
-    decayconsider, wire, largeWire,
+    decayconsider, wire, largeWire, timeDriver,
 
     //storage
     coreDry,
@@ -60,10 +56,10 @@ public class DecalingBlocks {
     lightLink, mediumLink, heavyLink ,mover, test2,
 
     //turrets
-    cluster, starflood, interleet, confronter, missileter,
+    cluster, starflood, interleet, confronter, missileter, preletT1, preletT2,
 
     //units
-    timeFactory, decayFactory, timeRefabricator, decayRefabricator,timeAssembler, decayModule, decayModuleT2,
+    timeFactory, decayFactory, timeRefabricator, decayRefabricator,timeAssembler,decayAssembler, decayModule, decayModuleT2,
 
     //for modmakers
     airStrike;
@@ -240,6 +236,13 @@ public class DecalingBlocks {
             consumesPower = outputsPower = true;
             consumePowerBuffered(20f);
         }};
+        timeDriver = new AttributeGenerator("time-driver"){{
+            requirements(Category.power, with(DecalingItems.oldmateria, 540, Items.graphite, 460, Items.silicon, 300, DecalingItems.timefragment, 280));
+            scaledHealth = 148;
+            size = 3;
+            powerProduction = 4.6f;
+            fogRadius = 3;
+        }};
         //storage
         coreDry = new DrillCore("core-dry"){{
             requirements(Category.effect, BuildVisibility.editorOnly, with(DecalingItems.oldmateria, 1200, Items.graphite, 600, Items.lead, 800));
@@ -290,9 +293,8 @@ public class DecalingBlocks {
         mover = new Duct("mover"){{
             requirements(Category.distribution, with(DecalingItems.oldmateria, 1));
             health = 120;
-            speed = 2f;
             researchCost = with(DecalingItems.oldmateria, 10);
-            speed = 5f;
+            speed = 2.96f;
         }};
         test2 = new LiquidDriver("test"){{
             requirements(Category.distribution, with(DecalingItems.oldmateria, 1));
@@ -495,6 +497,68 @@ public class DecalingBlocks {
             drawer = new DrawTurret("decay-");
             researchCost = with(DecalingItems.oldmateria, 600, Items.silicon, 375, Items.graphite, 300, DecalingItems.viliniteAlloy, 150);
         }};
+        preletT1 = new UpgradeblePowerTurret("prelet-t1"){{
+            requirements(Category.turret, with(
+                    DecalingItems.oldmateria, 120,
+                    Items.silicon, 140,
+                    DecalingItems.decaygraphite, 55,
+                    DecalingItems.timefragment, 85,
+                    DecalingItems.timeEssence, 10
+            ));
+            upgradeTurret = DecalingBlocks.preletT2;
+            upgradecost = new ItemStack(DecalingItems.timefragment, 50);
+            scaledHealth = 175;
+            size = 3;
+            reload = 12f;
+            range = 140f;
+            recoil = 1.2f;
+            itemCapacity = 30;
+            coolant = consumeCoolant(0.2f);
+            consumePower(5.7f);
+            outlineColor = DecalPal.decalOutline;
+            drawer = new DrawTurret("decay-");
+            shootType = new LaserBulletType(){{
+                damage = 40f;
+                length = 140f;
+                lifetime = 26f;
+                colors = new Color[]{Color.valueOf("b8ccf2").a(0.35f), Color.valueOf("c0d6ff").a(0.5f), Color.white.a(0.6f), Color.white, Color.white};
+
+                lightColor = hitColor;
+
+                status = DecalingStatus.timeswap1;
+                statusDuration = 120f;
+            }};
+        }};
+        preletT2 = new PowerTurret("prelet-t2"){{
+            requirements(Category.turret, BuildVisibility.debugOnly, with(
+                    DecalingItems.oldmateria, 120,
+                    Items.silicon, 140,
+                    DecalingItems.decaygraphite, 55,
+                    DecalingItems.timefragment, 115,
+                    DecalingItems.timeEssence, 10
+            ));
+            scaledHealth = 195;
+            size = 3;
+            reload = 10f;
+            range = 150f;
+            recoil = 1.2f;
+            shoot = new ShootSpread(3, 6);
+            coolant = consumeCoolant(0.2f);
+            consumePower(6.3f);
+            outlineColor = DecalPal.decalOutline;
+            drawer = new DrawTurret("decay-");
+            shootType = new LaserBulletType(){{
+                damage = 40f;
+                length = 140f;
+                lifetime = 26f;
+                colors = new Color[]{Color.valueOf("b8ccf2").a(0.35f), Color.valueOf("c0d6ff").a(0.5f), Color.white.a(0.6f), Color.white, Color.white};
+
+                lightColor = hitColor;
+
+                status = DecalingStatus.timeswap1;
+                statusDuration = 140f;
+            }};
+        }};
         //units
         timeFactory = new UnitFactory("time-factory"){{
             requirements(Category.units, with(Items.silicon, 200, Items.graphite, 300, DecalingItems.timefragment, 60));
@@ -556,6 +620,17 @@ public class DecalingBlocks {
             new AssemblerUnitPlan(DecalingUnits.day, 60f * 60f * 3f, PayloadStack.list(DecalingUnits.clock, 6, DecalingBlocks.timewallLarge, 20)),
             new AssemblerUnitPlan(DecalingUnits.year, 60f * 60f * 6f, PayloadStack.list(DecalingUnits.hour, 8, DecalingUnits.clock, 8, DecalingBlocks.decalwalllarge, 20, DecalingBlocks.timewallLarge, 20))
             );
+            consumePower(3.7f);
+            areaSize = 15;
+        }};
+        decayAssembler = new UnitAssembler("decay-assembler"){{
+            requirements(Category.units, with(DecalingItems.decaygraphite, 300, DecalingItems.oldmateria, 680, Items.graphite, 650, Items.silicon,1100));
+            regionSuffix = "-decay";
+            droneType = DecalingUnits.decayAssemblyDrone;
+            size = 3;
+            plans.add(
+                    new AssemblerUnitPlan(DecalingUnits.destroy, 60f * 60f, PayloadStack.list(DecalingUnits.clear, 4, DecalingBlocks.decalwalllarge, 12))
+                    );
             consumePower(3.7f);
             areaSize = 15;
         }};

@@ -82,6 +82,10 @@ public class DecalinTechTree {
                 node(DecalingBlocks.decayRefabricator, Seq.with(new SectorComplete(sectureBase)),() -> {
                     node(DecalingUnits.remove, () -> {
                     });
+                    node(DecalingBlocks.decayAssembler, () -> {
+                        node(DecalingUnits.destroy, () -> {
+                        });
+                    });
                 });
                 node(DecalingUnits.clear, () -> {
                 });

@@ -54,7 +54,7 @@ public class Decaling extends Mod{
         new DecalingAttributes().load();
         new DecalingItems().load();
         new DecalingStatus().load();
-        
+        new DecalingWeather().load();
         new DecalingUnits().load();
         new DecalingBlocks().load();
 

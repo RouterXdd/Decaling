@@ -19,12 +19,14 @@ import mindustry.graphics.g3d.PlanetGrid.*;
 import mindustry.world.blocks.environment.*;
 import decal.content.*;
 
+import java.util.Optional;
+
 import static mindustry.Vars.*;
 
 public class DecalinPlanetGenerator extends PlanetGenerator {
 
 	String launchSchem = "bXNjaAF4nGNgZmBmZmDJS8xNZeB0zi9KtVJwKapk4E5JLU4uyiwoyczPY2BgYMtJTErNKWZgio5lZOBLSU1OzNFNBirWTQGqZWBgBCEgBADe6xIK";
-	BaseGenerator basegen = new BaseGenerator();
+	DecalinBase basegen = new DecalinBase();
 	public static final int seed = 27;
 	public static int widthSeed = 1, heightSeed = 2, roomSeed = 3, strokeSeed = 4;
 
@@ -65,7 +67,37 @@ public class DecalinPlanetGenerator extends PlanetGenerator {
 	}
 
 	@Override
-	public void generateSector(Sector sector) {}
+	public void generateSector(Sector sector) {
+		if (sector.id == 226 || sector.id == 12) {
+			sector.generateEnemyBase = true;
+			return;
+		}
+		Ptile tile = sector.tile;
+
+		boolean any = false;
+		float poles = Math.abs(tile.v.y);
+		float noise = Noise.snoise3(tile.v.x, tile.v.y, tile.v.z, 0.001f, 0.6f);
+
+		if (noise + poles / 7.2 > 0.12 && poles > 0.23) {
+			any = true;
+		}
+		if (noise < 0.16) {
+			for (Ptile other : tile.tiles) {
+				var osec = sector.planet.getSector(other);
+
+				//no sectors near start sector!
+				if (
+						osec.id == sector.planet.startSector || //near starting sector
+								osec.generateEnemyBase && poles < 0.85 || //near other base
+								(sector.preset != null && noise < 0.11) //near preset
+				) {
+					return;
+				}
+			}
+		}
+
+		sector.generateEnemyBase = any;
+	}
 
 	@Override
 	public Color getColor(Vec3 pos) {
@@ -161,7 +193,7 @@ public class DecalinPlanetGenerator extends PlanetGenerator {
 		});
 	
 		// make connections look more natural
-		distort(125f, 72f);
+		distort(130f, 76f);
 
 		// make core and enemy area
 		erase(spawnX, spawnY, 20);
@@ -171,8 +203,8 @@ public class DecalinPlanetGenerator extends PlanetGenerator {
 		// more roughness
 		distort(136f, 31f);
 		distort(10f, 12f);
-		distort(5f, 7f);
-		median(3);
+		distort(6f, 7f);
+		median(4);
 
 
 		// ores
@@ -217,9 +249,43 @@ public class DecalinPlanetGenerator extends PlanetGenerator {
 		});*/
 
 		// put core and enemy spawn in the map
+		Room spawn = null;
+		Seq<Room> enemies = new Seq<>();
+		int enemySpawns = rand.random(1, Math.max(Mathf.floor(sector.threat * 4), 1));
+		int offset = rand.nextInt(360);
+		float length = (float)(width / 2.55 - rand.random(13, 23));
+		int angleStep = 5;
+
+		for (int i = 0; i < 360; i += angleStep){
+			int angle = offset + i;
+			int cx = (int)Math.floor(width / 2f + Angles.trnsx(angle, length));
+			int cy = (int)Math.floor(height / 2f + Angles.trnsy(angle, length));
+
+			if (i + angleStep >= 360){
+				spawn = new Room(cx, cy, rand.random(10, 18));
+				r.add(spawn);
+
+				for(int j = 0; j < enemySpawns; j++){
+					float enemyOffset = rand.range(60);
+
+					Tmp.v1.set(cx - width / 2f, cy - height / 2f).rotate(180 + enemyOffset).add(width / 2f, height / 2f);
+					Room espawn = new Room((int)Math.floor(Tmp.v1.x), (int)Math.floor(Tmp.v1.y), rand.random(10, 16));
+					r.add(espawn);
+					enemies.add(espawn);
+				}
+				break;
+			}
+		}
 		Schematics.placeLaunchLoadout(spawnX, spawnY);
 
 		tiles.getn(r.get(1).x, r.get(1).y).setOverlay(Blocks.spawn);
+
+		if (sector.hasEnemyBase()){
+			basegen.generate(tiles, enemies.map(room -> tiles.getn(room.x, room.y)), tiles.get(spawnX, spawnY), state.rules.waveTeam, sector, sector.threat);
+			state.rules.attackMode = sector.info.attack = true;
+		} else {
+			state.rules.winWave = sector.info.winWave = 10 + 5 * (int)Math.max(sector.threat * 10, 10);
+		}
 
 		state.rules.waveSpacing = Mathf.lerp(60 * 65 * 2, 60f * 60f * 1f, Math.max(sector.threat - 0.4f, 0f));
 		state.rules.spawns = DecalinWaves.generate(sector.threat, new Rand(), state.rules.attackMode);
@@ -235,8 +301,6 @@ public class DecalinPlanetGenerator extends PlanetGenerator {
 
 	@Override
 	public void postGenerate(Tiles tiles) {
-		if (sector.hasEnemyBase())
-			basegen.postGenerate();
 	}
 
 	public class Room {

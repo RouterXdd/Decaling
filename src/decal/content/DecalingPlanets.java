@@ -11,7 +11,6 @@ import mindustry.graphics.g3d.*;
 import mindustry.type.*;
 import mindustry.world.meta.*;
 import decal.planets.*;
-import decal.content.*;
 
 
 public class DecalingPlanets {
@@ -38,6 +37,7 @@ public class DecalingPlanets {
             ruleSetter = r -> {
                 r.waveTeam = DecalingTeams.decayed;
                 r.attributes.clear();
+                r.attributes.set(DecalingAttributes.timedrive, 0.4f);
                 r.showSpawns = true;
                 r.fog = false;
                 r.onlyDepositCore = false;
