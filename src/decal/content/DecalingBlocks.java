@@ -1,6 +1,7 @@
 package decal.content;
 
 import arc.graphics.*;
+import arc.struct.*;
 import decal.world.blocks.distribution.*;
 import decal.world.blocks.power.*;
 import decal.world.blocks.storage.*;
@@ -15,6 +16,7 @@ import mindustry.type.unit.*;
 import mindustry.world.*;
 import mindustry.content.*;
 import mindustry.graphics.*;
+import mindustry.world.blocks.payloads.*;
 import mindustry.world.meta.*;
 import mindustry.world.draw.*;
 import mindustry.world.blocks.units.*;
@@ -56,10 +58,10 @@ public class DecalingBlocks {
     lightLink, mediumLink, heavyLink ,mover, test2,
 
     //turrets
-    cluster, starflood, interleet, confronter, missileter, preletT1, preletT2,
+    cluster, starflood, interleet, confronter, missileter, preletT1, preletT2, crystalFer,
 
     //units
-    timeFactory, decayFactory, timeRefabricator, decayRefabricator,timeAssembler,decayAssembler, decayModule, decayModuleT2,
+    timeFactory, decayFactory, timeRefabricator, decayRefabricator,timeAssembler,decayAssembler, decayModule, decayModuleT2, wallConstructor,
 
     //for modmakers
     airStrike;
@@ -355,7 +357,7 @@ public class DecalingBlocks {
                 outlineColor = DecalPal.decalOutline;
                 drawer = new DrawTurret("decay-");
                     shootType = new ContinuousFlameBulletType(){{
-                damage = 14f;
+                damage = 11.8f;
                 length = -30f;
                 speed = 6f;
                 lifetime = 33f;
@@ -365,7 +367,7 @@ public class DecalingBlocks {
                 lightColor = hitColor = flareColor;
 
                 fragBullet = new ContinuousFlameBulletType(){{
-                damage = 8f;
+                damage = 7.3f;
                 length = 0f;
                 speed = 4f;
                 drag = 0.07f;
@@ -376,7 +378,7 @@ public class DecalingBlocks {
                 lightColor = hitColor = flareColor;
             }};
 
-                fragBullets = 6;
+                fragBullets = 4;
                 fragVelocityMin = 0.5f;
                 fragVelocityMax = 1.5f;
                 fragLifeMin = 0.4f;
@@ -513,7 +515,7 @@ public class DecalingBlocks {
             range = 140f;
             recoil = 1.2f;
             itemCapacity = 30;
-            coolant = consumeCoolant(0.2f);
+            coolant = consumeCoolant(0.6f);
             consumePower(5.7f);
             outlineColor = DecalPal.decalOutline;
             drawer = new DrawTurret("decay-");
@@ -543,7 +545,7 @@ public class DecalingBlocks {
             range = 150f;
             recoil = 1.2f;
             shoot = new ShootSpread(3, 6);
-            coolant = consumeCoolant(0.2f);
+            coolant = consumeCoolant(0.6f);
             consumePower(6.3f);
             outlineColor = DecalPal.decalOutline;
             drawer = new DrawTurret("decay-");
@@ -558,6 +560,44 @@ public class DecalingBlocks {
                 status = DecalingStatus.timeswap1;
                 statusDuration = 140f;
             }};
+        }};
+        crystalFer = new ItemTurret("crystal-fer"){{
+            requirements(Category.turret, with(
+                    DecalingItems.oldmateria, 210,
+                    Items.silicon, 160,
+                    DecalingItems.decaygraphite, 65,
+                    DecalingItems.timefragment, 110
+            ));
+            scaledHealth = 142;
+            size = 3;
+            reload = 70f;
+            range = 184f;
+            recoil = 1.3f;
+            shoot.shots = 5;
+            shoot.shotDelay = 6f;
+            targetGround = false;
+            coolant = consumeCoolant(0.6f);
+            outlineColor = DecalPal.decalOutline;
+            ammo(
+                    DecalingItems.timefragment, new BasicBulletType(){{
+                        height = 12f;
+                        width = 9f;
+                        speed = 6f;
+                        lifetime = 30.6f;
+                        ammoMultiplier = 2.4f;
+                        collidesGround = false;
+                        damage = 26f;
+                        homingPower = 0.1f;
+                        homingRange = 11f;
+                        status = DecalingStatus.timeswap1;
+                        statusDuration = 60f * 0.8f;
+                    }});
+            drawer = new DrawTurret("decay-");
+            researchCost = with(DecalingItems.oldmateria, 210,
+                    Items.silicon, 160,
+                    DecalingItems.decaygraphite, 65,
+                    DecalingItems.timefragment, 110
+            );
         }};
         //units
         timeFactory = new UnitFactory("time-factory"){{
@@ -647,6 +687,15 @@ public class DecalingBlocks {
             regionSuffix = "-decay";
             tier = 2;
             size = 5;
+        }};
+       wallConstructor = new Constructor("constructor"){{
+            requirements(Category.units, with(DecalingItems.oldmateria, 250, Items.silicon, 180, Items.graphite, 150, DecalingItems.decaygraphite, 60));
+            regionSuffix = "-decay";
+            hasPower = true;
+            buildSpeed = 0.42f;
+            consumePower(3f);
+            size = 3;
+            filter = Seq.with(DecalingBlocks.decalwalllarge, DecalingBlocks.timewallLarge);
         }};
         //for modmakers
         airStrike = new ItemTurret("air-strike"){{

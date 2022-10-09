@@ -60,7 +60,7 @@ public class DecalingUnits {
     health = 625;
     speed = 2.3f;
     hitSize = 22f;
-    drag = 0.008f;
+    drag = 0.04f;
     flying = true;
     range = 82f;
     constructor = UnitEntity::create;
@@ -135,7 +135,7 @@ public class DecalingUnits {
     health = 8900;
     speed = 1.26f;
     hitSize = 36.5f;
-    drag = 0.04f;
+    drag = 0.082f;
     flying = true;
     range = 320f;
     constructor = UnitEntity::create;
@@ -183,7 +183,7 @@ public class DecalingUnits {
     health = 18600;
     armor = 6;
     speed = 0.78f;
-    drag = 0.03f;
+    drag = 0.11f;
     hitSize = 53f;
     flying = true;
     range = 355f;

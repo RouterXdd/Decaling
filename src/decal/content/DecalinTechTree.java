@@ -52,6 +52,8 @@ public class DecalinTechTree {
             node(DecalingBlocks.cluster, () -> {
                 node(DecalingBlocks.starflood, Seq.with(new Produce(DecalingItems.timefragment)), () -> {
                     node(DecalingBlocks.interleet, Seq.with(new SectorComplete(forgotLand)), () -> {
+                        node(DecalingBlocks.crystalFer, () -> {
+                        });
                         node(DecalingBlocks.confronter, Seq.with(new SectorComplete(repairTerminal)),() -> {
                             node(DecalingBlocks.missileter, Seq.with(new Produce(DecalingItems.viliniteAlloy)),() -> {
 
@@ -71,7 +73,7 @@ public class DecalinTechTree {
             node(DecalingBlocks.mover, () -> {
                 node(DecalingBlocks.lightLink, () -> {
                     node(DecalingBlocks.mediumLink, Seq.with(new SectorComplete(forgotLand)),() -> {
-                        node(DecalingBlocks.heavyLink, () -> {
+                        node(DecalingBlocks.heavyLink, Seq.with(new SectorComplete(highPeaks)),() -> {
                         });
                     });
                 });

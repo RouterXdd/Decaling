@@ -314,6 +314,7 @@ public class TransferLink extends Block {
 
             Drawf.circles(x, y, linkRange);
             links.each(i -> {
+                if (links != null);
                 Building link = Vars.world.build(i);
                 Drawf.square(link.x, link.y, link.block.size * Vars.tilesize / 2f + 1f, Pal.place);
             });
