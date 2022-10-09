@@ -1,7 +1,7 @@
 package decal.world.blocks.storage;
 
 
-import mindustry.world.blocks.storage.CoreBlock;
+import mindustry.world.blocks.storage.*;
 
 import arc.*;
 import arc.graphics.*;

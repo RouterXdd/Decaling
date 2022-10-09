@@ -1,10 +1,10 @@
 package decal.content;
 
-import arc.util.Time;
-import decal.graphics.DecalPal;
-import mindustry.gen.Sounds;
-import mindustry.type.Weather;
-import mindustry.type.weather.ParticleWeather;
+import arc.util.*;
+import decal.graphics.*;
+import mindustry.gen.*;
+import mindustry.type.*;
+import mindustry.type.weather.*;
 
 
 public class DecalingWeather {

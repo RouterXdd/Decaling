@@ -1,23 +1,20 @@
 package decal.world.blocks.power;
 
-import arc.Core;
-import arc.graphics.Blending;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.TextureRegion;
-import arc.math.Mathf;
-import arc.struct.EnumSet;
-import arc.util.Time;
-import decal.content.DecalingAttributes;
-import decal.graphics.DecalPal;
-import mindustry.graphics.Layer;
-import mindustry.world.blocks.power.PowerGenerator;
-import mindustry.world.meta.Attribute;
-import mindustry.world.meta.BlockFlag;
-import mindustry.world.meta.Env;
-import mindustry.world.meta.StatUnit;
+import arc.*;
+import arc.graphics.*;
+import arc.graphics.g2d.*;
+import arc.math.*;
+import arc.struct.*;
+import arc.util.*;
+import decal.content.*;
+import decal.graphics.*;
+import mindustry.graphics.*;
+import mindustry.world.blocks.power.*;
+import mindustry.world.meta.*;
 
 public class AttributeGenerator extends PowerGenerator {
 
+    public boolean drawHeat = true;
     public Attribute attribute = DecalingAttributes.timedrive;
     public TextureRegion rotatorRegion;
     public TextureRegion heatRegion;
@@ -30,9 +27,7 @@ public class AttributeGenerator extends PowerGenerator {
     }
     @Override
     public TextureRegion[] icons() {
-        return new TextureRegion[]{
-                this.region, this.rotatorRegion
-        };
+        return new TextureRegion[]{region, rotatorRegion, topRegion};
     }
 
     @Override
@@ -63,10 +58,10 @@ public class AttributeGenerator extends PowerGenerator {
             float s = 0.3f;
             float ts = 0.6f;
             super.draw();
-            Draw.rect(rotatorRegion, x, y, rotatorAngle);
+            Drawf.spinSprite(rotatorRegion, x, y, rotatorAngle);
 
             Draw.z(Layer.blockAfterCracks);
-            if(drawArrow){
+            if(drawHeat){
                 Draw.color(DecalPal.darkTime);
                 Draw.alpha(warmup * ts * (1f - s + Mathf.absin(Time.time, 3f, s)));
                 Draw.blend(Blending.additive);

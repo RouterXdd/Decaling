@@ -1,27 +1,31 @@
 package decal.planets;
 
-import arc.math.*;
-import arc.util.*;
-import arc.struct.*;
-import arc.graphics.*;
-import arc.math.geom.*;
-import arc.util.noise.*;
-import mindustry.ai.*;
-import mindustry.game.*;
-import mindustry.type.*;
-import mindustry.world.*;
-import mindustry.content.*;
-import mindustry.ai.Astar.*;
-import mindustry.maps.planet.*;
-import mindustry.ai.BaseRegistry.*;
-import mindustry.maps.generators.*;
-import mindustry.graphics.g3d.PlanetGrid.*;
-import mindustry.world.blocks.environment.*;
-import decal.content.*;
+import arc.graphics.Color;
+import arc.math.Angles;
+import arc.math.Mathf;
+import arc.math.Rand;
+import arc.math.geom.Vec2;
+import arc.math.geom.Vec3;
+import arc.struct.FloatSeq;
+import arc.struct.Seq;
+import arc.util.Tmp;
+import arc.util.noise.Noise;
+import arc.util.noise.Simplex;
+import decal.content.DecalingBlocks;
+import mindustry.ai.Astar;
+import mindustry.ai.Astar.DistanceHeuristic;
+import mindustry.ai.Astar.TileHueristic;
+import mindustry.content.Blocks;
+import mindustry.game.Schematic;
+import mindustry.game.Schematics;
+import mindustry.graphics.g3d.PlanetGrid.Ptile;
+import mindustry.maps.generators.PlanetGenerator;
+import mindustry.type.Sector;
+import mindustry.world.Block;
+import mindustry.world.Tile;
+import mindustry.world.Tiles;
 
-import java.util.Optional;
-
-import static mindustry.Vars.*;
+import static mindustry.Vars.state;
 
 public class DecalinPlanetGenerator extends PlanetGenerator {
 
@@ -31,7 +35,7 @@ public class DecalinPlanetGenerator extends PlanetGenerator {
 	public static int widthSeed = 1, heightSeed = 2, roomSeed = 3, strokeSeed = 4;
 
 	public Block[] arr = {
-		DecalingBlocks.decayfloor, 
+		DecalingBlocks.decayfloor,
 		DecalingBlocks.decayfloor, 
 		DecalingBlocks.decayfloor, 
 		DecalingBlocks.decayfloor,
@@ -208,16 +212,13 @@ public class DecalinPlanetGenerator extends PlanetGenerator {
 
 
 		// ores
-		Seq<Block> ores = Seq.with();
+		Seq<Block> ores = Seq.with(DecalingBlocks.oreMateria);
 		float poles = 1f - Math.abs(sector.tile.v.y);
 		float nmag = 0.5f;
 		float scl = 1f;
 		float addscl = 1.3f;
 		if(Simplex.noise3d(seed, 2, 0.5, scl, sector.tile.v.x, sector.tile.v.y, sector.tile.v.z)*nmag + poles > 0.3f*addscl){
 			ores.add(DecalingBlocks.oreFragment);
-		}
-		if(Simplex.noise3d(seed, 2, 0.5, scl, sector.tile.v.x, sector.tile.v.y, sector.tile.v.z)*nmag + poles > 0.25f*addscl){
-			ores.add(DecalingBlocks.oreMateria);
 		}
 		FloatSeq frequencies = new FloatSeq();
 		for(int i = 0; i < ores.size; i++){

@@ -61,6 +61,8 @@ public class DecalinTechTree {
                 });
             });
             node(DecalingBlocks.decayconsider, () -> {
+                node(DecalingBlocks.timeDriver, Seq.with(new OnSector(highPeaks)),() -> {
+                });
                 node(DecalingBlocks.wire, () -> {
                     node(DecalingBlocks.largeWire, () -> {
                     });
@@ -114,7 +116,9 @@ public class DecalinTechTree {
             node(DecalingSectors.forgotLand, () -> {
                 node(DecalingSectors.sectureBase, Seq.with(new SectorComplete(forgotLand)),() -> {
                     node(DecalingSectors.repairTerminal, Seq.with(new SectorComplete(sectureBase)),() -> {
+                        node(DecalingSectors.highPeaks, Seq.with(new SectorComplete(repairTerminal)),() -> {
 
+                        });
                     });
                 });
             });

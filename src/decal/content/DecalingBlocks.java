@@ -240,7 +240,7 @@ public class DecalingBlocks {
             requirements(Category.power, with(DecalingItems.oldmateria, 540, Items.graphite, 460, Items.silicon, 300, DecalingItems.timefragment, 280));
             scaledHealth = 148;
             size = 3;
-            powerProduction = 4.6f;
+            powerProduction = 4.8f;
             fogRadius = 3;
         }};
         //storage
