@@ -37,7 +37,7 @@ public class DecalinBase {
     private Tiles tiles;
     private Seq<Tile> cores;
     private static final Vec2 axis = new Vec2(), rotator = new Vec2();
-
+    //Slotterleet's code
     public DecalinBase() {
         schematics = new String[]{
                 //cores
