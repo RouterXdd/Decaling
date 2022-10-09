@@ -31,7 +31,7 @@ public class DecalinPlanetGenerator extends PlanetGenerator {
 
 	String launchSchem = "bXNjaAF4nGNgZmBmZmDJS8xNZeB0zi9KtVJwKapk4E5JLU4uyiwoyczPY2BgYMtJTErNKWZgio5lZOBLSU1OzNFNBirWTQGqZWBgBCEgBADe6xIK";
 	DecalinBase basegen = new DecalinBase();
-	public static final int seed = 27;
+	public static final int seed = 29;
 	public static int widthSeed = 1, heightSeed = 2, roomSeed = 3, strokeSeed = 4;
 
 	public Block[] arr = {
@@ -85,7 +85,7 @@ public class DecalinPlanetGenerator extends PlanetGenerator {
 		if (noise + poles / 7.2 > 0.12 && poles > 0.23) {
 			any = true;
 		}
-		if (noise < 0.16) {
+		if (noise < 0.17) {
 			for (Ptile other : tile.tiles) {
 				var osec = sector.planet.getSector(other);
 
@@ -284,8 +284,6 @@ public class DecalinPlanetGenerator extends PlanetGenerator {
 		if (sector.hasEnemyBase()){
 			basegen.generate(tiles, enemies.map(room -> tiles.getn(room.x, room.y)), tiles.get(spawnX, spawnY), state.rules.waveTeam, sector, sector.threat);
 			state.rules.attackMode = sector.info.attack = true;
-		} else {
-			state.rules.winWave = sector.info.winWave = 10 + 5 * (int)Math.max(sector.threat * 10, 10);
 		}
 
 		state.rules.waveSpacing = Mathf.lerp(60 * 65 * 2, 60f * 60f * 1f, Math.max(sector.threat - 0.4f, 0f));

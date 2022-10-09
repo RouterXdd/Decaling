@@ -20,6 +20,7 @@ public class DecalingPlanets {
     public static void load(){
          decalin = new Planet("decalin", Planets.sun, 1f, 3){{
             defaultCore = DecalingBlocks.coreDry;
+            sectorSeed = 3;
             generator = new DecalinPlanetGenerator();
             meshLoader = () -> new HexMesh(this, 5);
              cloudMeshLoader = () -> new MultiMesh(
