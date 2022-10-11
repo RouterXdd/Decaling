@@ -746,6 +746,7 @@ public class DecalingBlocks {
             solid = true;
             update = true;
             configurable = true;
+            consumePower(36);
             consumeItems(with(DecalingItems.oldmateria, 1600,DecalingItems.timefragment, 2000, DecalingItems.timeEssence, 900));
         }};
         //for modmakers
