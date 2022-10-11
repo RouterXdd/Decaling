@@ -2,6 +2,7 @@ package decal.content;
 
 import arc.graphics.*;
 import arc.struct.*;
+import decal.world.blocks.campaning.TimeMachine;
 import decal.world.blocks.distribution.*;
 import decal.world.blocks.power.*;
 import decal.world.blocks.storage.*;
@@ -43,10 +44,10 @@ public class DecalingBlocks {
 
 
     //crafting
-    changer, repairer, recreator, vilineForge,
+    changer, repairer, recreator, vilineForge, pressureClet,
 
     //production
-    test, oreCrusher,
+    test, oreCrusher, tectonicBomber,
 
     //power
     decayconsider, wire, largeWire, timeDriver,
@@ -62,7 +63,8 @@ public class DecalingBlocks {
 
     //units
     timeFactory, decayFactory, timeRefabricator, decayRefabricator,timeAssembler,decayAssembler, decayModule, decayModuleT2, wallConstructor,
-
+    //CUMpaning
+    timeMachine,
     //for modmakers
     airStrike;
 
@@ -177,10 +179,39 @@ public class DecalingBlocks {
             craftTime = 64f;
             size = 3;
             itemCapacity = 10;
-            drawer = new DrawMulti(new DrawDefault(),new DrawPistons(){{sinMag = 8f;}}, new DrawFlame());
+            drawer = new DrawMulti(new DrawDefault(),new DrawPistons(){{sinMag = 10f;}}, new DrawFlame());
 
             consumePower(2.1f);
             consumeItems(with(Items.graphite, 2, Items.silicon, 3, DecalingItems.timefragment, 2));
+        }};
+        pressureClet = new GenericCrafter("pressure-clet") {{
+            requirements(Category.crafting, with(
+                    DecalingItems.oldmateria, 170,
+                    DecalingItems.decaygraphite, 80,
+                    Items.silicon, 120,
+                    DecalingItems.timefragment, 85
+            ));
+            scaledHealth = 80;
+            craftEffect = Fx.smeltsmoke;
+            outputItem = new ItemStack(DecalingItems.reliteplate, 2);
+            craftTime = 80f;
+            size = 3;
+            itemCapacity = 20;
+            drawer = new DrawMulti(
+            new DrawDefault(),
+            new DrawRegion(){{
+                suffix = ("-spinner");
+                rotateSpeed = 3;
+                spinSprite = true;
+            }},
+            new DrawRegion(){{
+                suffix = ("-spinner");
+                rotateSpeed = -3;
+                spinSprite = true;
+            }});
+
+            consumePower(2.8f);
+            consumeItems(with(DecalingItems.oldmateria, 5, Items.silicon, 4, Items.lead, 6, DecalingItems.timefragment, 4));
         }};
         //production
         test = new Drill("driller"){{
@@ -195,6 +226,14 @@ public class DecalingBlocks {
             size = 3;
             tier = 3;
             drillTime = 470;
+        }};
+        tectonicBomber = new BurstDrill("tectonic-bomber"){{
+            requirements(Category.production, with(DecalingItems.oldmateria, 120, Items.silicon, 75, DecalingItems.timefragment, 100, DecalingItems.decaygraphite, 70));
+            size = 5;
+            tier = 4;
+            drillTime = 246;
+            itemCapacity = 80;
+            consumePower(0.75f);
         }};
         //power
         decayconsider = new ThermalGenerator("decay-consider"){{
@@ -696,6 +735,18 @@ public class DecalingBlocks {
             consumePower(3f);
             size = 3;
             filter = Seq.with(DecalingBlocks.decalwalllarge, DecalingBlocks.timewallLarge);
+        }};
+        //CUMpaning
+        timeMachine = new TimeMachine("time-machine"){{
+            requirements(Category.effect, BuildVisibility.debugOnly, with());
+            health = 6000;
+            size = 5;
+            itemCapacity = 2000;
+            breakable = true;
+            solid = true;
+            update = true;
+            configurable = true;
+            consumeItems(with(DecalingItems.oldmateria, 1600,DecalingItems.timefragment, 2000, DecalingItems.timeEssence, 900));
         }};
         //for modmakers
         airStrike = new ItemTurret("air-strike"){{

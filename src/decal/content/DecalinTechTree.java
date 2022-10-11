@@ -26,6 +26,8 @@ public class DecalinTechTree {
                 });
                 nodeProduce(Items.graphite, () -> {
                     nodeProduce(DecalingItems.decaygraphite, () -> {
+                        nodeProduce(DecalingItems.reliteplate, () -> {
+                        });
                     });
                 });
                 nodeProduce(Items.lead, () -> {
@@ -34,9 +36,10 @@ public class DecalinTechTree {
             node(DecalingBlocks.repairer, Seq.with(new Produce(DecalingItems.oldmateria)), () -> {
                 node(DecalingBlocks.changer, Seq.with(new SectorComplete(forgotLand)),() -> {
                     node(DecalingBlocks.recreator, () -> {
-                    });
+                        node(DecalingBlocks.pressureClet,() -> {
+                        });
                     node(DecalingBlocks.vilineForge, Seq.with(new SectorComplete(repairTerminal)),() -> {
-
+                    });
                     });
                 });
             });
@@ -112,7 +115,9 @@ public class DecalinTechTree {
             });
             node(DecalingBlocks.test, () -> {
                 node(DecalingBlocks.oreCrusher, () -> {
+                    node(DecalingBlocks.tectonicBomber, () -> {
 
+                    });
                 });
             });
             node(DecalingSectors.forgotLand, () -> {

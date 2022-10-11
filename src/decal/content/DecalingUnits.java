@@ -6,7 +6,7 @@ import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.pattern.*;
 import mindustry.gen.*;
-import mindustry.graphics.Pal;
+import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.world.meta.*;
 import mindustry.content.*;
@@ -16,11 +16,11 @@ import decal.world.abilities.*;
 public class DecalingUnits {
  public static UnitType
  //time
- hour, clock, timer, day, year, timeAssemblyDrone, decayAssemblyDrone,
+ hour, clock, timer, day, year, timeAssemblyDrone,
  //core
  decray,
  //decay
-    clear, remove, destroy, obliterate, annihilate;
+    clear, remove, destroy, obliterate, annihilate, decayAssemblyDrone;
  public static void load(){
     //air time units
     hour = new UnitType("hour"){{

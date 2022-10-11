@@ -36,13 +36,8 @@ public class DecalinPlanetGenerator extends PlanetGenerator {
 
 	public Block[] arr = {
 		DecalingBlocks.decayfloor,
-		DecalingBlocks.decayfloor, 
-		DecalingBlocks.decayfloor, 
 		DecalingBlocks.decayfloor,
 		Blocks.stone,
-		Blocks.stone,
-		DecalingBlocks.decaystone,
-		DecalingBlocks.decaystone,
 		DecalingBlocks.decaystone
 	};
 
