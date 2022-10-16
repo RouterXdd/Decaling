@@ -43,5 +43,10 @@ public class DecalingFx{
 
         Fill.circle(e.x, e.y, e.fin() * 10);
         Drawf.light(e.x, e.y, e.fin() * 20f, DecalPal.darkTime, 0.7f);
+    }),
+    changeMode = new Effect(50f, 50f, e -> {
+        color(DecalPal.darkTime);
+        stroke(e.fin() * 2f);
+        Lines.square(e.x, e.y, 4f, 0);
     });
 }

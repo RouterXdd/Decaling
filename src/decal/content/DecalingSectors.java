@@ -5,7 +5,7 @@ import static decal.content.DecalingPlanets.*;
 
 public class DecalingSectors {
     public static SectorPreset
-    forgotLand, sectureBase, repairTerminal, highPeaks;
+    forgotLand, sectureBase, repairTerminal, highPeaks, orbitalCenter;
 
     public static void load(){
         forgotLand = new SectorPreset("forgot-land", decalin, 16){{
@@ -24,6 +24,9 @@ public class DecalingSectors {
             captureWave = 50;
             difficulty = 7;
             startWaveTimeMultiplier = 1.6f;
+        }};
+        orbitalCenter = new SectorPreset("orbital-center", decalin, 67){{
+            difficulty = 9;
         }};
     }
 }

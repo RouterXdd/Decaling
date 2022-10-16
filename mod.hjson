@@ -5,7 +5,7 @@ displayName: "Decaling"
 name: "decal"
 
 #your name
-author: "RouterXdd"
+author: "RouterXdd/[red]EXPUNGED[]"
 
 #the fully qualified main class of the mod
 main: "decal.Decaling"
@@ -17,7 +17,7 @@ description: "Decaling is destroying all thing. Or not?"
 version: 1.0
 
 #the minimum game build required to run this mod
-minGameVersion: 138
+minGameVersion: 139
 
 #this is a java mod
 java: true

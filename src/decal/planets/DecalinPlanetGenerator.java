@@ -1,29 +1,20 @@
 package decal.planets;
 
-import arc.graphics.Color;
-import arc.math.Angles;
-import arc.math.Mathf;
-import arc.math.Rand;
-import arc.math.geom.Vec2;
-import arc.math.geom.Vec3;
-import arc.struct.FloatSeq;
-import arc.struct.Seq;
-import arc.util.Tmp;
-import arc.util.noise.Noise;
-import arc.util.noise.Simplex;
-import decal.content.DecalingBlocks;
-import mindustry.ai.Astar;
-import mindustry.ai.Astar.DistanceHeuristic;
-import mindustry.ai.Astar.TileHueristic;
-import mindustry.content.Blocks;
-import mindustry.game.Schematic;
-import mindustry.game.Schematics;
-import mindustry.graphics.g3d.PlanetGrid.Ptile;
-import mindustry.maps.generators.PlanetGenerator;
-import mindustry.type.Sector;
-import mindustry.world.Block;
-import mindustry.world.Tile;
-import mindustry.world.Tiles;
+import arc.graphics.*;
+import arc.math.*;
+import arc.math.geom.*;
+import arc.struct.*;
+import arc.util.*;
+import arc.util.noise.*;
+import decal.content.*;
+import mindustry.ai.*;
+import mindustry.ai.Astar.*;
+import mindustry.content.*;
+import mindustry.game.*;
+import mindustry.graphics.g3d.PlanetGrid.*;
+import mindustry.maps.generators.*;
+import mindustry.type.*;
+import mindustry.world.*;
 
 import static mindustry.Vars.state;
 
@@ -279,6 +270,8 @@ public class DecalinPlanetGenerator extends PlanetGenerator {
 		if (sector.hasEnemyBase()){
 			basegen.generate(tiles, enemies.map(room -> tiles.getn(room.x, room.y)), tiles.get(spawnX, spawnY), state.rules.waveTeam, sector, sector.threat);
 			state.rules.attackMode = sector.info.attack = true;
+		}else{
+			state.rules.winWave = sector.info.winWave = 10 + 5 * (int)Math.max(sector.threat * 10, 1);
 		}
 
 		state.rules.waveSpacing = Mathf.lerp(60 * 65 * 2, 60f * 60f * 1f, Math.max(sector.threat - 0.4f, 0f));

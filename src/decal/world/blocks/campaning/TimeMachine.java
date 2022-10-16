@@ -36,8 +36,7 @@ public class TimeMachine extends Block {
         }
         @Override
         public void draw() {
-            Drawf.spinSprite(rotatorRegion, x, y, 90);
-            Drawf.spinSprite(rotatorRegion, x, y, -90);
+            Drawf.spinSprite(rotatorRegion, x, y, 45);
         }
     }
 }

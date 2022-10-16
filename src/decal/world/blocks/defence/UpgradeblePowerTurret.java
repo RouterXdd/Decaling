@@ -1,13 +1,12 @@
 package decal.world.blocks.defence;
 
-import arc.scene.ui.layout.Table;
-import decal.content.DecalingBlocks;
-import mindustry.gen.Icon;
-import mindustry.type.ItemStack;
-import mindustry.ui.Styles;
-import mindustry.world.Block;
-import mindustry.world.Tile;
-import mindustry.world.blocks.defense.turrets.PowerTurret;
+import arc.scene.ui.layout.*;
+import decal.content.*;
+import mindustry.gen.*;
+import mindustry.type.*;
+import mindustry.ui.*;
+import mindustry.world.*;
+import mindustry.world.blocks.defense.turrets.*;
 
 import static mindustry.Vars.world;
 

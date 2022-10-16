@@ -20,7 +20,7 @@ public class DecalingUnits {
  //core
  decray,
  //decay
-    clear, remove, destroy, obliterate, annihilate, decayAssemblyDrone;
+ clear, remove, destroy, obliterate, annihilate, decayAssemblyDrone;
  public static void load(){
     //air time units
     hour = new UnitType("hour"){{

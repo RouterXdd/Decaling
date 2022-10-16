@@ -313,10 +313,10 @@ public class TransferLink extends Block {
             Drawf.circles(x, y, tile.block().size * Vars.tilesize / 2f + 1f + Mathf.absin(Time.time, 4f, 1f));
 
             Drawf.circles(x, y, linkRange);
-            links.each(i -> {
-                if (links != null);
+             links.each(i -> {
+                 if (links != null);
                 Building link = Vars.world.build(i);
-                Drawf.square(link.x, link.y, link.block.size * Vars.tilesize / 2f + 1f, Pal.place);
+                 Drawf.square(link.x, link.y, link.block.size * Vars.tilesize / 2f + 1f, Pal.place);
             });
         }
 

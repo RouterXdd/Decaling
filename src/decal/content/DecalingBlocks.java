@@ -2,9 +2,10 @@ package decal.content;
 
 import arc.graphics.*;
 import arc.struct.*;
-import decal.world.blocks.campaning.TimeMachine;
+import decal.world.blocks.campaning.*;
 import decal.world.blocks.distribution.*;
 import decal.world.blocks.power.*;
+import decal.world.blocks.production.*;
 import decal.world.blocks.storage.*;
 import decal.graphics.*;
 import decal.world.blocks.defence.*;
@@ -31,11 +32,11 @@ import mindustry.world.blocks.defense.turrets.*;
 
 import static mindustry.type.ItemStack.*;
 
-public class DecalingBlocks {
+public class DecalingBlocks{
     public static Block
 
     //environment
-    decayfloor, decaywall, oreFragment, decaystone, oreMateria, decaystoneWall,
+    decayfloor, decaywall, oreFragment, decaystone, oreMateria, decaystoneWall, purIce, purIceWall,
 
     //defence
     decalwall, decalwalllarge, timewall, timewallLarge,
@@ -59,7 +60,7 @@ public class DecalingBlocks {
     lightLink, mediumLink, heavyLink ,mover, test2,
 
     //turrets
-    cluster, starflood, interleet, confronter, missileter, preletT1, preletT2, crystalFer,
+    cluster, starflood, interleet, confronter, missileter, preletT1, preletT2, crystalFer, orbitalCannon, metalBlast, metalBlastV2,
 
     //units
     timeFactory, decayFactory, timeRefabricator, decayRefabricator,timeAssembler,decayAssembler, decayModule, decayModuleT2, wallConstructor,
@@ -94,6 +95,13 @@ public class DecalingBlocks {
          oreMateria = new OreBlock(DecalingItems.oldmateria){{
              oreDefault = true;
          }};
+        purIce = new Floor("pur-ice"){{
+            dragMultiplier = 0.35f;
+            speedMultiplier = 0.9f;
+            attributes.set(Attribute.water, 0.4f);
+            albedo = 0.65f;
+        }};
+        purIceWall = new StaticWall("pur-ice-wall");
         //defence
     decalwall = new Wall("decalwall"){{
             requirements(Category.defense, with(DecalingItems.oldmateria, 6));
@@ -214,11 +222,11 @@ public class DecalingBlocks {
             consumeItems(with(DecalingItems.oldmateria, 5, Items.silicon, 4, Items.lead, 6, DecalingItems.timefragment, 4));
         }};
         //production
-        test = new Drill("driller"){{
+        test = new RotateDrill("driller"){{
             requirements(Category.production, with(DecalingItems.oldmateria, 25));
             size = 2;
             tier = 2;
-            drillTime = 160;
+            drillTime = 190;
             researchCost = with(DecalingItems.oldmateria, 125);
         }};
         oreCrusher = new BurstDrill("ore-Crusher"){{
@@ -447,7 +455,7 @@ public class DecalingBlocks {
                 drag = 0.065f;
                 speed = 8f;
                 lifetime = 34f;
-                colors = new Color[]{Color.valueOf("b8ccf2").a(0.35f), Color.valueOf("c0d6ff").a(0.5f), Color.valueOf("ffffff").a(0.6f), Color.valueOf("ffffff"), Color.white};
+                colors = new Color[]{Color.valueOf("b8ccf2").a(0.35f), Color.valueOf("c0d6ff").a(0.5f), Color.valueOf("ffffff").a(0.6f), Color.valueOf("ffffff"), DecalPal.darkTime};
                 flareColor = Color.valueOf("ffffff");
 
                 lightColor = hitColor = flareColor;
@@ -637,6 +645,100 @@ public class DecalingBlocks {
                     DecalingItems.decaygraphite, 65,
                     DecalingItems.timefragment, 110
             );
+        }};
+        orbitalCannon = new ItemTurret("omega-cannon"){{
+            requirements(Category.turret, with(
+                    DecalingItems.oldmateria, 900,
+                    Items.lead, 1100,
+                    DecalingItems.decaygraphite, 460,
+                    DecalingItems.timefragment, 750,
+                    DecalingItems.reliteplate, 600
+            ));
+            rotateSpeed = 20f;
+            scaledHealth = 230;
+            size = 5;
+            reload = 800f;
+            range = 3000f;
+            recoil = 2f;
+            coolant = consumeCoolant(5f);
+            outlineColor = DecalPal.decalOutline;
+            ammo(
+                    DecalingItems.timefragment, new BasicBulletType(){{
+                        height = 32f;
+                        width = 18f;
+                        speed = 5f;
+                        lifetime = 600f;
+                        damage = 800f;
+                        sprite = "decal-orbital";
+                        trailColor = DecalPal.darkTime;
+                        trailLength = 30;
+                        trailWidth = 5;
+                        ammoMultiplier = 1;
+                        pierce = true;
+                        pierceBuilding = true;
+                    }});
+            drawer = new DrawTurret("decay-");
+            ammoPerShot = 40;
+            maxAmmo = 40;
+        }};
+        metalBlast = new ModesPowerTurret("metal-blast"){{
+            requirements(Category.turret, with(
+                    DecalingItems.oldmateria, 240,
+                    Items.silicon, 180,
+                    DecalingItems.decaygraphite, 75,
+                    DecalingItems.timefragment, 145,
+                    DecalingItems.reliteplate, 50
+            ));
+            modeTurret = DecalingBlocks.metalBlastV2;
+            scaledHealth = 195;
+            size = 3;
+            reload = 11f;
+            range = 180f;
+            recoil = 1.2f;
+            coolant = consumeCoolant(0.6f);
+            consumePower(3.35f);
+            outlineColor = DecalPal.decalOutline;
+            drawer = new DrawTurret("decay-");
+            shootType = new BasicBulletType(){{
+                height = 24f;
+                width = 14f;
+                speed = 6f;
+                lifetime = 30f;
+                damage = 4f;
+                sprite = "decal-orbital";
+                ammoMultiplier = 1;
+            }};
+        }};
+        metalBlastV2 = new ModesPowerTurret("metal-blast-v2"){{
+            requirements(Category.turret, BuildVisibility.debugOnly,with(
+                    DecalingItems.oldmateria, 240,
+                    Items.silicon, 180,
+                    DecalingItems.decaygraphite, 75,
+                    DecalingItems.timefragment, 145,
+                    DecalingItems.reliteplate, 50
+            ));
+            modeTurret = DecalingBlocks.metalBlast;
+            scaledHealth = 195;
+            size = 3;
+            reload = 60f;
+            range = 180f;
+            recoil = 1.2f;
+            coolant = consumeCoolant(0.6f);
+            consumePower(3.9f);
+            outlineColor = DecalPal.decalOutline;
+            drawer = new DrawTurret("decay-");
+            shootType = new BasicBulletType(){{
+                height = 26f;
+                width = 15f;
+                speed = 6f;
+                lifetime = 30f;
+                damage = 50f;
+                sprite = "decal-orbital";
+                ammoMultiplier = 1;
+                pierce = true;
+                pierceCap = 4;
+                pierceBuilding = true;
+            }};
         }};
         //units
         timeFactory = new UnitFactory("time-factory"){{

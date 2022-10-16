@@ -36,7 +36,7 @@ public class DecalinTechTree {
             node(DecalingBlocks.repairer, Seq.with(new Produce(DecalingItems.oldmateria)), () -> {
                 node(DecalingBlocks.changer, Seq.with(new SectorComplete(forgotLand)),() -> {
                     node(DecalingBlocks.recreator, () -> {
-                        node(DecalingBlocks.pressureClet,() -> {
+                        node(DecalingBlocks.pressureClet,Seq.with(new SectorComplete(orbitalCenter)),() -> {
                         });
                     node(DecalingBlocks.vilineForge, Seq.with(new SectorComplete(repairTerminal)),() -> {
                     });
@@ -59,7 +59,9 @@ public class DecalinTechTree {
                         });
                         node(DecalingBlocks.confronter, Seq.with(new SectorComplete(repairTerminal)),() -> {
                             node(DecalingBlocks.missileter, Seq.with(new Produce(DecalingItems.viliniteAlloy)),() -> {
+                                node(DecalingBlocks.orbitalCannon, Seq.with(new SectorComplete(orbitalCenter)),() -> {
 
+                                });
                             });
                         });
                     });
@@ -89,7 +91,7 @@ public class DecalinTechTree {
                 node(DecalingBlocks.decayRefabricator, Seq.with(new SectorComplete(sectureBase)),() -> {
                     node(DecalingUnits.remove, () -> {
                     });
-                    node(DecalingBlocks.decayAssembler, () -> {
+                    node(DecalingBlocks.decayAssembler, Seq.with(new SectorComplete(orbitalCenter)),() -> {
                         node(DecalingUnits.destroy, () -> {
                         });
                     });
@@ -102,7 +104,7 @@ public class DecalinTechTree {
                     node(DecalingBlocks.timeRefabricator, Seq.with(new SectorComplete(sectureBase)),() -> {
                         node(DecalingUnits.clock, () -> {
                         });
-                        node(DecalingBlocks.timeAssembler, () -> {
+                        node(DecalingBlocks.timeAssembler, Seq.with(new SectorComplete(orbitalCenter)),() -> {
                             node(DecalingUnits.timer, () -> {
                             });
                             node(DecalingUnits.day, Seq.with(new Research(DecalingBlocks.decayModule)),() -> {
@@ -115,16 +117,18 @@ public class DecalinTechTree {
             });
             node(DecalingBlocks.test, () -> {
                 node(DecalingBlocks.oreCrusher, () -> {
-                    node(DecalingBlocks.tectonicBomber, () -> {
+                    node(DecalingBlocks.tectonicBomber, Seq.with(new SectorComplete(orbitalCenter)),() -> {
 
                     });
                 });
             });
-            node(DecalingSectors.forgotLand, () -> {
-                node(DecalingSectors.sectureBase, Seq.with(new SectorComplete(forgotLand)),() -> {
-                    node(DecalingSectors.repairTerminal, Seq.with(new SectorComplete(sectureBase)),() -> {
-                        node(DecalingSectors.highPeaks, Seq.with(new SectorComplete(repairTerminal)),() -> {
+            node(forgotLand, () -> {
+                node(sectureBase, Seq.with(new SectorComplete(forgotLand)),() -> {
+                    node(repairTerminal, Seq.with(new SectorComplete(sectureBase)),() -> {
+                        node(highPeaks, Seq.with(new SectorComplete(repairTerminal)),() -> {
+                            node(orbitalCenter, Seq.with(new SectorComplete(highPeaks)),() -> {
 
+                            });
                         });
                     });
                 });
