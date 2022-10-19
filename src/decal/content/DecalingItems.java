@@ -8,13 +8,7 @@ import decal.graphics.*;
 import static mindustry.content.Items.*;
 
 public class DecalingItems {
-     public static Item
-    oldmateria;
-    public static Item decaygraphite;
-    public static Item timefragment;
-    public static Item viliniteAlloy;
-    public static Item timeEssence;
-    public static Item reliteplate;
+     public static Item oldmateria, decaygraphite, timefragment, viliniteAlloy, timeEssence, reliteplate;
 
     public static final Seq<Item> decalinItems = new Seq<>();
     public static void load(){
