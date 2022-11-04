@@ -43,6 +43,9 @@ public class OldSerpuloGenerator extends PlanetGenerator{
                     {Blocks.taintedWater, Blocks.darksandTaintedWater, Blocks.darksand, Blocks.grass, Blocks.grass, Blocks.grass, Blocks.iceSnow, Blocks.snow, Blocks.ice, Blocks.ice, Blocks.ice, Blocks.ice, Blocks.ice},
                     {Blocks.darksandWater, Blocks.darksand, Blocks.snow, Blocks.ice, Blocks.iceSnow, Blocks.snow, Blocks.snow, Blocks.snow, Blocks.ice, Blocks.ice, Blocks.ice, Blocks.ice, Blocks.ice}
             };
+    {
+        defaultLoadout = Loadouts.basicShard;
+    }
 
     ObjectMap<Block, Block> dec = ObjectMap.of(
             Blocks.taintedWater, Blocks.water,
@@ -95,10 +98,6 @@ public class OldSerpuloGenerator extends PlanetGenerator{
         }
 
         sector.generateEnemyBase = any;
-    }
-    @Override
-    public Schematic getDefaultLoadout(){
-        return Loadouts.basicShard;
     }
     @Override
     public float getHeight(Vec3 position){

@@ -59,7 +59,7 @@ public class Decaling extends Mod{
         new DecalingWeather().load();
         new DecalingUnits().load();
         new DecalingBlocks().load();
-
+        new DecalingLoadouts().load();
         new DecalingPlanets().load();
         new DecalingSectors().load();
         new DecalinTechTree().load();

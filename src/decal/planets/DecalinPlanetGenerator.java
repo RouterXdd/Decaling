@@ -19,8 +19,6 @@ import mindustry.world.*;
 import static mindustry.Vars.state;
 
 public class DecalinPlanetGenerator extends PlanetGenerator {
-
-	String launchSchem = "bXNjaAF4nGNgZmBmZmDJS8xNZeB0zi9KtVJwKapk4E5JLU4uyiwoyczPY2BgYMtJTErNKWZgio5lZOBLSU1OzNFNBirWTQGqZWBgBCEgBADe6xIK";
 	DecalinBase basegen = new DecalinBase();
 	public static final int seed = 29;
 	public static int widthSeed = 1, heightSeed = 2, roomSeed = 3, strokeSeed = 4;
@@ -31,6 +29,9 @@ public class DecalinPlanetGenerator extends PlanetGenerator {
 		Blocks.stone,
 		DecalingBlocks.decaystone
 	};
+	{
+		defaultLoadout = DecalingLoadouts.basicDrillCore;
+	}
 
 	float rawHeight(Vec3 pos) {
 		return Simplex.noise3d(seed, 13, 0.6f, 0.9f, pos.x, pos.y, pos.z);
@@ -285,11 +286,6 @@ public class DecalinPlanetGenerator extends PlanetGenerator {
 		state.rules.winWave = sector.info.winWave = 10 + 5 * (int)Math.max(sector.threat * 12, 1);
 		state.rules.waves = sector.info.waves = true;
 		state.rules.env = sector.planet.defaultEnv;
-	}
-
-	@Override
-	public Schematic getDefaultLoadout() {
-		return Schematics.readBase64(launchSchem);
 	}
 
 	@Override
