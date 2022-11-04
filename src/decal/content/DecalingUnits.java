@@ -8,6 +8,7 @@ import mindustry.entities.pattern.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
+import mindustry.type.weapons.RepairBeamWeapon;
 import mindustry.world.meta.*;
 import mindustry.content.*;
 import decal.graphics.*;
@@ -440,6 +441,7 @@ public class DecalingUnits {
          speed = 0.34f;
          hitSize = 31f;
          health = 1470;
+         range = 150f;
          outlineColor = DecalPal.decalOutline;
          constructor = MechUnit::create;
          immunities.add(DecalingStatus.decaling);
@@ -459,6 +461,60 @@ public class DecalingUnits {
                  splashDamageRadius = 56;
                  status = DecalingStatus.decaling;
                  statusDuration = 30f;
+             }};
+         }});
+     }};
+     obliterate = new UnitType("obliterate"){{
+         speed = 0.26f;
+         hitSize = 56f;
+         health = 5120;
+         range = 60f;
+         outlineColor = DecalPal.decalOutline;
+         constructor = MechUnit::create;
+         immunities.add(DecalingStatus.decaling);
+         abilities.add(new DecayField(130f, 2f));
+         weapons.add(new Weapon("decal-artillery-decay-weapon"){{
+             reload = 100f;
+             x = 8f;
+             y = -6f;
+             top = false;
+             mirror = true;
+             ejectEffect = Fx.casing1;
+             bullet = new BasicBulletType(3f, 80){{
+                 drag = 0.06f;
+                 width = 12f;
+                 height = 16f;
+                 lifetime = 140f;
+                 pierce = true;
+                 pierceCap = 3;
+                 pierceBuilding = true;
+                 status = DecalingStatus.decaling;
+                 statusDuration = 30f;
+             }};
+         }});
+     }};
+     annihilate = new UnitType("annihilate"){{
+         controller = u -> new FlyingFollowAI();
+         speed = 0.18f;
+         hitSize = 73f;
+         health = 21000;
+         armor = 10f;
+         outlineColor = DecalPal.decalOutline;
+         constructor = MechUnit::create;
+         immunities.add(DecalingStatus.decaling);
+         abilities.add(new DecayField(160f, 2.8f));
+         weapons.add(new RepairBeamWeapon("decal-artillery-decay-weapon"){{
+             x = 0f;
+             y = -7f;
+             beamWidth = 1f;
+             top = false;
+             mirror = false;
+             ejectEffect = Fx.casing1;
+             repairSpeed = 1.5f;
+             laserColor = DecalPal.decalOutline;
+             healColor = DecalPal.decalOutline;
+             bullet = new BulletType(){{
+                 maxRange = 160f;
              }};
          }});
      }};

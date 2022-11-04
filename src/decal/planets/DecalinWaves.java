@@ -14,7 +14,7 @@ import static decal.content.DecalingUnits.*;
 public class DecalinWaves {
     public static Seq<SpawnGroup> generate(float difficulty, Rand rand, boolean attack) {
         UnitType[][] species = {
-                {clear, remove, destroy, scepter, reign}, //TODO temp
+                {clear, remove, destroy, obliterate, annihilate},
                 {hour, clock, timer, day, year}
         };
 

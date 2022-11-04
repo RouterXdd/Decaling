@@ -19,7 +19,7 @@ import mindustry.world.blocks.environment.*;
 import static mindustry.Vars.*;
 
 public class OldSerpuloGenerator extends PlanetGenerator{
-    //alternate, less direct generation (wip)
+    //lol, serpulo generation, but no spores, only grass
     public static boolean alt = false;
 
     BaseGenerator basegen = new BaseGenerator();
@@ -96,7 +96,10 @@ public class OldSerpuloGenerator extends PlanetGenerator{
 
         sector.generateEnemyBase = any;
     }
-
+    @Override
+    public Schematic getDefaultLoadout(){
+        return Loadouts.basicShard;
+    }
     @Override
     public float getHeight(Vec3 position){
         float height = rawHeight(position);

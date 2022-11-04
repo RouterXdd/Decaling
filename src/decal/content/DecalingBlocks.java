@@ -51,7 +51,7 @@ public class DecalingBlocks{
     test, oreCrusher, tectonicBomber,
 
     //power
-    decayconsider, wire, largeWire, timeDriver,
+    decayconsider, wire, largeWire, timeDriver, armoredWire, largeArmoredWire,
 
     //storage
     coreDry,
@@ -281,6 +281,30 @@ public class DecalingBlocks{
             ));
             size = 2;
             health = 120;
+            group = BlockGroup.power;
+            consumesPower = outputsPower = true;
+            consumePowerBuffered(20f);
+        }};
+        armoredWire = new Wall("armored-wire"){{
+            requirements(Category.power, with(
+                    DecalingItems.reliteplate, 2,
+                    Items.silicon, 4
+            ));
+            health = 100;
+            absorbLasers = true;
+            group = BlockGroup.power;
+            consumesPower = outputsPower = true;
+            consumePowerBuffered(5f);
+            researchCost = with(DecalingItems.oldmateria, 20,Items.silicon, 16);
+        }};
+        largeWire = new Wall("large-armored-wire"){{
+            requirements(Category.power, with(
+                    DecalingItems.reliteplate, 8,
+                    Items.silicon, 16
+            ));
+            size = 2;
+            health = 400;
+            absorbLasers = true;
             group = BlockGroup.power;
             consumesPower = outputsPower = true;
             consumePowerBuffered(20f);
@@ -810,7 +834,9 @@ public class DecalingBlocks{
             droneType = DecalingUnits.decayAssemblyDrone;
             size = 3;
             plans.add(
-                    new AssemblerUnitPlan(DecalingUnits.destroy, 60f * 60f, PayloadStack.list(DecalingUnits.clear, 4, DecalingBlocks.decalwalllarge, 12))
+                    new AssemblerUnitPlan(DecalingUnits.destroy, 60f * 60f, PayloadStack.list(DecalingUnits.clear, 4, DecalingBlocks.decalwalllarge, 12)),
+                    new AssemblerUnitPlan(DecalingUnits.day, 60f * 60f * 3f, PayloadStack.list(DecalingUnits.remove, 6, DecalingBlocks.timewallLarge, 20)),
+                    new AssemblerUnitPlan(DecalingUnits.year, 60f * 60f * 6f, PayloadStack.list(DecalingUnits.clear, 8, DecalingUnits.remove, 8, DecalingBlocks.decalwalllarge, 20, DecalingBlocks.timewallLarge, 20))
                     );
             consumePower(3.7f);
             areaSize = 15;

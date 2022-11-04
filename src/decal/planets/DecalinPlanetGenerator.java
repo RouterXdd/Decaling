@@ -106,6 +106,12 @@ public class DecalinPlanetGenerator extends PlanetGenerator {
 	public Seq<Tile> pathfind(int startX, int startY, int endX, int endY, TileHueristic th, DistanceHeuristic dh){
 		return Astar.pathfind(startX, startY, endX, endY, th, dh, tile -> true);
 	}
+	@Override
+	public void addWeather(Sector sector, Rules rules){
+		Weather.WeatherEntry weather = new Weather.WeatherEntry(DecalingWeather.decayStorm);
+		Weather.WeatherEntry weather2 = new Weather.WeatherEntry(DecalingWeather.timePressure);
+		rules.weather.add(weather, weather2);
+	}
 
 	@Override
 	protected void generate() {

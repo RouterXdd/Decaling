@@ -1,19 +1,21 @@
 package decal;
 
 import arc.*;
-import arc.func.Func;
+import arc.func.*;
+import arc.graphics.*;
+import arc.math.*;
 import arc.util.*;
 import mindustry.*;
 import mindustry.content.*;
 import mindustry.game.EventType.*;
 import mindustry.gen.Icon;
-import mindustry.mod.Mod;
-import mindustry.mod.Mods.LoadedMod;
+import mindustry.mod.*;
+import mindustry.mod.Mods.*;
 import mindustry.gen.*;
 import mindustry.mod.*;
 import mindustry.ui.dialogs.*;
 import decal.content.*;
-import java.util.Random;
+import java.util.*;
 
 import static arc.Core.*;
 import static mindustry.Vars.*;

@@ -14,6 +14,7 @@ import mindustry.world.meta.*;
 import decal.planets.*;
 
 import static decal.content.DecalingItems.decalinItems;
+import static mindustry.content.Items.erekirItems;
 
 
 public class DecalingPlanets {
@@ -23,6 +24,7 @@ public class DecalingPlanets {
     //Past time
     oldSun, oldSerpulo, oldErekir, oldTantros, oldDecalin;
     public static void load(){
+        Planets.tantros.visible = true;
          decalin = new Planet("decalin", Planets.sun, 1f, 3){{
             defaultCore = DecalingBlocks.coreDry;
             sectorSeed = 3;
@@ -76,7 +78,7 @@ public class DecalingPlanets {
                     new HexSkyMesh(this, 2, 0.15f, 0.14f, 5, Color.valueOf("eba768").a(0.75f), 2, 0.42f, 1f, 0.43f),
                     new HexSkyMesh(this, 3, 0.6f, 0.15f, 5, Color.valueOf("eea293").a(0.75f), 2, 0.42f, 1.2f, 0.45f)
             );
-            alwaysUnlocked = false;
+            accessible = false;
             landCloudColor = Color.valueOf("ed6542");
             atmosphereColor = Color.valueOf("f07218");
             defaultEnv = Env.scorching | Env.terrestrial;
@@ -90,7 +92,7 @@ public class DecalingPlanets {
             lightDstFrom = 0.2f;
             clearSectorOnLose = true;
             defaultCore = Blocks.coreBastion;
-            hiddenItems.addAll(Items.serpuloItems).removeAll(Items.erekirItems);
+            hiddenItems.addAll(Items.serpuloItems).removeAll(erekirItems);
 
             updateLighting = false;
 
@@ -137,7 +139,7 @@ public class DecalingPlanets {
             atmosphereRadOut = 0.3f;
             startSector = 43;
             landCloudColor = Pal.heal.cpy().a(0.5f);
-            hiddenItems.addAll(Items.erekirItems).removeAll(Items.serpuloItems);
+            hiddenItems.addAll(erekirItems).removeAll(Items.serpuloItems);
         }};
 
         oldTantros = new Planet("old-tantros", oldSun, 1f, 3){{
@@ -167,7 +169,7 @@ public class DecalingPlanets {
             atmosphereRadOut = 0.3f;
             startSector = 43;
             landCloudColor = Color.cyan.cpy().a(0.5f);
-            defaultEnv = DecalingEnv.icy | Env.terrestrial;
+            defaultEnv = DecalingEnv.icy;
         }};
         decalin.hiddenItems.addAll(Vars.content.items()).removeAll(decalinItems);
 }}
