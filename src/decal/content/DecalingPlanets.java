@@ -5,7 +5,7 @@ import decal.graphics.*;
 import decal.world.meta.*;
 import mindustry.*;
 import mindustry.content.*;
-import mindustry.game.Team;
+import mindustry.game.*;
 import mindustry.graphics.*;
 import mindustry.graphics.g3d.*;
 import mindustry.maps.planet.*;
@@ -46,11 +46,13 @@ public class DecalingPlanets {
             ruleSetter = r -> {
                 r.loadout = ItemStack.list(DecalingItems.oldmateria, 160);
                 r.waveTeam = DecalingTeams.decayed;
-                r.attributes.clear();
                 r.attributes.set(DecalingAttributes.timedrive, 0.4f);
                 r.showSpawns = true;
                 r.fog = false;
                 r.onlyDepositCore = false;
+                Weather.WeatherEntry abuse = new Weather.WeatherEntry(DecalingWeather.timeBackground);
+                abuse.always = true;
+                r.weather.add(abuse);
             };
              unlockedOnLand.add(DecalingBlocks.coreDry);
         }};

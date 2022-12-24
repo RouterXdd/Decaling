@@ -8,7 +8,7 @@ import mindustry.type.weather.*;
 
 
 public class DecalingWeather {
-    public static Weather decayStorm, timePressure;
+    public static Weather decayStorm, timePressure, timeBackground;
     public static void load() {
 
         decayStorm = new ParticleWeather("decay-storm") {{
@@ -37,6 +37,12 @@ public class DecalingWeather {
             soundVolOscMag = 1.5f;
             soundVolOscScl = 1100f;
             soundVolMin = 0.02f;
+        }};
+        timeBackground = new ParticleWeather("time-background") {{
+            drawParticles = false;
+            force = 0f;
+            duration = 6f * Time.toMinutes;
+            attrs.set(DecalingAttributes.timedrive, 0.4f);
         }};
     }
 }

@@ -9,6 +9,7 @@ import decal.world.blocks.production.*;
 import decal.world.blocks.storage.*;
 import decal.graphics.*;
 import decal.world.blocks.defence.*;
+import decal.world.bullets.DecayBullet;
 import mindustry.entities.bullet.*;
 import mindustry.entities.part.*;
 import mindustry.entities.pattern.*;
@@ -60,7 +61,7 @@ public class DecalingBlocks{
     lightLink, mediumLink, heavyLink ,mover, test2,
 
     //turrets
-    cluster, starflood, interleet, confronter, missileter, preletT1, preletT2, crystalFer, orbitalCannon, metalBlast, metalBlastV2,
+    cluster, starflood, interleet, confronter, missileter, decaynir, preletT1, preletT2, crystalFer, orbitalCannon, metalBlast, metalBlastV2,
 
     //units
     timeFactory, decayFactory, timeRefabricator, decayRefabricator,timeAssembler,decayAssembler, decayModule, decayModuleT2, wallConstructor,
@@ -297,7 +298,7 @@ public class DecalingBlocks{
             consumePowerBuffered(5f);
             researchCost = with(DecalingItems.oldmateria, 20,Items.silicon, 16);
         }};
-        largeWire = new Wall("large-armored-wire"){{
+        largeArmoredWire = new Wall("large-armored-wire"){{
             requirements(Category.power, with(
                     DecalingItems.reliteplate, 8,
                     Items.silicon, 16
@@ -371,7 +372,7 @@ public class DecalingBlocks{
         }};
         test2 = new LiquidDriver("test"){{
             requirements(Category.distribution, with(DecalingItems.oldmateria, 1));
-            range = 8;
+            range = 58;
         }};
         //turrets
         cluster = new ItemTurret("cluster"){{
@@ -569,6 +570,51 @@ public class DecalingBlocks{
                     }});
             drawer = new DrawTurret("decay-");
             researchCost = with(DecalingItems.oldmateria, 600, Items.silicon, 375, Items.graphite, 300, DecalingItems.viliniteAlloy, 150);
+        }};
+        decaynir = new ItemTurret("decaynir"){{
+            requirements(Category.turret, with(
+                    DecalingItems.oldmateria, 144,
+                    Items.lead, 175,
+                    Items.graphite, 110,
+                    DecalingItems.decaygraphite, 86
+            ));
+            scaledHealth = 195;
+            size = 3;
+            reload = 38f;
+            range = 190f;
+            recoil = 1.5f;
+            coolant = consumeCoolant(0.3f);
+            outlineColor = DecalPal.decalOutline;
+            ammo(
+                    DecalingItems.decaygraphite, new DecayBullet(4f, 36f){{
+                        height = 12f;
+                        width = 9f;
+                        lifetime = 47.5f;
+                        ammoMultiplier = 2.6f;
+                        status = DecalingStatus.decaling;
+                        statusDuration = 60f * 3f;
+                        decayRange = 18f;
+                        decayDamage = 0.6f;
+                    }},
+                    Items.silicon, new DecayBullet(4f, 24f){{
+                        height = 11f;
+                        width = 8f;
+                        lifetime = 47.5f;
+                        ammoMultiplier = 1.4f;
+                        homingPower = 0.08f;
+                        homingRange = 9f;
+                        decayRange = 11f;
+                        decayDamage = 0.2f;
+                    }});
+            drawer = new DrawTurret("decay-"){{
+                parts.add(new RegionPart("-recoil"){{
+                    progress = PartProgress.reload;
+                    moveY = -2.3f;
+                    mirror = false;
+                    heatColor = Color.red;
+                }});
+            }};
+            researchCost = with(DecalingItems.oldmateria, 100, Items.lead, 100, Items.silicon, 100);
         }};
         preletT1 = new UpgradeblePowerTurret("prelet-t1"){{
             requirements(Category.turret, with(
@@ -778,7 +824,10 @@ public class DecalingBlocks{
         decayFactory = new UnitFactory("decay-factory"){{
             requirements(Category.units, with(Items.silicon, 220, Items.graphite, 270, DecalingItems.oldmateria, 140));
             size = 3;
-            plans.add(new UnitPlan(DecalingUnits.clear, 60f * 34f, with(DecalingItems.oldmateria, 35, Items.silicon, 30)));
+            plans.add(
+                    new UnitPlan(DecalingUnits.clear, 60f * 34f, with(DecalingItems.oldmateria, 35, Items.silicon, 30)),
+                    new UnitPlan(DecalingUnits.refate, 60f * 45f, with(DecalingItems.oldmateria, 50, Items.silicon, 30, Items.lead, 45))
+            );
             regionSuffix = "-decay";
             fogRadius = 3;
             researchCostMultiplier = 0.65f;
@@ -849,7 +898,7 @@ public class DecalingBlocks{
             size = 3;
         }};
         decayModuleT2 = new UnitAssemblerModule("decay-modulet2"){{
-            requirements(Category.units, with(Items.lead, 800, DecalingItems.oldmateria, 600, DecalingItems.decaygraphite, 400, DecalingItems.timefragment, 250,DecalingItems.viliniteAlloy, 260));
+            requirements(Category.units, with(Items.lead, 800, DecalingItems.oldmateria, 600, DecalingItems.decaygraphite, 400, DecalingItems.timefragment, 250,DecalingItems.viliniteAlloy, 260,DecalingItems.reliteplate, 190,DecalingItems.timeEssence, 70));
             consumePower(3.7f);
             regionSuffix = "-decay";
             tier = 2;
@@ -866,7 +915,7 @@ public class DecalingBlocks{
         }};
         //CUMpaning
         timeMachine = new TimeMachine("time-machine"){{
-            requirements(Category.effect, BuildVisibility.debugOnly, with());
+            requirements(Category.effect, BuildVisibility.campaignOnly, with(DecalingItems.oldmateria, 3580, Items.silicon, 3700, Items.graphite, 2860, DecalingItems.decaygraphite, 1950, DecalingItems.timefragment, 2980, DecalingItems.timeEssence, 1300, DecalingItems.reliteplate, 2350));
             health = 6000;
             size = 5;
             itemCapacity = 2000;

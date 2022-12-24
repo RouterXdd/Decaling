@@ -21,7 +21,9 @@ public class DecalingUnits {
  //core
  decray,
  //decay
- clear, remove, destroy, obliterate, annihilate, decayAssemblyDrone;
+ clear, remove, destroy, obliterate, annihilate, decayAssemblyDrone,
+ //support
+ refate;
  public static void load(){
     //air time units
     hour = new UnitType("hour"){{
@@ -302,6 +304,7 @@ public class DecalingUnits {
             engineOffset = 6.5f;
             payloadCapacity = 0f;
             targetable = false;
+            bounded = false;
             constructor = UnitEntity::create;
             immunities.add(DecalingStatus.decaling);
             outlineColor = DecalPal.decalOutline;
@@ -328,6 +331,7 @@ public class DecalingUnits {
          engineOffset = 6.5f;
          payloadCapacity = 0f;
          targetable = false;
+         bounded = false;
          constructor = UnitEntity::create;
          immunities.add(DecalingStatus.decaling);
          outlineColor = DecalPal.decalOutline;
@@ -468,7 +472,7 @@ public class DecalingUnits {
          speed = 0.26f;
          hitSize = 56f;
          health = 5120;
-         range = 60f;
+         range = 200f;
          outlineColor = DecalPal.decalOutline;
          constructor = MechUnit::create;
          immunities.add(DecalingStatus.decaling);
@@ -480,8 +484,8 @@ public class DecalingUnits {
              top = false;
              mirror = true;
              ejectEffect = Fx.casing1;
-             bullet = new BasicBulletType(3f, 80){{
-                 drag = 0.06f;
+             bullet = new BasicBulletType(4f, 80){{
+                 drag = -0.06f;
                  width = 12f;
                  height = 16f;
                  lifetime = 140f;
@@ -494,7 +498,7 @@ public class DecalingUnits {
          }});
      }};
      annihilate = new UnitType("annihilate"){{
-         controller = u -> new FlyingFollowAI();
+         controller = u -> new DefenderAI();
          speed = 0.18f;
          hitSize = 73f;
          health = 21000;
@@ -515,6 +519,38 @@ public class DecalingUnits {
              healColor = DecalPal.decalOutline;
              bullet = new BulletType(){{
                  maxRange = 160f;
+             }};
+         }});
+     }};
+     refate = new UnitType("refate"){{
+         health = 325;
+         speed = 2.8f;
+         controller = b -> new DefenderAI();
+         hitSize = 8f;
+         drag = 0.032f;
+         flying = true;
+         range = 78f;
+         faceTarget = true;
+         circleTarget = false;
+         constructor = UnitEntity::create;
+         engineOffset = 5.2f;
+         engineSize = 1.5f;
+         outlineColor = DecalPal.decalOutline;
+         immunities.add(DecalingStatus.decaling);
+         abilities.add(new RegenField(0.2f, 32f));
+         weapons.add(new Weapon("main-weapon"){{
+             reload = 30f;
+             x = 0f;
+             y = 1f;
+             top = false;
+             ejectEffect = Fx.casing1;
+             mirror = false;
+             bullet = new BasicBulletType(3.5f, 12){{
+                 width = 7f;
+                 height = 9f;
+                 lifetime = 22.3f;
+                 status = DecalingStatus.decaling;
+                 statusDuration = 20f;
              }};
          }});
      }};

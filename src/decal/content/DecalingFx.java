@@ -48,5 +48,23 @@ public class DecalingFx{
         color(DecalPal.darkTime);
         stroke(e.fin() * 2f);
         Lines.square(e.x, e.y, 4f, 0);
-    });
+    }),
+    regen = new Effect(50f, 30f, e -> {
+        color(DecalPal.vilinite);
+        rand.setSeed(e.id);
+        for(int i = 0; i < 3; i++){
+            v.trns(rand.random(360f), rand.random(e.finpow() * 14f)).add(e.x, e.y);
+            Fill.square(v.x, v.y, rand.random(0.6f, 1.4f));
+        }
+    }),
+            regenWave = new Effect(11, e -> {
+                color(DecalPal.vilinite);
+                stroke(e.fout() * 2f);
+                Lines.square(e.x, e.y, 6f, 0);
+                color(DecalPal.darkTime);
+                stroke(e.fout() * 2f);
+                Lines.square(e.x, e.y, 6f, 45);
+            })
+
+    ;
 }

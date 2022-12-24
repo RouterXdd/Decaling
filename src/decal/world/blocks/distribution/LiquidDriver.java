@@ -10,9 +10,9 @@ import arc.util.*;
 import arc.util.io.*;
 import arc.util.pooling.Pool.*;
 import arc.util.pooling.*;
+import decal.world.bullets.*;
 import mindustry.content.*;
 import mindustry.entities.*;
-import mindustry.entities.bullet.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.logic.*;
@@ -29,7 +29,7 @@ public class LiquidDriver extends LiquidBlock {
     public int minDistribute = 10;
     public float knockback = 4f;
     public float reload = 100f;
-    public MassDriverBolt bullet = new MassDriverBolt();
+    public LiquidDriverBolt bullet = new LiquidDriverBolt();
     public float bulletSpeed = 5.5f;
     public float bulletLifetime = 200f;
     public Effect shootEffect = Fx.shootBig2;
@@ -269,7 +269,7 @@ public class LiquidDriver extends LiquidBlock {
         }
 
         @Override
-        public boolean acceptItem(Building source, Item item){
+        public boolean acceptLiquid(Building source, Liquid liquid){
             //mass drivers that output only cannot accept items
             return liquids.currentAmount() < liquidCapacity && linkValid();
         }
@@ -306,7 +306,7 @@ public class LiquidDriver extends LiquidBlock {
         public void handlePayload(Bullet bullet, DriverBulletData data){
             float totalLiquids = liquids.currentAmount();
 
-            //add all the items possible
+            //add all the liquids possible
             for(int i = 0; i < data.liquids.length; i++){
                 int maxAdd = (int) Math.min(data.liquids[i], liquidCapacity * 2 - totalLiquids);
                 liquids.add(content.liquid(i), maxAdd);

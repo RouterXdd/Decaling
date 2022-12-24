@@ -23,7 +23,9 @@ public class ModesPowerTurret extends PowerTurret{
         public void change() {
 
             Tile tile = world.tileWorld(x, y);
-            if (modeTurret != null) tile.setBlock(modeTurret, team, 0);
+            if (modeTurret != null) {
+                tile.setBlock(modeTurret, team, 0);
+            }
         }
         @Override
         public void buildConfiguration(Table table) {

@@ -31,6 +31,8 @@ public class DecalingItems {
             cost = 2.4f;
         }};
         timeEssence = new Item("time-essence", Color.valueOf("cddaf3")){{
+            frames = 2;
+            frameTime = 16f;
             hardness = 5;
             cost = 3.6f;
             healthScaling = 1.6f;
