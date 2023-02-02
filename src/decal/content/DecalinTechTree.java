@@ -45,7 +45,8 @@ public class DecalinTechTree {
             });
             node(DecalingBlocks.decalwall, Seq.with(new Produce(DecalingItems.oldmateria)), () -> {
                 node(DecalingBlocks.timewall, Seq.with(new Produce(DecalingItems.timefragment)), () -> {
-
+                    node(DecalingBlocks.decayBarrier, Seq.with(new SectorComplete(repairTerminal)),() -> {
+                    });
                     node(DecalingBlocks.timewallLarge, () -> {
                     });
                 });
@@ -72,6 +73,10 @@ public class DecalinTechTree {
                 });
                 node(DecalingBlocks.wire, () -> {
                     node(DecalingBlocks.largeWire, () -> {
+                    });
+                    node(DecalingBlocks.armoredWire, () -> {
+                        node(DecalingBlocks.largeArmoredWire, () -> {
+                        });
                     });
                 });
             });

@@ -109,7 +109,6 @@ public class LiquidDriver extends LiquidBlock {
         public float rotation = 90;
         public float reloadCounter = 0f;
         public DriverState state = DriverState.idle;
-        //TODO use queue? this array usually holds about 3 shooters max anyway
         public OrderedSet<Building> waitingShooters = new OrderedSet<>();
 
         public Building currentShooter(){

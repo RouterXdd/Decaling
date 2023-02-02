@@ -305,7 +305,7 @@ public class DecalingUnits {
             payloadCapacity = 0f;
             targetable = false;
             bounded = false;
-            constructor = UnitEntity::create;
+            constructor = BuildingTetherPayloadUnit::create;
             immunities.add(DecalingStatus.decaling);
             outlineColor = DecalPal.decalOutline;
             isEnemy = false;
@@ -332,7 +332,7 @@ public class DecalingUnits {
          payloadCapacity = 0f;
          targetable = false;
          bounded = false;
-         constructor = UnitEntity::create;
+         constructor = BuildingTetherPayloadUnit::create;
          immunities.add(DecalingStatus.decaling);
          outlineColor = DecalPal.decalOutline;
          isEnemy = false;

@@ -17,6 +17,7 @@ import mindustry.type.*;
 import mindustry.world.*;
 
 import static mindustry.Vars.state;
+import static mindustry.Vars.world;
 
 public class DecalinPlanetGenerator extends PlanetGenerator {
 	DecalinBase basegen = new DecalinBase();
@@ -32,6 +33,10 @@ public class DecalinPlanetGenerator extends PlanetGenerator {
 	{
 		defaultLoadout = DecalingLoadouts.basicDrillCore;
 	}
+	ObjectMap<Block, Block> dec = ObjectMap.of(
+			Blocks.stone, Blocks.boulder,
+			DecalingBlocks.decayfloor
+	);
 
 	float rawHeight(Vec3 pos) {
 		return Simplex.noise3d(seed, 13, 0.6f, 0.9f, pos.x, pos.y, pos.z);
@@ -232,6 +237,20 @@ public class DecalinPlanetGenerator extends PlanetGenerator {
 						}
 					}
 				});
+		pass((x,y) ->{
+			dec: {
+				for(int i = 0; i < 4; i++){
+					Tile near = world.tile(x + Geometry.d4[i].x, y + Geometry.d4[i].y);
+					if(near != null && near.block() != Blocks.air){
+						break dec;
+					}
+				}
+
+				if(rand.chance(0.01) && floor.asFloor().hasSurface() && block == Blocks.air){
+					block = dec.get(floor, floor.asFloor().decoration);
+				}
+			}
+		});
 		/*
 		old ore system
 		pass((x, y) -> {

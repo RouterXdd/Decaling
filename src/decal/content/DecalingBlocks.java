@@ -37,10 +37,10 @@ public class DecalingBlocks{
     public static Block
 
     //environment
-    decayfloor, decaywall, oreFragment, decaystone, oreMateria, decaystoneWall, purIce, purIceWall,
+    decayfloor, decaywall, oreFragment, decaystone, oreMateria, decaystoneWall, purIce, purIceWall, crystalBoulder,
 
     //defence
-    decalwall, decalwalllarge, timewall, timewallLarge,
+    decalwall, decalwalllarge, timewall, timewallLarge, decayBarrier,
 
     //breackers
 
@@ -103,6 +103,11 @@ public class DecalingBlocks{
             albedo = 0.65f;
         }};
         purIceWall = new StaticWall("pur-ice-wall");
+
+        crystalBoulder = new Prop("crystal-boulder"){{
+            variants = 2;
+            decayfloor.asFloor().decoration = this;
+        }};
         //defence
     decalwall = new Wall("decalwall"){{
             requirements(Category.defense, with(DecalingItems.oldmateria, 6));
@@ -128,6 +133,22 @@ public class DecalingBlocks{
             size = 2;
             health = 960 * 4;
         }};
+             decayBarrier= new DirectionalForceProjector("decay-barrier"){{
+                requirements(Category.effect, with(DecalingItems.oldmateria, 180,
+                        Items.graphite, 85,
+                        Items.silicon, 110,
+                        DecalingItems.decaygraphite, 60,
+                        DecalingItems.viliniteAlloy, 50
+                ));
+                size = 3;
+                width = 70f;
+                length = 40;
+                shieldHealth = 2800f;
+                cooldownNormal = 2f;
+                cooldownBrokenBase = 0.5f;
+
+                consumePower(5.5f);
+            }};
         //crafting
         changer = new GenericCrafter("changer") {{
         requirements(Category.crafting, with(
@@ -296,7 +317,6 @@ public class DecalingBlocks{
             group = BlockGroup.power;
             consumesPower = outputsPower = true;
             consumePowerBuffered(5f);
-            researchCost = with(DecalingItems.oldmateria, 20,Items.silicon, 16);
         }};
         largeArmoredWire = new Wall("large-armored-wire"){{
             requirements(Category.power, with(
