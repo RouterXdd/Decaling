@@ -18,6 +18,8 @@ public class DecalinTechTree {
         DecalingPlanets.decalin.techTree = nodeRoot("decalin", DecalingBlocks.coreDry, true, () -> {
             nodeProduce(DecalingItems.oldmateria, () -> {
                 nodeProduce(DecalingItems.timefragment, () -> {
+                    nodeProduce(DecalingItems.timeEssence, () -> {
+                    });
                 });
 
                 nodeProduce(Items.silicon, () -> {
@@ -37,6 +39,8 @@ public class DecalinTechTree {
                 node(DecalingBlocks.changer, Seq.with(new SectorComplete(forgotLand)),() -> {
                     node(DecalingBlocks.recreator, () -> {
                         node(DecalingBlocks.pressureClet,Seq.with(new SectorComplete(orbitalCenter)),() -> {
+                            node(DecalingBlocks.timeElectric, () -> {
+                            });
                         });
                     node(DecalingBlocks.vilineForge, Seq.with(new SectorComplete(repairTerminal)),() -> {
                     });

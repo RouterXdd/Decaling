@@ -8,9 +8,11 @@ import decal.graphics.*;
 import static mindustry.content.Items.*;
 
 public class DecalingItems {
-     public static Item oldmateria, decaygraphite, timefragment, viliniteAlloy, timeEssence, reliteplate;
+     public static Item oldmateria, decaygraphite, timefragment, viliniteAlloy, timeEssence, reliteplate, iod;
 
     public static final Seq<Item> decalinItems = new Seq<>();
+    public static final Seq<Item> oldDecalinItems = new Seq<>();
+    public static final Seq<Item> oldTantrosItems = new Seq<>();
     public static void load(){
         oldmateria = new Item("oldmateria", Color.valueOf("1a1a1a")){{
             hardness = 1;
@@ -42,8 +44,16 @@ public class DecalingItems {
             cost = 4.1f;
             healthScaling = 2.1f;
         }};
+        iod = new Item("iod", Color.valueOf("db4325")){{
+            hardness = 1;
+            cost = 1.2f;
+            healthScaling = 1.4f;
+        }};
         decalinItems.addAll(
                 oldmateria, timefragment, decaygraphite, lead, silicon, graphite, viliniteAlloy, timeEssence, reliteplate
+        );
+        oldDecalinItems.addAll(
+                iod, coal
         );
     }
 }

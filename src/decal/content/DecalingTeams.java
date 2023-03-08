@@ -2,14 +2,16 @@ package decal.content;
 
 import arc.graphics.Color;
 import mindustry.game.Team;
+import mindustry.graphics.Pal;
 
 public class DecalingTeams {
-    public static Team decayed, oldCrux, shared;
+    public static Team decayed, oldCrux, shared, neoplastic;
 
     public static void load() {
         decayed = newTeam(12, "decayed", Color.valueOf("232323"));
         oldCrux = newTeam(13, "old-crux", Color.valueOf("f31f1f"));
         shared = newTeam(14, "unknown", Color.valueOf("937232"));
+        neoplastic = newTeam(6, "neoplastic", Pal.neoplasm1);
     }
 
     //modify any of 256 teams' properties

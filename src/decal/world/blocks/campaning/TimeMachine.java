@@ -28,7 +28,8 @@ public class TimeMachine extends Block {
         public void buildConfiguration(Table table) {
             table.button(Icon.upOpen, Styles.clearTogglei, () -> {
                 if (Vars.state.isCampaign() && canConsume() && potentialEfficiency == 1) {
-                    DecalingPlanets.oldSerpulo.alwaysUnlocked = true;
+                    DecalingPlanets.oldDecalin.alwaysUnlocked = true;
+                    Vars.ui.showInfo("@unlockedTime");
                     items.clear();
                 } else {
                     if (!Vars.state.isCampaign()) {

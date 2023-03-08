@@ -16,14 +16,15 @@ import mindustry.type.*;
 
 public class StealDecayField extends Ability {
     public float range = 30, damage = 1, percentAmount = 0.5f;
-    public StealDecayField( float range, float damage) {
+    public StealDecayField( float range, float damage, float percentAmount) {
         this.range = range;
         this.damage = damage;
+        this.percentAmount = percentAmount;
     }
 
     @Override
     public String localized() {
-        return Core.bundle.format("ability.stealfield", range / 8f, damage);
+        return Core.bundle.format("ability.stealfield", range / 8f, damage, percentAmount);
     }
 
     @Override

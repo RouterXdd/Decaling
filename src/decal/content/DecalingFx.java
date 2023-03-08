@@ -57,6 +57,14 @@ public class DecalingFx{
             Fill.square(v.x, v.y, rand.random(0.6f, 1.4f));
         }
     }),
+            rushMove = new Effect(50f, 20f, e -> {
+                color(Color.darkGray);
+                rand.setSeed(e.id);
+                for(int i = 0; i < 3; i++){
+                    v.trns(rand.random(360f), rand.random(e.finpow() * 40f)).add(e.x, e.y);
+                    Fill.square(v.x, v.y, rand.random(11f, 14f));
+                }
+            }),
             regenWave = new Effect(11, e -> {
                 color(DecalPal.vilinite);
                 stroke(e.fout() * 2f);

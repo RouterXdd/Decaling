@@ -1,5 +1,6 @@
 package decal.world.abilities;
 
+import arc.Core;
 import arc.util.*;
 import decal.content.DecalingFx;
 import mindustry.entities.abilities.*;
@@ -18,7 +19,10 @@ public class RegenField extends Ability {
         this.amount = amount;
         this.range = range;
     }
-
+    @Override
+    public String localized() {
+        return Core.bundle.format("ability.regenfield", range / 8f, amount);
+    }
     @Override
     public void update(Unit unit){
             wasHealed = false;

@@ -3,16 +3,21 @@ package decal;
 import arc.*;
 import arc.func.*;
 import arc.graphics.*;
+import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.util.*;
+import decal.graphics.DecalPal;
+import decal.world.meta.*;
 import mindustry.*;
 import mindustry.content.*;
 import mindustry.game.EventType.*;
 import mindustry.gen.Icon;
+import mindustry.graphics.*;
 import mindustry.mod.*;
 import mindustry.mod.Mods.*;
 import mindustry.gen.*;
 import mindustry.mod.*;
+import mindustry.type.Weather;
 import mindustry.ui.dialogs.*;
 import decal.content.*;
 import java.util.*;
@@ -45,6 +50,17 @@ public class Decaling extends Mod{
             );
             mod.meta.subtitle = "[#000000]"+"v"+mod.meta.version+"[]" +"\n"+ mogus;
         }
+        Vars.renderer.addEnvRenderer(DecalingEnv.neolaspmatic, () -> {
+            Texture tex = Core.assets.get("sprites/distortAlpha.png", Texture.class);
+            if (tex.getMagFilter() != Texture.TextureFilter.linear) {
+                tex.setFilter(Texture.TextureFilter.linear);
+                tex.setWrap(Texture.TextureWrap.repeat);
+            }
+
+            Draw.z(Layer.weather - 1);
+            Weather.drawNoiseLayers(tex, Pal.neoplasm1, 1000f, 0.2f, 0.8f, 1.2f, 0.6f, 0.4f, 4, -1.2f, 0.7f, 0.8f, 0.9f);
+            Draw.reset();
+        });
     }
     public Decaling(){
         Log.info("Loaded Decaling constructor.");

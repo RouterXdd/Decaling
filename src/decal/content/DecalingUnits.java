@@ -1,6 +1,8 @@
 package decal.content;
 
 import arc.graphics.*;
+import decal.world.meta.DecalingEnv;
+import mindustry.ai.UnitCommand;
 import mindustry.ai.types.*;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
@@ -19,11 +21,16 @@ public class DecalingUnits {
  //time
  hour, clock, timer, day, year, timeAssemblyDrone,
  //core
- decray,
+ decray, melair,
  //decay
- clear, remove, destroy, obliterate, annihilate, decayAssemblyDrone,
+ clear, remove, destroy, obliterate, annihilate, decayAssemblyDrone, rush,
  //support
- refate;
+ refate,
+ //neo
+ transporter, child,
+ //ice
+ iceliner
+    ;
  public static void load(){
     //air time units
     hour = new UnitType("hour"){{
@@ -381,6 +388,41 @@ public class DecalingUnits {
             }};
         }});
     }};
+     melair = new UnitType("melair"){{
+         controller = u -> new BuilderAI();
+         flying = true;
+         drag = 0.04f;
+         accel = 0.16f;
+         range = 160f;
+         speed = 2.55f;
+         health = 500;
+         mineSpeed = 7f;
+         mineTier = 2;
+         buildSpeed = 1f;
+         engineSize = 2.4f;
+         engineOffset = 6.8f;
+         constructor = UnitEntity::create;
+         immunities.add(DecalingStatus.decaling);
+         outlineColor = DecalPal.decalOutline;
+         abilities.add(new StealDecayField(50f, 0.4f, 0.2f));
+         weapons.add(new Weapon("main-melair-weap"){{
+             reload = 8f;
+             x = 0f;
+             y = 0f;
+             top = false;
+             shoot = new ShootHelix();
+             bullet = new MissileBulletType(){{
+                 height = 14f;
+                 width = 8f;
+                 speed = 4f;
+                 lifetime = 34f;
+                 damage = 10f;
+                 status = DecalingStatus.decaling;
+                 statusDuration = 10f * 2f;
+                 buildingDamageMultiplier = 0.01f;
+             }};
+         }});
+     }};
     clear = new UnitType("clear"){{
         speed = 0.6f;
         hitSize = 9f;
@@ -525,7 +567,7 @@ public class DecalingUnits {
      refate = new UnitType("refate"){{
          health = 325;
          speed = 2.8f;
-         controller = b -> new DefenderAI();
+         controller = u -> new DefenderAI();
          hitSize = 8f;
          drag = 0.032f;
          flying = true;
@@ -551,6 +593,108 @@ public class DecalingUnits {
                  lifetime = 22.3f;
                  status = DecalingStatus.decaling;
                  statusDuration = 20f;
+             }};
+         }});
+     }};
+     rush = new UnitType("rush"){{
+         hitSize = 8f * 3.6f;
+         flying = true;
+         drag = 0.06f;
+         accel = 0.1f;
+         range = 200f;
+         speed = 4f;
+         health = 50000;
+         engineSize = 0f;
+         engineOffset = 7.4f;
+         constructor = UnitEntity::create;
+         immunities.add(DecalingStatus.decaling);
+         outlineColor = DecalPal.decalOutline;
+         abilities.add(new DecayField(20f, 200f));
+         abilities.add(new MoveEffectAbility(){{
+             effect = DecalingFx.rushMove;
+             y = -3f;
+             interval = 7f;
+         }});
+     }};
+     transporter = new UnitType("transporter"){{
+         controller = u -> new CargoAI();
+         envEnabled = DecalingEnv.neolaspmatic;
+
+         flying = true;
+         drag = 0.07f;
+         accel = 0.11f;
+         speed = 1.7f;
+         health = 170;
+         engineSize = 1.9f;
+         engineOffset = 2.4f;
+         payloadCapacity = 0f;
+         targetable = false;
+         bounded = false;
+         constructor = BuildingTetherPayloadUnit::create;
+         outlineColor = Pal.neoplasmOutline;
+         isEnemy = false;
+         hidden = true;
+         useUnitCap = false;
+         logicControllable = false;
+         playerControllable = false;
+         allowedInPayloads = false;
+         envEnabled = Env.any;
+         envDisabled = Env.none;
+     }};
+     iceliner = new UnitType("iceliner"){{
+         health = 600;
+         speed = 0f;
+         hitSize = 14f;
+         flying = true;
+         range = 120f;
+         faceTarget = true;
+         circleTarget = false;
+         constructor = BuildingTetherPayloadUnit::create;
+         engineOffset = 4f;
+         engineSize = 2.2f;
+         outlineColor = DecalPal.decalOutline;
+         weapons.add(new Weapon("main-weapon"){{
+             reload = 40f;
+             x = 0f;
+             y = 2f;
+             top = false;
+             ejectEffect = Fx.casing1;
+             mirror = false;
+             bullet = new BasicBulletType(4f, 30){{
+                 width = 9f;
+                 height = 12f;
+                 lifetime = 30f;
+             }};
+         }});
+     }};
+     child = new UnitType("child"){{
+         controller = u -> new BuilderAI();
+         envEnabled = DecalingEnv.neolaspmatic;
+         flying = true;
+         drag = 0.04f;
+         accel = 0.13f;
+         range = 160f;
+         speed = 3.8f;
+         health = 240;
+         mineSpeed = 5f;
+         mineTier = 2;
+         buildSpeed = 0.6f;
+         engineSize = 2.6f;
+         engineOffset = 4.7f;
+         constructor = UnitEntity::create;
+         outlineColor = Pal.neoplasmOutline;
+         weapons.add(new Weapon("main-weap"){{
+             reload = 30f;
+             x = 0f;
+             y = 0f;
+             top = false;
+             bullet = new BasicBulletType(){{
+                 height = 13f;
+                 width = 6f;
+                 speed = 5f;
+                 lifetime = 32f;
+                 damage = 20f;
+                 buildingDamageMultiplier = 0.01f;
              }};
          }});
      }};

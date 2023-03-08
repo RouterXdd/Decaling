@@ -104,7 +104,7 @@ public class LiquidDriver extends LiquidBlock {
         }
     }
 
-    public class LiquidDriverBuild extends LiquidBuild{
+    public class LiquidDriverBuild extends LiquidBuild {
         public int link = -1;
         public float rotation = 90;
         public float reloadCounter = 0f;
