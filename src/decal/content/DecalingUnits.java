@@ -1,7 +1,7 @@
 package decal.content;
 
 import arc.graphics.*;
-import decal.world.meta.DecalingEnv;
+import decal.world.meta.*;
 import mindustry.ai.UnitCommand;
 import mindustry.ai.types.*;
 import mindustry.entities.abilities.*;
@@ -10,7 +10,7 @@ import mindustry.entities.pattern.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
-import mindustry.type.weapons.RepairBeamWeapon;
+import mindustry.type.weapons.*;
 import mindustry.world.meta.*;
 import mindustry.content.*;
 import decal.graphics.*;
@@ -25,7 +25,7 @@ public class DecalingUnits {
  //decay
  clear, remove, destroy, obliterate, annihilate, decayAssemblyDrone, rush,
  //support
- refate,
+ refate,t2, recursion,
  //neo
  transporter, child,
  //ice
@@ -394,6 +394,7 @@ public class DecalingUnits {
          drag = 0.04f;
          accel = 0.16f;
          range = 160f;
+         hitSize = 15f;
          speed = 2.55f;
          health = 500;
          mineSpeed = 7f;
@@ -594,6 +595,33 @@ public class DecalingUnits {
                  status = DecalingStatus.decaling;
                  statusDuration = 20f;
              }};
+         }});
+     }};
+     recursion = new UnitType("recursion"){{
+         health = 2780;
+         speed = 3.2f;
+         controller = u -> new BuilderAI();
+         hitSize = 27f;
+         drag = 0.02f;
+         flying = true;
+         range = 106f;
+         faceTarget = true;
+         circleTarget = false;
+         constructor = UnitEntity::create;
+         engineOffset = 2.2f;
+         engineSize = 2.3f;
+         outlineColor = DecalPal.decalOutline;
+         immunities.add(DecalingStatus.decaling);
+         buildSpeed = 1f;
+         drawBuildBeam = false;
+         weapons.add(new BuildWeapon("decal-recursion-weapon"){{
+             rotate = true;
+             rotateSpeed = 7f;
+             mirror = true;
+             top = true;
+             x = -8f;
+             y = -2f;
+             shootY = 1f;
          }});
      }};
      rush = new UnitType("rush"){{

@@ -15,7 +15,7 @@ import mindustry.graphics.*;
 import mindustry.type.*;
 
 public class StealDecayField extends Ability {
-    public float range = 30, damage = 1, percentAmount = 0.5f;
+    public float range, damage, percentAmount;
     public StealDecayField( float range, float damage, float percentAmount) {
         this.range = range;
         this.damage = damage;

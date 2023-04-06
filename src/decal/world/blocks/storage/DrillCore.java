@@ -1,6 +1,7 @@
 package decal.world.blocks.storage;
 
 
+import mindustry.game.*;
 import mindustry.world.blocks.storage.*;
 
 import arc.*;
@@ -169,7 +170,7 @@ public class DrillCore extends CoreBlock {
 
     @Override
     public TextureRegion[] icons(){
-        return new TextureRegion[]{region, rotatorRegion, topRegion};
+        return new TextureRegion[]{region, rotatorRegion, topRegion, teamRegions[Team.sharded.id]};
     }
 
     protected void countOre(Tile tile){
@@ -355,6 +356,7 @@ public class DrillCore extends CoreBlock {
                 Draw.rect(itemRegion, x, y);
                 Draw.color();
             }
+            drawTeamTop();
         }
 
         @Override

@@ -1,7 +1,7 @@
 package decal.content;
 
 import arc.graphics.*;
-import arc.math.Mathf;
+import arc.math.*;
 import arc.struct.*;
 import decal.world.blocks.campaning.*;
 import decal.world.blocks.distribution.*;
@@ -10,8 +10,9 @@ import decal.world.blocks.production.*;
 import decal.world.blocks.storage.*;
 import decal.graphics.*;
 import decal.world.blocks.defence.*;
-import decal.world.bullets.DecayBullet;
-import decal.world.meta.DecalingEnv;
+import decal.world.bullets.*;
+import decal.world.environment.*;
+import decal.world.meta.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.part.*;
 import mindustry.entities.pattern.*;
@@ -22,7 +23,7 @@ import mindustry.world.*;
 import mindustry.content.*;
 import mindustry.graphics.*;
 import mindustry.world.blocks.payloads.*;
-import mindustry.world.blocks.storage.CoreBlock;
+import mindustry.world.blocks.storage.*;
 import mindustry.world.meta.*;
 import mindustry.world.draw.*;
 import mindustry.world.blocks.units.*;
@@ -44,13 +45,13 @@ public class DecalingBlocks{
     neoWall, roughNeoFloor, oreIod,
 
     //defence
-    decalwall, decalwalllarge, timewall, timewallLarge, decayBarrier,
+    decalwall, decalwalllarge, timewall, timewallLarge, decayBarrier, viliniteWall, viliniteWallLarge, iodWall,
 
-    //breackers
+    //breakers
 
 
     //crafting
-    changer, repairer, recreator, vilineForge, pressureClet, timeElectric,
+    changer, repairer, recreator, vilineForge, pressureClet, timeElectric, recycler, decayIncinerator,
 
     //production
     test, oreCrusher, tectonicBomber,
@@ -59,13 +60,13 @@ public class DecalingBlocks{
     decayconsider, wire, largeWire, timeDriver, armoredWire, largeArmoredWire,
 
     //storage
-    coreDry, coreBorn,
+    coreDry, coreDecay, coreBorn,
 
     //distribution
     lightLink, mediumLink, heavyLink ,mover, test2, neoLoader, neoUnloader,
 
     //turrets
-    cluster, starflood, interleet, confronter, missileter, decaynir, preletT1, preletT2, crystalFer, orbitalCannon, metalBlast, metalBlastV2,
+    cluster, starflood, interleet, confronter, missileter, decaynir, preletT1, preletT2, crystalFer, orbitalCannon, metalBlast, metalBlastV2, prototypeRift,
 
     neoShooter, unstable,
 
@@ -75,10 +76,13 @@ public class DecalingBlocks{
     timeFactory, decayFactory, timeRefabricator, decayRefabricator,timeAssembler,decayAssembler, decayModule, decayModuleT2, wallConstructor,
     //CUMpaning
     timeMachine,
+    //special
+    creeperCell,
     //for modmakers
     airStrike;
 
     public void load() {
+        Blocks.incinerator.requirements(Category.crafting, with(Items.copper, 10, Items.lead, 40, Items.graphite, 30));
         //environment
         decayfloor = new Floor("decay-floor"){{
             attributes.set(DecalingAttributes.decay, 1f);
@@ -176,6 +180,24 @@ public class DecalingBlocks{
 
                 consumePower(5.5f);
             }};
+        viliniteWall = new DecalingWall("vilinite-wall"){{
+            requirements(Category.defense, with(DecalingItems.viliniteAlloy, 6));
+            health = 1280;
+            repairChance = 0.05f;
+            healAmount = 60f;
+        }};
+        viliniteWallLarge = new DecalingWall("vilinite-wall-large"){{
+            requirements(Category.defense, with(DecalingItems.viliniteAlloy, 24));
+            health = 1280 * 4;
+            repairChance = 0.05f;
+            healAmount = 240f;
+            size = 2;
+        }};
+        iodWall = new NeoplasmaWall("iod-wall"){{
+            requirements(Category.defense, with(DecalingItems.iod, 8));
+            health = 400;
+            healPercent = 5f;
+        }};
         //crafting
         changer = new GenericCrafter("changer") {{
         requirements(Category.crafting, with(
@@ -297,6 +319,31 @@ public class DecalingBlocks{
             consumePower(2.8f);
             consumeItems(with(DecalingItems.timefragment, 6, DecalingItems.decaygraphite, 2 , DecalingItems.viliniteAlloy, 1));
         }};
+        recycler = new Separator("recycler"){{
+            requirements(Category.crafting, with(DecalingItems.oldmateria, 320,DecalingItems.timefragment, 180, DecalingItems.decaygraphite, 100, DecalingItems.viliniteAlloy, 50, DecalingItems.reliteplate, 20));
+            results = with(
+                    Items.lead, 3,
+                    Items.graphite, 3,
+                    Items.silicon, 3,
+                    DecalingItems.timefragment, 3,
+                    DecalingItems.decaygraphite, 3,
+                    DecalingItems.viliniteAlloy, 2
+            );
+            hasPower = true;
+            craftTime = 15f;
+            size = 4;
+            itemCapacity = 40;
+
+            consumePower(3.8f);
+            consumeItem(DecalingItems.oldmateria, 10);
+        }};
+        decayIncinerator = new Incinerator("decay-incinerator"){{
+            requirements(Category.crafting, with(DecalingItems.oldmateria, 370, Items.silicon, 190, DecalingItems.decaygraphite, 90, DecalingItems.timefragment, 240));
+            health = 580;
+            size = 3;
+            envEnabled |= Env.space;
+            consumePower(2f);
+        }};
         //production
         test = new RotateDrill("driller"){{
             requirements(Category.production, with(DecalingItems.oldmateria, 25));
@@ -339,13 +386,12 @@ public class DecalingBlocks{
             fogRadius = 3;
             researchCost = with(DecalingItems.oldmateria, 30);
         }};
-        wire = new Wall("wire"){{
+        wire = new WireWall("wire"){{
             requirements(Category.power, with(
                     DecalingItems.oldmateria, 5,
                     Items.silicon, 2
             ));
             health = 30;
-            group = BlockGroup.power;
             consumesPower = outputsPower = true;
             consumePowerBuffered(5f);
             researchCost = with(DecalingItems.oldmateria, 20,Items.silicon, 16);
@@ -361,13 +407,15 @@ public class DecalingBlocks{
             consumesPower = outputsPower = true;
             consumePowerBuffered(20f);
         }};
-        armoredWire = new Wall("armored-wire"){{
+        armoredWire = new WireWall("armored-wire"){{
             requirements(Category.power, with(
                     DecalingItems.reliteplate, 2,
                     Items.silicon, 4
             ));
             health = 100;
+            armor = 20f;
             absorbLasers = true;
+            electricity = false;
             group = BlockGroup.power;
             consumesPower = outputsPower = true;
             consumePowerBuffered(5f);
@@ -405,6 +453,18 @@ public class DecalingBlocks{
             size = 3;
 
             unitCapModifier = 10;
+        }};
+        coreDecay = new DrillCore("core-decay"){{
+            requirements(Category.effect, with(DecalingItems.oldmateria, 3200, Items.graphite, 2600, Items.lead, 2900, Items.silicon, 1890, DecalingItems.viliniteAlloy, 1300));
+
+            tier = 3;
+            unitType = DecalingUnits.melair;
+            health = 4000;
+            itemCapacity = 6000;
+            drillTime = 60;
+            size = 4;
+
+            unitCapModifier = 16;
         }};
         coreBorn = new CoreBlock("core-born"){{
             requirements(Category.effect, with(DecalingItems.iod, 1200));
@@ -933,6 +993,59 @@ public class DecalingBlocks{
                 pierceBuilding = true;
             }};
         }};
+        prototypeRift = new PayloadAmmoTurret("prototype-rift"){{
+            requirements(Category.turret, with(
+                    DecalingItems.oldmateria, 1270,
+                    Items.silicon, 780,
+                    Items.graphite, 970,
+                    DecalingItems.timefragment, 980,
+                    DecalingItems.viliniteAlloy, 580,
+                    DecalingItems.timeEssence, 200
+            ));
+            scaledHealth = 890;
+            size = 5;
+            reload = 200f;
+            range = 360f;
+            recoil = 1.45f;
+            coolant = consumeCoolant(0.2f);
+            consumePower(3.2f);
+            outlineColor = DecalPal.decalOutline;
+            drawer = new DrawTurret("decay-");
+            ammo(
+                    DecalingBlocks.timewallLarge, new BasicBulletType(){{
+                        height = 20f;
+                        width = 20f;
+                        speed = 6f;
+                        lifetime = 60f;
+                        damage = 100f;
+                        sprite = "large-orb";
+                        frontColor = DecalPal.darkTime;
+                        backColor = DecalPal.darkTime;
+                        trailColor = DecalPal.darkTime;
+                        trailLength = 20;
+                        trailWidth = 5;
+                        ammoMultiplier = 1;
+                        pierce = true;
+                        pierceCap = 5;
+                        pierceBuilding = true;
+                        intervalBullet = new ContinuousFlameBulletType(){{
+                            damage = 10f;
+                            length = 100f;
+                            lifetime = 60f;
+                            pierceCap = 3;
+                            colors = new Color[]{Color.valueOf("b8ccf2").a(0.35f), Color.valueOf("c0d6ff").a(0.5f), Color.valueOf("ffffff").a(0.6f), Color.valueOf("ffffff"), Color.white};
+                            flareColor = Color.valueOf("ffffff");
+
+                            lightColor = hitColor = flareColor;
+                        }};
+
+                        bulletInterval = 4f;
+                        intervalRandomSpread = 360f;
+                        intervalBullets = 2;
+                        intervalAngle = 360f;
+                        intervalSpread = 360f;
+                    }});
+        }};
         neoShooter = new ItemTurret("neo-shooter"){{
             requirements(Category.turret, with(
                     DecalingItems.iod, 80
@@ -1142,6 +1255,13 @@ public class DecalingBlocks{
             consumePower(36);
             consumeItems(with(DecalingItems.oldmateria, 1600,DecalingItems.timefragment, 2000, DecalingItems.timeEssence, 900));
         }};
+        //special
+        creeperCell = new Wall("creeper-cell"){{
+            requirements(Category.effect,BuildVisibility.editorOnly, with());
+            health = 600;
+            size = 1;
+            unitCapModifier = 0;
+        }};
         //for modmakers
         airStrike = new ItemTurret("air-strike"){{
             requirements(Category.turret, BuildVisibility.debugOnly, with());
@@ -1152,6 +1272,7 @@ public class DecalingBlocks{
                 recoil = 0f;
                 coolant = consumeCoolant(0.4f);
                 outlineColor = DecalPal.decalOutline;
+                shootEffect = DecalingFx.launchMissile;
                 shootY = 0f;
                 shoot = new ShootSummon(0f, 0f, 280f, 360f);
                 ammo(

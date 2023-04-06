@@ -54,11 +54,13 @@ public class AttributeGenerator extends PowerGenerator {
         }
         @Override
         public void draw() {
-            float warmup = 0.1f;
+            float warmup = 0.2f;
             float s = 0.3f;
             float ts = 0.6f;
             super.draw();
             Drawf.spinSprite(rotatorRegion, x, y, rotatorAngle);
+
+            Draw.rect(topRegion, x, y);
 
             Draw.z(Layer.blockAfterCracks);
             if(drawHeat){
@@ -69,7 +71,6 @@ public class AttributeGenerator extends PowerGenerator {
                 Draw.blend();
                 Draw.color();
             }
-            Draw.rect(topRegion, x, y);
         }
     }
 }

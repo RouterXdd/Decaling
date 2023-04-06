@@ -30,7 +30,7 @@ public class ModesPowerTurret extends PowerTurret{
         @Override
         public void buildConfiguration(Table table) {
             table.button(Icon.flipX, Styles.clearTogglei, () -> {
-                if (canConsume() && potentialEfficiency == 1) {
+                if (potentialEfficiency == 1) {
                     change();
                 }
                 deselect();

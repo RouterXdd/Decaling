@@ -44,6 +44,10 @@ public class DecalinTechTree {
                         });
                     node(DecalingBlocks.vilineForge, Seq.with(new SectorComplete(repairTerminal)),() -> {
                     });
+                        node(DecalingBlocks.recycler, Seq.with(new SectorComplete(orbitalCenter)),() -> {
+                        });
+                        node(DecalingBlocks.decayIncinerator, Seq.with(new SectorComplete(junkyard)),() -> {
+                        });
                     });
                 });
             });
@@ -53,6 +57,10 @@ public class DecalinTechTree {
                     });
                     node(DecalingBlocks.timewallLarge, () -> {
                     });
+                    node(DecalingBlocks.viliniteWall, () -> {
+                        node(DecalingBlocks.viliniteWallLarge, () -> {
+                        });
+                    });
                 });
                 node(DecalingBlocks.decalwalllarge, () -> {
                 });
@@ -61,6 +69,8 @@ public class DecalinTechTree {
                 node(DecalingBlocks.starflood, Seq.with(new Produce(DecalingItems.timefragment)), () -> {
                     node(DecalingBlocks.interleet, Seq.with(new SectorComplete(forgotLand)), () -> {
                         node(DecalingBlocks.crystalFer, () -> {
+                            node(DecalingBlocks.decaynir, () -> {
+                            });
                         });
                         node(DecalingBlocks.confronter, Seq.with(new SectorComplete(repairTerminal)),() -> {
                             node(DecalingBlocks.missileter, Seq.with(new Produce(DecalingItems.viliniteAlloy)),() -> {
@@ -134,6 +144,9 @@ public class DecalinTechTree {
             node(forgotLand, () -> {
                 node(sectureBase, Seq.with(new SectorComplete(forgotLand)),() -> {
                     node(repairTerminal, Seq.with(new SectorComplete(sectureBase)),() -> {
+                        node(junkyard, Seq.with(new SectorComplete(repairTerminal)),() -> {
+
+                        });
                         node(highPeaks, Seq.with(new SectorComplete(repairTerminal)),() -> {
                             node(orbitalCenter, Seq.with(new SectorComplete(highPeaks)),() -> {
 
@@ -141,6 +154,8 @@ public class DecalinTechTree {
                         });
                     });
                 });
+            });
+            node(DecalingBlocks.coreDecay, Seq.with(new SectorComplete(repairTerminal)),() -> {
             });
         });
     }

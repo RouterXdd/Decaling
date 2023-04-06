@@ -14,7 +14,7 @@ import mindustry.graphics.*;
 import mindustry.type.*;
 
 public class DecayField extends Ability {
-    public float range = 30, damage = 1;
+    public float range, damage;
     public DecayField( float range, float damage) {
         this.range = range;
         this.damage = damage;
