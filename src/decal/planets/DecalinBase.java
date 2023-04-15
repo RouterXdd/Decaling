@@ -32,7 +32,7 @@ public class DecalinBase {
     public String[] schematics;
     public Seq<BasePart> coreParts = new Seq<>(), parts = new Seq<>();
     public ObjectMap<Content, Seq<BasePart>> reqParts = new ObjectMap<>();
-    public static ObjectMap<Item, Block> uores = new ObjectMap<>();
+    public static ObjectMap<Item, Block> ores = new ObjectMap<>();
 
     private Tiles tiles;
     private Seq<Tile> cores;
@@ -43,6 +43,7 @@ public class DecalinBase {
                 //cores
                 "bXNjaAF4nEVQW26DQBDz7vIIjwQh9QC9AB+9Q29R9WMTthXSJkRAW+X2tYGqIOEZ79jjBS1ah+TmrwHla7j4x/PZzwFVH+bLNNyXYbwByKI/hzjDvr1neOo5F7tluIYfH2MX/fQZ0P6zXT8N32FCs1HrV5N/xLz46SOOY4/jRlzi17xQcNrbcZLHg4tfAIMETpAJgANLPqXA8iU6FFtXacTiCCdVCmNJ5BpPNGkJuQQpagkSnESnPLeOkMNIRTPD2qnL5MIfsE3KyqaMcJAgVwhLqOEEXOt4kkpesDMK22j7Hq+QpyCRdSG5Yea1K7nDOMJ6v3LTVaoN/deioqc1/ORyqWnASKR0dpSLbr6Topl5XXza5A2TOQGv9gu+GDXZ",
                 "bXNjaAF4nFVRW26DMBBc24TEvCE9QC6Qn56hN+hn1Q8S3ArJCRWgVrl9d3YTVcWC8T5nd6A97R0l1/4SqHgJ5/52OPVLODxTPoTlPI9f6zhdiSiN/SnEhezb+5aqgTPjcR0v4aePkZ7+28fYz5+B2j/vcZjH7zBTrS75SuXdMV7XMMcQ1odjWfv5I07T8OA6TzO63HiUV35pRw7gSZ6MyDDkZA1fEoUUKYYzDUAyDTIt+z05xxcpsFQAHB+Lz4bknpIBbBVyTakACffhzASZCR8mAuTomVBJDikNWcuRhBzAK1SIpTyIQ39L3CHFBSAMKepAanVJ2QsbGIse6OLBh44eDJ6HF2eNbXfUal2HBndxPMYFtEjxHHOimAonsUxjGWKGJzEkqvDwG7ZSEBXgh5WrVWGHnMclFLRQqVCrRDl0EF1K6AJng/0q0EDGDRhq/Q+ValbxMYad8gNqFkFAZK2xJqAENIgZhhwFDRgNjwBhGXbYqIU8gAyMnTo7dXZY+xfbg0Ad",
+                "bXNjaAF4nE1RW26DMBBcDOFlO9AKVe1fLsBXj9DeouoHAbey5EBlUKrcvjusKkXCHnZmdrQs9ExtStk8XByZdzcOt9N5WN3plfTk1jH6n80vMxHlYTi7sFL+MS7RfVb0MrE79Fcf/Ow31/8OIfRhiN+OjiLhvs0+/tfRjbcxuEgPUm/+4vop+itTWqjLgqKVYlzmr7jMGzPdXSL41U/3vuhEokYYj6bg3MaDv/EhRSkgE6gpARiA4ivlBxpAw6LIUqKYKlAVMKdU0oF2qhAoSYGsoRZ0JJVxtWslNKIKyoFBgaxEq6CBNFAr9OWckQkcEKX5JKg4GqARoGEv5T1n2Bs0GgC1AKuw7NFaoo04jTiNOI3kWBnQSqYVpxWnFaeFE5Y90yIzpYYt/LVHnnOHEutpuIFzGtlzI1oDDeS+nlbIFqSiR2w3oU4238nmO/k1ncz2hERAJlAL8Cx/TjxPrA==",
 
                 //defenses
                 "bXNjaAF4nF2PwW6EMAxEBxIiw6bbU+/9Af6if1HtIQtphZTSCraq+vf1xOylgvDw2OMBnHF28Gv6yHh4yVP6fZ7zW16njNOc92lbvm7L5woglHTNZUf7evF4nHW0jPX5k0rB0z9hLGl715WHvC2l5O1eTuV7v2kJjEADr0fvDk3DHD1aiYk9xVavCm8IBjEMNHBHy1U6yzkPp7/FZawEjr1jMhIdDURkzBEaaHcKjxoTuCWovfYGQ7WL5YnlieWJ5YnlieWJGXrL6y1v0HdHeEMwiKH6IntERzHaJ0aOED3cH6eIKZg=",
@@ -314,8 +315,8 @@ public class DecalinBase {
     }
 
     static void set(Tile tile, Item item){
-        if (uores.containsKey(item)) {
-            tile.setOverlay(uores.get(item));
+        if (ores.containsKey(item)) {
+            tile.setOverlay(ores.get(item));
         } else if (bases.ores.containsKey(item)){
             tile.setOverlay(bases.ores.get(item));
         } else if (bases.oreFloors.containsKey(item)) {

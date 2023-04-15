@@ -13,6 +13,7 @@ import decal.world.blocks.defence.*;
 import decal.world.bullets.*;
 import decal.world.environment.*;
 import decal.world.meta.*;
+import mindustry.entities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.part.*;
 import mindustry.entities.pattern.*;
@@ -66,7 +67,7 @@ public class DecalingBlocks{
     lightLink, mediumLink, heavyLink ,mover, test2, neoLoader, neoUnloader,
 
     //turrets
-    cluster, starflood, interleet, confronter, missileter, decaynir, preletT1, preletT2, crystalFer, orbitalCannon, metalBlast, metalBlastV2, prototypeRift,
+    cluster, starflood, interleet, confronter, missileter, decaynir, preletT1, preletT2, crystalFer, rollIn,orbitalCannon, metalBlast, metalBlastV2, prototypeRift,
 
     neoShooter, unstable,
 
@@ -899,6 +900,59 @@ public class DecalingBlocks{
                     DecalingItems.timefragment, 110
             );
         }};
+        rollIn = new ContinuousTurret("roll-in"){{
+            requirements(Category.turret, with(DecalingItems.oldmateria, 430,
+                    Items.silicon, 230,
+                    DecalingItems.decaygraphite, 170,
+                    DecalingItems.timefragment, 320,
+                    DecalingItems.viliniteAlloy, 210
+            ));
+
+            shootType = new PointLaserBulletType(){{
+                damage = 10f;
+                buildingDamageMultiplier = 0.4f;
+                lightColor = color = hitColor = DecalPal.darkTime;
+                status = DecalingStatus.timeStop;
+                statusDuration = 30;
+                trailWidth = 4;
+                trailLength = 40;
+                trailColor = DecalPal.darkTime;
+            }};
+
+            drawer = new DrawTurret("decal-"){{
+                var heatp = DrawPart.PartProgress.warmup.blend(p -> Mathf.absin(2f, 1f) * p.warmup, 0.2f);
+                parts.add(new RegionPart("-mid"){{
+                            heatProgress = heatp;
+                            progress = PartProgress.warmup;
+                            heatColor = DecalPal.darkTime;
+                            moveY = -8f;
+                            mirror = false;
+                            under = true;
+                        }});
+            }};
+
+            shootSound = Sounds.none;
+            loopSoundVolume = 1f;
+            loopSound = Sounds.laserbeam;
+
+            shootWarmupSpeed = 0.1f;
+            shootCone = 360f;
+
+            aimChangeSpeed = 2f;
+            rotateSpeed = 2f;
+
+            shootY = 0.5f;
+            outlineColor = DecalPal.decalOutline;
+            size = 4;
+            range = 250f;
+            scaledHealth = 210;
+
+            unitSort = UnitSorts.farthest;
+
+            consumePower(6);
+            consumeItem(DecalingItems.timefragment, 8);
+        }};
+
         orbitalCannon = new ItemTurret("omega-cannon"){{
             requirements(Category.turret, with(
                     DecalingItems.oldmateria, 900,
@@ -1028,6 +1082,7 @@ public class DecalingBlocks{
                         pierce = true;
                         pierceCap = 5;
                         pierceBuilding = true;
+                        reloadMultiplier = 1;
                         intervalBullet = new ContinuousFlameBulletType(){{
                             damage = 10f;
                             length = 100f;

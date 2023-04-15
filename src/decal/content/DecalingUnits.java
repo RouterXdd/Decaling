@@ -6,6 +6,7 @@ import mindustry.ai.UnitCommand;
 import mindustry.ai.types.*;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
+import mindustry.entities.part.HoverPart;
 import mindustry.entities.pattern.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
@@ -19,7 +20,7 @@ import decal.world.abilities.*;
 public class DecalingUnits {
  public static UnitType
  //time
- hour, clock, timer, day, year, timeAssemblyDrone,
+ hour, clock, timer, day, year, timeAssemblyDrone, pause,
  //core
  decray, melair,
  //decay
@@ -352,6 +353,72 @@ public class DecalingUnits {
          envEnabled = Env.any;
          envDisabled = Env.none;
          abilities.add(new DecayField(26f, 0.5f));
+     }};
+     pause = new UnitType("pause"){{
+         hovering = true;
+         shadowElevation = 0.1f;
+         constructor = ElevationMoveUnit::create;
+
+         drag = 0.07f;
+         speed = 1.8f;
+         rotateSpeed = 5f;
+         outlineColor = DecalPal.decalOutline;
+         accel = 0.09f;
+         health = 1560f;
+         armor = 1f;
+         hitSize = 11f;
+         engineOffset = 6f;
+         engineSize = 2f;
+         itemCapacity = 0;
+         useEngineElevation = false;
+         researchCostMultiplier = 0f;
+
+         abilities.add(new MoveEffectAbility(0f, -6f, DecalPal.darkTime, Fx.missileTrailShort, 4f){{
+             teamColor = true;
+         }});
+
+         for(float f : new float[]{-3f, 3f}){
+             parts.add(new HoverPart(){{
+                 x = 4f;
+                 y = f;
+                 mirror = true;
+                 radius = 6f;
+                 phase = 90f;
+                 stroke = 2f;
+                 layerOffset = -0.001f;
+                 color = DecalPal.darkTime;
+             }});
+         }
+
+         weapons.add(new Weapon("decal-pause-weapon"){{
+             shootSound = Sounds.blaster;
+             y = -2f;
+             x = 4f;
+             top = true;
+             mirror = true;
+             reload = 40f;
+             baseRotation = -35f;
+             shootCone = 360f;
+
+             shoot = new ShootSpread(3, 14f);
+
+             bullet = new BasicBulletType(5f, 10){{
+                 homingPower = 0.2f;
+                 homingDelay = 4f;
+                 width = 8f;
+                 height = 12f;
+                 lifetime = 30f;
+                 shootEffect = Fx.sparkShoot;
+                 smokeEffect = Fx.shootBigSmoke;
+                 hitColor = backColor = trailColor = DecalPal.darkTime;
+                 frontColor = Color.white;
+                 trailWidth = 1.5f;
+                 trailLength = 5;
+                 hitEffect = despawnEffect = Fx.hitBulletColor;
+                 status = DecalingStatus.timeCrack;
+                 statusDuration = 40;
+             }};
+         }});
      }};
     decray = new UnitType("decray"){{
         controller = u -> new BuilderAI();

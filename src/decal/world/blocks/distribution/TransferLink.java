@@ -149,7 +149,6 @@ public class TransferLink extends Block {
 
         float dx1 = x1 + ox * l1, dy1 = y1 + oy * l1, dx2 = x2 - ox * l2, dy2 = y2 - oy * l2;
 
-        //TODO maybe just Drawf.laser
         Draw.alpha(Renderer.laserOpacity);
         Draw.z(Layer.power);
         Draw.rect(laserEndRegion, dx1, dy1);
@@ -316,6 +315,7 @@ public class TransferLink extends Block {
              links.each(i -> {
                  if (links != null);
                 Building link = Vars.world.build(i);
+                 if (link != null);
                  Drawf.square(link.x, link.y, link.block.size * Vars.tilesize / 2f + 1f, Pal.place);
             });
         }

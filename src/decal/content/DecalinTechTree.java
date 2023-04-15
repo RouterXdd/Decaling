@@ -75,7 +75,9 @@ public class DecalinTechTree {
                         node(DecalingBlocks.confronter, Seq.with(new SectorComplete(repairTerminal)),() -> {
                             node(DecalingBlocks.missileter, Seq.with(new Produce(DecalingItems.viliniteAlloy)),() -> {
                                 node(DecalingBlocks.orbitalCannon, Seq.with(new SectorComplete(orbitalCenter)),() -> {
+                                    node(DecalingBlocks.prototypeRift, Seq.with(new OnSector(orbitalCenter)),() -> {
 
+                                    });
                                 });
                             });
                         });
@@ -149,13 +151,17 @@ public class DecalinTechTree {
                         });
                         node(highPeaks, Seq.with(new SectorComplete(repairTerminal)),() -> {
                             node(orbitalCenter, Seq.with(new SectorComplete(highPeaks)),() -> {
+                                node(timeSiege, Seq.with(new SectorComplete(orbitalCenter)),() -> {
 
+                                });
                             });
                         });
                     });
                 });
             });
             node(DecalingBlocks.coreDecay, Seq.with(new SectorComplete(repairTerminal)),() -> {
+            });
+            node(DecalingBlocks.timeMachine, Seq.with(new SectorComplete(timeSiege)),() -> {
             });
         });
     }
