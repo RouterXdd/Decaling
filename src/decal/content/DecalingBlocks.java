@@ -46,7 +46,7 @@ public class DecalingBlocks{
     neoWall, roughNeoFloor, oreIod,
 
     //defence
-    decalwall, decalwalllarge, timewall, timewallLarge, decayBarrier, viliniteWall, viliniteWallLarge, iodWall,
+    decalwall, decalwalllarge, timewall, timewallLarge, decayBarrier, viliniteWall, viliniteWallLarge, mirrorWall, iodWall,
 
     //breakers
 
@@ -55,7 +55,7 @@ public class DecalingBlocks{
     changer, repairer, recreator, vilineForge, pressureClet, timeElectric, recycler, decayIncinerator,
 
     //production
-    test, oreCrusher, tectonicBomber,
+    test, oreCrusher, tectonicBomber, test3,
 
     //power
     decayconsider, wire, largeWire, timeDriver, armoredWire, largeArmoredWire,
@@ -120,7 +120,7 @@ public class DecalingBlocks{
             liquidDrop = Liquids.neoplasm;
             isLiquid = true;
             liquidMultiplier = 0.8f;
-            cacheLayer = CacheLayer.tar;
+            cacheLayer = DecalingShaders.neoplasmLayer;
         }};
         neoFloor = new Floor("neo-floor") {{
             variants = 3;
@@ -186,13 +186,21 @@ public class DecalingBlocks{
             health = 1280;
             repairChance = 0.05f;
             healAmount = 60f;
+            repairHit = true;
         }};
         viliniteWallLarge = new DecalingWall("vilinite-wall-large"){{
             requirements(Category.defense, with(DecalingItems.viliniteAlloy, 24));
             health = 1280 * 4;
             repairChance = 0.05f;
             healAmount = 240f;
+            repairHit = true;
             size = 2;
+        }};
+        mirrorWall = new DecalingWall("mirror-wall"){{
+            requirements(Category.defense, with(DecalingItems.viliniteAlloy, 8, DecalingItems.reliteplate, 4));
+            health = 2000;
+            mirrorChance = 0.1f;
+            absorbLasers = true;
         }};
         iodWall = new NeoplasmaWall("iod-wall"){{
             requirements(Category.defense, with(DecalingItems.iod, 8));
@@ -930,7 +938,7 @@ public class DecalingBlocks{
                             under = true;
                         }});
             }};
-
+            coolant = consumeCoolant(0.6f);
             shootSound = Sounds.none;
             loopSoundVolume = 1f;
             loopSound = Sounds.laserbeam;

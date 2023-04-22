@@ -17,6 +17,7 @@ import static mindustry.Vars.*;
 
 public class DecalingWall extends Wall {
     public float repairChance = -1f;
+    public float mirrorChance = -1f;
     public float healAmount = 40f;
     public boolean repairHit;
 
@@ -44,6 +45,9 @@ public class DecalingWall extends Wall {
         if(repairChance > 0f){
             stats.add(DecStat.repairChance, repairChance * 100, StatUnit.percent);
             stats.add(DecStat.healAmount, healAmount, StatUnit.none);
+        }
+        if(mirrorChance > 0f){
+            stats.add(DecStat.mirrorChance, mirrorChance * 100, StatUnit.percent);
         }
     }
 
@@ -84,6 +88,32 @@ public class DecalingWall extends Wall {
             if(repairChance > 0f) {
                 if(Mathf.chance(repairChance)) {
                     this.heal(healAmount);
+                }
+            }
+            if(mirrorChance > 0f){
+                if(Mathf.chance(mirrorChance)) {
+                    if (bullet.vel.len() <= 0.1f || !bullet.type.reflectable) return true;
+
+                    //make sound
+                    deflectSound.at(tile, Mathf.random(0.9f, 1.1f));
+
+                    //translate bullet back to where it was upon collision
+                    bullet.trns(bullet.vel.x, bullet.vel.y);
+
+                    float penX = Math.abs(x - bullet.x), penY = Math.abs(y - bullet.y);
+
+                    if (penX > penY) {
+                        bullet.vel.x *= 1;
+                    } else {
+                        bullet.vel.y *= 1;
+                    }
+
+                    bullet.owner = this;
+                    bullet.team = team;
+                    bullet.time += 1f;
+
+                    //disable bullet collision by returning false
+                    return false;
                 }
             }
 

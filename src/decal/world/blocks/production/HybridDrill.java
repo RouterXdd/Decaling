@@ -1,8 +1,4 @@
-package decal.world.blocks.storage;
-
-
-import mindustry.game.*;
-import mindustry.world.blocks.storage.*;
+package decal.world.blocks.production;
 
 import arc.*;
 import arc.graphics.*;
@@ -24,22 +20,22 @@ import mindustry.world.blocks.environment.*;
 import mindustry.world.meta.*;
 
 import static mindustry.Vars.*;
+import mindustry.world.blocks.production.*;
 
-
-public class DrillCore extends CoreBlock {
+public class HybridDrill extends BeamDrill {
     public float hardnessDrillMultiplier = 50f;
 
     protected final ObjectIntMap<Item> oreCount = new ObjectIntMap<>();
     protected final Seq<Item> itemArray = new Seq<>();
 
     /** Maximum tier of blocks this drill can mine. */
-    public int tier;
+    public int groundtier;
     /** Base time to drill one ore, in frames. */
-    public float drillTime = 300;
+    public float grounddrillTime = 300;
     /** How many times faster the drill will progress when boosted by liquid. */
     public float liquidBoostIntensity = 1.6f;
     /** Speed at which the drill speeds up. */
-    public float warmupSpeed = 0.015f;
+    public float groundwarmupSpeed = 0.015f;
     /** Special exemption item that this drill can't mine. */
     public @Nullable Item blockedItem;
 
@@ -50,25 +46,25 @@ public class DrillCore extends CoreBlock {
     /** Whether to draw the item this drill is mining. */
     public boolean drawMineItem = true;
     /** Effect played when an item is produced. This is colored. */
-    public Effect drillEffect = Fx.mine;
+    public Effect grounddrillEffect = Fx.mine;
     /** Drill effect randomness. Block size by default. */
-    public float drillEffectRnd = -1f;
+    public float grounddrillEffectRnd = -1f;
     /** Speed the drill bit rotates at. */
     public float rotateSpeed = 2f;
     /** Effect randomly played while drilling. */
-    public Effect updateEffect = Fx.pulverizeSmall;
+    public Effect groundupdateEffect = Fx.pulverizeSmall;
     /** Chance the update effect will appear. */
     public float updateEffectChance = 0.02f;
 
-    public boolean drawRim = false;
-    public boolean drawSpinSprite = true;
-    public Color heatColor = Color.valueOf("ff5512");
-    public TextureRegion rimRegion = Core.atlas.find(this.name + "-rim");
-    public TextureRegion rotatorRegion = Core.atlas.find(this.name + "-rotator");
-    public TextureRegion topRegion = Core.atlas.find(this.name + "-top");
-    public TextureRegion itemRegion = Core.atlas.find(this.name + "-item");
+    public boolean grounddrawRim = false;
+    public boolean grounddrawSpinSprite = true;
+    public Color groundheatColor = Color.valueOf("ff5512");
+    public TextureRegion rimRegion = Core.atlas.find(this.name + "-grim");
+    public TextureRegion rotatorRegion = Core.atlas.find(this.name + "-grotator");
+    public TextureRegion topRegion = Core.atlas.find(this.name + "-gtop");
+    public TextureRegion itemRegion = Core.atlas.find(this.name + "-gitem");
 
-    public DrillCore(String name){
+    public HybridDrill(String name){
         super(name);
         update = true;
         solid = true;
@@ -84,7 +80,7 @@ public class DrillCore extends CoreBlock {
     @Override
     public void init(){
         super.init();
-        if(drillEffectRnd < 0) drillEffectRnd = size;
+        if(grounddrillEffectRnd < 0) grounddrillEffectRnd = size;
     }
 
     @Override
@@ -105,7 +101,7 @@ public class DrillCore extends CoreBlock {
     public void setBars(){
         super.setBars();
 
-        addBar("drillspeed", (DrillCoreBuild e) ->
+        addBar("drillspeed", (HybridDrill.HybridDrillBuild e) ->
                 new Bar(() -> Core.bundle.format("bar.drillspeed", Strings.fixed(e.lastDrillSpeed * 60 * e.timeScale(), 2)), () -> Pal.ammo, () -> e.warmup));
     }
 
@@ -123,12 +119,12 @@ public class DrillCore extends CoreBlock {
         countOre(tile);
 
         if(returnItem != null){
-            float width = drawPlaceText(Core.bundle.formatFloat("bar.drillspeed", 60f / getDrillTime(returnItem) * returnCount, 2), x, y + 1, valid);
+            float width = drawPlaceText(Core.bundle.formatFloat("bar.drillspeed", 60f / getDrillTime(returnItem) * returnCount, 2), x, y + 2, valid);
             float dx = x * tilesize + offset - width/2f - 4f, dy = y * tilesize + offset + size * tilesize / 2f + 5, s = iconSmall / 4f;
             Draw.mixcol(Color.darkGray, 1f);
-            Draw.rect(returnItem.fullIcon, dx, dy + 7, s, s);
+            Draw.rect(returnItem.fullIcon, dx, dy - 1, s, s);
             Draw.reset();
-            Draw.rect(returnItem.fullIcon, dx, dy + 8, s, s);
+            Draw.rect(returnItem.fullIcon, dx, dy, s, s);
 
             if(drawMineItem){
                 Draw.color(returnItem.color);
@@ -136,7 +132,7 @@ public class DrillCore extends CoreBlock {
                 Draw.color();
             }
         }else{
-            Tile to = tile.getLinkedTilesAs(this, tempTiles).find(t -> t.drop() != null && (t.drop().hardness > tier || t.drop() == blockedItem));
+            Tile to = tile.getLinkedTilesAs(this, tempTiles).find(t -> t.drop() != null && (t.drop().hardness > groundtier || t.drop() == blockedItem));
             Item item = to == null ? null : to.drop();
             if(item != null){
                 drawPlaceText(Core.bundle.get("bar.drilltierreq"), x, y, valid);
@@ -145,7 +141,7 @@ public class DrillCore extends CoreBlock {
     }
 
     public float getDrillTime(Item item){
-        return drillTime + hardnessDrillMultiplier * item.hardness;
+        return grounddrillTime + hardnessDrillMultiplier * item.hardness;
     }
 
     @Override
@@ -153,9 +149,9 @@ public class DrillCore extends CoreBlock {
         super.setStats();
 
         stats.add(Stat.drillTier, StatValues.blocks(b -> b instanceof Floor f && !f.wallOre && f.itemDrop != null &&
-                f.itemDrop.hardness <= tier && f.itemDrop != blockedItem && (indexer.isBlockPresent(f) || state.isMenu())));
+                f.itemDrop.hardness <= groundtier && f.itemDrop != blockedItem && (indexer.isBlockPresent(f) || state.isMenu())));
 
-        stats.add(Stat.drillSpeed, 60f / drillTime * size * size, StatUnit.itemsSecond);
+        stats.add(Stat.drillSpeed, 60f / grounddrillTime * size * size, StatUnit.itemsSecond);
         if(liquidBoostIntensity != 1){
             stats.add(Stat.boostEffect, liquidBoostIntensity * liquidBoostIntensity, StatUnit.timesSpeed);
         }
@@ -170,7 +166,7 @@ public class DrillCore extends CoreBlock {
 
     @Override
     public TextureRegion[] icons(){
-        return new TextureRegion[]{region, rotatorRegion, topRegion, teamRegions[Team.sharded.id]};
+        return new TextureRegion[]{region, rotatorRegion, topRegion};
     }
 
     protected void countOre(Tile tile){
@@ -209,10 +205,10 @@ public class DrillCore extends CoreBlock {
     public boolean canMine(Tile tile){
         if(tile == null || tile.block().isStatic()) return false;
         Item drops = tile.drop();
-        return drops != null && drops.hardness <= tier && drops != blockedItem;
+        return drops != null && drops.hardness <= groundtier && drops != blockedItem;
     }
 
-    public class DrillCoreBuild extends CoreBuild{
+    public class HybridDrillBuild extends BeamDrillBuild {
         public float progress;
         public float warmup;
         public float timeDrilled;
@@ -285,14 +281,14 @@ public class DrillCore extends CoreBlock {
                 float speed = Mathf.lerp(1f, liquidBoostIntensity, optionalEfficiency) * efficiency;
 
                 lastDrillSpeed = (speed * dominantItems * warmup) / delay;
-                warmup = Mathf.approachDelta(warmup, speed, warmupSpeed);
+                warmup = Mathf.approachDelta(warmup, speed, groundwarmupSpeed);
                 progress += delta() * dominantItems * speed * warmup;
 
                 if(Mathf.chanceDelta(updateEffectChance * warmup))
-                    updateEffect.at(x + Mathf.range(size * 2f), y + Mathf.range(size * 2f));
+                    groundupdateEffect.at(x + Mathf.range(size * 2f), y + Mathf.range(size * 2f));
             }else{
                 lastDrillSpeed = 0f;
-                warmup = Mathf.approachDelta(warmup, 0f, warmupSpeed);
+                warmup = Mathf.approachDelta(warmup, 0f, groundwarmupSpeed);
                 return;
             }
 
@@ -301,7 +297,7 @@ public class DrillCore extends CoreBlock {
 
                 progress %= delay;
 
-                if(wasVisible) drillEffect.at(x + Mathf.range(drillEffectRnd), y + Mathf.range(drillEffectRnd), dominantItem.color);
+                if(wasVisible) grounddrillEffect.at(x + Mathf.range(grounddrillEffectRnd), y + Mathf.range(grounddrillEffectRnd), dominantItem.color);
             }
         }
 
@@ -334,8 +330,8 @@ public class DrillCore extends CoreBlock {
             drawDefaultCracks();
 
             Draw.z(Layer.blockAfterCracks);
-            if(drawRim){
-                Draw.color(heatColor);
+            if(grounddrawRim){
+                Draw.color(groundheatColor);
                 Draw.alpha(warmup * ts * (1f - s + Mathf.absin(Time.time, 3f, s)));
                 Draw.blend(Blending.additive);
                 Draw.rect(rimRegion, x, y);
@@ -343,7 +339,7 @@ public class DrillCore extends CoreBlock {
                 Draw.color();
             }
 
-            if(drawSpinSprite){
+            if(grounddrawSpinSprite){
                 Drawf.spinSprite(rotatorRegion, x, y, timeDrilled * rotateSpeed);
             }else{
                 Draw.rect(rotatorRegion, x, y, timeDrilled * rotateSpeed);
@@ -353,10 +349,9 @@ public class DrillCore extends CoreBlock {
 
             if(dominantItem != null && drawMineItem){
                 Draw.color(dominantItem.color);
-                Draw.rect(itemRegion, x, y);
+                Draw.rect(itemRegion, x, y, timeDrilled * rotateSpeed);
                 Draw.color();
             }
-            drawTeamTop();
         }
 
         @Override

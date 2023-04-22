@@ -1,23 +1,8 @@
-#the mod name as displayed in-game
 displayName: "Project Decay"
-
-#the internal name of your mod
 name: "decal"
-
-#your name
 author: "RouterXdd/[red]EXPUNGED[]"
-
-#the fully qualified main class of the mod
 main: "decal.Decaling"
-
-#the mod description as seen in the mod dialog
 description: "Decaying is destroying all thing. Or not?"
-
-#the mod version
 version: 1.0
-
-#the minimum game build required to run this mod
-minGameVersion: 141
-
-#this is a java mod
+minGameVersion: 143
 java: true

@@ -12,7 +12,8 @@ public class DecStat implements Comparable<Stat> {
     public static final Stat
 
             repairChance = new Stat("repairChance"),
-            healAmount = new Stat("healAmount");
+            healAmount = new Stat("healAmount"),
+            mirrorChance = new Stat("mirrorChance");
 
     public final StatCat category;
     public final String name;

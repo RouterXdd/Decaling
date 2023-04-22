@@ -6,7 +6,7 @@ import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.util.*;
-import decal.graphics.DecalPal;
+import decal.graphics.*;
 import decal.world.meta.*;
 import mindustry.*;
 import mindustry.content.*;
@@ -17,7 +17,7 @@ import mindustry.mod.*;
 import mindustry.mod.Mods.*;
 import mindustry.gen.*;
 import mindustry.mod.*;
-import mindustry.type.Weather;
+import mindustry.type.*;
 import mindustry.ui.dialogs.*;
 import decal.content.*;
 import java.util.*;
@@ -27,6 +27,10 @@ import static mindustry.Vars.*;
 
 
 public class Decaling extends Mod{
+    public Decaling(){
+        Events.run(FileTreeInitEvent.class, () -> Core.app.post(DecalingShaders::init));
+        Log.info("Loaded Decaling constructor.");
+    }
     @Override
     public void init(){
         super.init();
@@ -61,9 +65,6 @@ public class Decaling extends Mod{
             Weather.drawNoiseLayers(tex, Pal.neoplasm1, 1000f, 0.2f, 0.8f, 1.2f, 0.6f, 0.4f, 4, -1.2f, 0.7f, 0.8f, 0.9f);
             Draw.reset();
         });
-    }
-    public Decaling(){
-        Log.info("Loaded Decaling constructor.");
     }
 
     @Override

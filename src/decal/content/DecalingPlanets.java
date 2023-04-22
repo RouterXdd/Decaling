@@ -13,9 +13,9 @@ import mindustry.type.*;
 import mindustry.world.meta.*;
 import decal.planets.*;
 
-import static decal.content.DecalingItems.decalinItems;
-import static decal.content.DecalingItems.oldDecalinItems;
-import static mindustry.content.Items.erekirItems;
+import static decal.content.DecalingItems.*;
+import static mindustry.content.Items.*;
+import static mindustry.content.Planets.*;
 
 
 public class DecalingPlanets {
@@ -26,7 +26,7 @@ public class DecalingPlanets {
     oldSun, oldSerpulo, oldErekir, oldTantros, oldDecalin;
     public static void load(){
         Planets.tantros.visible = true;
-         decalin = new Planet("decalin", Planets.sun, 1f, 3){{
+         decalin = new Planet("decalin", sun, 1f, 3){{
             defaultCore = DecalingBlocks.coreDry;
             sectorSeed = 3;
             generator = new DecalinPlanetGenerator();
@@ -57,10 +57,13 @@ public class DecalingPlanets {
             };
              unlockedOnLand.add(DecalingBlocks.coreDry);
         }};
-        oldSun = new Planet("old-sun", null, 4f){{
+        oldSun = new Planet("old-sun", sun, 4f){{
             radius = 4f;
             bloom = true;
             accessible = false;
+            orbitRadius = 2000f;
+            drawOrbit = false;
+            orbitTime = 10000f;
 
             meshLoader = () -> new SunMesh(
                     this, 4,
