@@ -2,4 +2,4 @@
 
 This mod is add a decayed planet and content
 
-The discord server (If link is not working, just ping on official mindustry server): https://discord.gg/5GP7gjaQ
+The discord server (If link is not working, just ping on official mindustry server): https://discord.gg/4MscFXYh
