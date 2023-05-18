@@ -40,7 +40,7 @@ public class HybridDrill extends BeamDrill {
     public @Nullable Item blockedItem;
 
     //return variables for countOre
-    protected @Nullable Item returnItem;
+    protected @Nullable Item returnItem2;
     protected int returnCount;
 
     /** Whether to draw the item this drill is mining. */
@@ -90,9 +90,9 @@ public class HybridDrill extends BeamDrill {
         if(tile == null) return;
 
         countOre(tile);
-        if(returnItem == null || !drawMineItem) return;
+        if(returnItem2 == null || !drawMineItem) return;
 
-        Draw.color(returnItem.color);
+        Draw.color(returnItem2.color);
         Draw.rect(itemRegion, plan.drawx(), plan.drawy());
         Draw.color();
     }
@@ -118,16 +118,16 @@ public class HybridDrill extends BeamDrill {
 
         countOre(tile);
 
-        if(returnItem != null){
-            float width = drawPlaceText(Core.bundle.formatFloat("bar.drillspeed", 60f / getDrillTime(returnItem) * returnCount, 2), x, y + 2, valid);
+        if(returnItem2 != null){
+            float width = drawPlaceText(Core.bundle.formatFloat("bar.drillspeed", 60f / getDrillTime(returnItem2) * returnCount, 2), x, y + 2, valid);
             float dx = x * tilesize + offset - width/2f - 4f, dy = y * tilesize + offset + size * tilesize / 2f + 5, s = iconSmall / 4f;
             Draw.mixcol(Color.darkGray, 1f);
-            Draw.rect(returnItem.fullIcon, dx, dy - 1, s, s);
+            Draw.rect(returnItem2.fullIcon, dx, dy - 1, s, s);
             Draw.reset();
-            Draw.rect(returnItem.fullIcon, dx, dy, s, s);
+            Draw.rect(returnItem2.fullIcon, dx, dy, s, s);
 
             if(drawMineItem){
-                Draw.color(returnItem.color);
+                Draw.color(returnItem2.color);
                 Draw.rect(itemRegion, tile.worldx() + offset, tile.worldy() + offset);
                 Draw.color();
             }
@@ -170,7 +170,7 @@ public class HybridDrill extends BeamDrill {
     }
 
     protected void countOre(Tile tile){
-        returnItem = null;
+        returnItem2 = null;
         returnCount = 0;
 
         oreCount.clear();
@@ -198,7 +198,7 @@ public class HybridDrill extends BeamDrill {
             return;
         }
 
-        returnItem = itemArray.peek();
+        returnItem2 = itemArray.peek();
         returnCount = oreCount.get(itemArray.peek(), 0);
     }
 
@@ -253,7 +253,7 @@ public class HybridDrill extends BeamDrill {
             super.onProximityUpdate();
 
             countOre(tile);
-            dominantItem = returnItem;
+            dominantItem = returnItem2;
             dominantItems = returnCount;
         }
 

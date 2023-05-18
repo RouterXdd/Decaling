@@ -47,7 +47,6 @@ public class DecalingPlanets {
             ruleSetter = r -> {
                 r.loadout = ItemStack.list(DecalingItems.oldmateria, 160);
                 r.waveTeam = DecalingTeams.decayed;
-                r.attributes.set(DecalingAttributes.timedrive, 0.4f);
                 r.showSpawns = true;
                 r.fog = false;
                 r.onlyDepositCore = false;
@@ -61,9 +60,11 @@ public class DecalingPlanets {
             radius = 4f;
             bloom = true;
             accessible = false;
-            orbitRadius = 2000f;
+            orbitRadius = 800f;
             drawOrbit = false;
             orbitTime = 10000f;
+            tidalLock = true;
+            solarSystem = this;
 
             meshLoader = () -> new SunMesh(
                     this, 4,
@@ -99,6 +100,7 @@ public class DecalingPlanets {
             clearSectorOnLose = true;
             defaultCore = Blocks.coreBastion;
             hiddenItems.addAll(Items.serpuloItems).removeAll(erekirItems);
+            solarSystem = oldSun;
 
             updateLighting = false;
 
@@ -140,6 +142,7 @@ public class DecalingPlanets {
                 r.attributes.clear();
                 r.showSpawns = true;
             };
+            solarSystem = oldSun;
             atmosphereColor = Pal.heal;
             atmosphereRadIn = 0.02f;
             atmosphereRadOut = 0.3f;
@@ -155,8 +158,9 @@ public class DecalingPlanets {
                     new HexSkyMesh(this, 11, 0.15f, 0.13f, 6, new Color().set(Color.white).mul(0.9f).a(0.75f), 2, 0.45f, 0.9f, 0.38f),
                     new HexSkyMesh(this, 1, 0.6f, 0.16f, 6, Color.white.cpy().lerp(Color.cyan, 0.55f).a(0.75f), 2, 0.45f, 1f, 0.41f)
             );
+            accessible = true;
             iconColor = Color.cyan;
-            alwaysUnlocked = false;
+            alwaysUnlocked = true;
             sectorSeed = 10;
             allowWaves = true;
             enemyCoreSpawnReplace = true;
@@ -170,6 +174,7 @@ public class DecalingPlanets {
                 r.showSpawns = true;
                 r.fog = false;
             };
+            solarSystem = oldSun;
             atmosphereColor = Color.cyan;
             atmosphereRadIn = 0.02f;
             atmosphereRadOut = 0.3f;
@@ -184,8 +189,10 @@ public class DecalingPlanets {
                     new HexSkyMesh(this, 11, 0.15f, 0.14f, 5, new Color().set(Pal.neoplasm2).mul(0.9f).a(0.75f), 2, 0.45f, 0.9f, 0.38f),
                     new HexSkyMesh(this, 1, 0.6f, 0.16f, 5, Color.white.cpy().lerp(Pal.neoplasm1, 0.55f).a(0.75f), 2, 0.45f, 1.1f, 0.41f)
             );
+            accessible = true;
+            alwaysUnlocked = true;
+            solarSystem = oldSun;
             iconColor = Pal.neoplasm2;
-            alwaysUnlocked = false;
             launchCapacityMultiplier = 0.8f;
             sectorSeed = 4;
             allowWaves = true;
@@ -208,5 +215,6 @@ public class DecalingPlanets {
             landCloudColor = Pal.neoplasm1.cpy().a(0.4f);
         }};
         decalin.hiddenItems.addAll(Vars.content.items()).removeAll(decalinItems);
+        tantros.hiddenItems.addAll(Vars.content.items()).removeAll(tantrosItems);
         oldDecalin.hiddenItems.addAll(Vars.content.items()).removeAll(oldDecalinItems);
 }}

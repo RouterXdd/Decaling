@@ -3,6 +3,7 @@ package decal.content;
 import arc.*;
 import arc.graphics.*;
 import arc.math.*;
+import decal.world.statuses.ErrorStatus;
 import mindustry.game.EventType.*;
 import mindustry.game.*;
 import mindustry.graphics.*;
@@ -14,7 +15,7 @@ import static mindustry.Vars.*;
 
 public class DecalingStatus {
         public static StatusEffect
-        decaling, timeswap1, timeswap2, timeswap3, rush, timeCrack, timeStop, anotherTimeline;
+        decaling, timeswap1, timeswap2, timeswap3, rush, timeCrack, timeStop, anotherTimeline, errorTest;
    public static void load(){
     decaling = new StatusEffect("decaying"){{
             color = Color.valueOf("3a3a3a");
@@ -56,6 +57,9 @@ public class DecalingStatus {
            damageMultiplier = 0f;
            healthMultiplier = 10000000f;
            effect = DecalingFx.changeMode;
+       }};
+        errorTest = new ErrorStatus("error-test"){{
+           color = DecalPal.icelin;
        }};
     }
 }

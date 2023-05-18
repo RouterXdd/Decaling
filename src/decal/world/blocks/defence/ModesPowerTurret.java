@@ -11,12 +11,13 @@ import mindustry.world.blocks.defense.turrets.*;
 
 import static mindustry.Vars.world;
 public class ModesPowerTurret extends PowerTurret{
-    public Block modeTurret = DecalingBlocks.metalBlastV2;
+    public Block modeTurret;
 
-    public ModesPowerTurret(String name){
+    public ModesPowerTurret(String name, Block modeTurret){
         super(name);
         configurable = true;
         buildType = ModesPowerTurretBuild::new;
+        this.modeTurret = modeTurret;
     }
     public class ModesPowerTurretBuild extends PowerTurretBuild {
 

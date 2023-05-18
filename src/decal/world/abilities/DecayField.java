@@ -13,6 +13,8 @@ import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 
+import static mindustry.Vars.*;
+
 public class DecayField extends Ability {
     public float range, damage;
     public DecayField( float range, float damage) {
@@ -30,10 +32,25 @@ public class DecayField extends Ability {
         Units.nearbyEnemies(unit.team, unit.x, unit.y, range, other -> {
             other.damageContinuousPierce(damage);
         });
+
     }
     @Override
     public void draw(Unit unit) {
         super.draw(unit);
-        Drawf.circles(unit.x, unit.y, range, new Color(Color.valueOf("232323")));
+
+        Draw.z(Layer.shields);
+
+        Draw.color(DecalPal.decalOutline);
+
+        if(renderer.animateShields){
+            Fill.poly(unit.x, unit.y, 360, range);
+        }else{
+            Lines.stroke(1.5f);
+            Draw.alpha(0.09f + Mathf.clamp(0.08f * 0f));
+            Fill.poly(unit.x, unit.y, 360, range);
+            Draw.alpha(1f);
+            Lines.poly(unit.x, unit.y, 360, range);
+            Draw.reset();
+        }
     }
 }

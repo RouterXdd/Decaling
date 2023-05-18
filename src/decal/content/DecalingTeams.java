@@ -8,7 +8,7 @@ public class DecalingTeams {
     public static Team decayed, oldCrux, shared, neoplastic;
 
     public static void load() {
-        decayed = newTeam(12, "decayed", Color.valueOf("232323"));
+        decayed = newTeam(12, "decayed", Color.valueOf("333333"));
         oldCrux = newTeam(13, "old-crux", Color.valueOf("f31f1f"));
         shared = newTeam(14, "unknown", Color.valueOf("937232"));
         neoplastic = newTeam(6, "neoplastic", Pal.neoplasm1);

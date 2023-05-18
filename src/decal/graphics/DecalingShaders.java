@@ -5,6 +5,7 @@ import arc.graphics.*;
 import arc.graphics.Texture.*;
 import arc.graphics.gl.*;
 import arc.scene.ui.layout.*;
+import arc.struct.*;
 import arc.util.*;
 import mindustry.*;
 import mindustry.graphics.*;
@@ -14,12 +15,20 @@ import static mindustry.Vars.*;
 
 public class DecalingShaders {
     public static BlockSurfaceShader neoplasma;
+    public static @Nullable FieldShader field;
     public static ShaderLayer neoplasmLayer;
     public static void init() {
         if (!Vars.headless) {
             neoplasma = new BlockSurfaceShader("neoplasma");
         }
         CacheLayer.add(neoplasmLayer = new ShaderLayer(neoplasma));
+        try{
+            field = new FieldShader();
+        }catch(Throwable t){
+            //don't load field shader
+            field = null;
+            t.printStackTrace();
+        }
     }
     public static class BlockSurfaceShader extends ModSurfaceShader {
         public BlockSurfaceShader(String frag) {
@@ -29,6 +38,23 @@ public class DecalingShaders {
         @Override
         public String texture() {
             return "noiseAlpha";
+        }
+    }
+    public static class FieldShader extends ModShader{
+
+        public FieldShader(){
+            super("field", "screenspace");
+        }
+
+        @Override
+        public void apply(){
+            setUniformf("u_dp", Scl.scl(1f));
+            setUniformf("u_time", Time.time / Scl.scl(1f));
+            setUniformf("u_offset",
+                    Core.camera.position.x - Core.camera.width / 2,
+                    Core.camera.position.y - Core.camera.height / 2);
+            setUniformf("u_texsize", Core.camera.width, Core.camera.height);
+            setUniformf("u_invsize", 1f/Core.camera.width, 1f/Core.camera.height);
         }
     }
     public static class ModSurfaceShader extends ModShader {

@@ -46,11 +46,13 @@ public class Decaling extends Mod{
                     bundle.get("mod.decal.subtitle2"),
                     bundle.get("mod.decal.subtitle3"),
                     bundle.get("mod.decal.subtitle4"),
-                    bundle.get("mod.decal.subtitle5")
+                    bundle.get("mod.decal.subtitle5"),
+                    bundle.get("mod.decal.subtitle6"),
+                    bundle.get("mod.decal.subtitle7")
             };
             Random rand = new Random();
             String mogus = String.valueOf(
-                    r[rand.nextInt(5)]
+                    r[rand.nextInt(7)]
             );
             mod.meta.subtitle = "[#000000]"+"v"+mod.meta.version+"[]" +"\n"+ mogus;
         }
@@ -72,6 +74,7 @@ public class Decaling extends Mod{
         new DecalingTeams().load();
         new DecalingAttributes().load();
         new DecalingItems().load();
+        new DecalingLiquids().load();
         new DecalingStatus().load();
         new DecalingWeather().load();
         new DecalingUnits().load();
@@ -80,6 +83,7 @@ public class Decaling extends Mod{
         new DecalingPlanets().load();
         new DecalingSectors().load();
         new DecalinTechTree().load();
+        new OldDecalinTechTree().load();
     }
 
 }

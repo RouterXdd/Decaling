@@ -1,16 +1,18 @@
 package decal.content;
 
 import arc.graphics.*;
+import arc.struct.*;
 import decal.world.meta.*;
-import mindustry.ai.UnitCommand;
+import mindustry.ai.*;
 import mindustry.ai.types.*;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
-import mindustry.entities.part.HoverPart;
+import mindustry.entities.part.*;
 import mindustry.entities.pattern.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
+import mindustry.type.ammo.*;
 import mindustry.type.weapons.*;
 import mindustry.world.meta.*;
 import mindustry.content.*;
@@ -20,7 +22,7 @@ import decal.world.abilities.*;
 public class DecalingUnits {
  public static UnitType
  //time
- hour, clock, timer, day, year, timeAssemblyDrone, pause,
+ hour, clock, timer, day, year, timeAssemblyDrone, pause, timeEntity,
  //core
  decray, melair,
  //decay
@@ -30,7 +32,9 @@ public class DecalingUnits {
  //neo
  transporter, child,
  //ice
- iceliner
+ iceliner,
+ //tantros
+ recuperate, harvone, lysis
     ;
  public static void load(){
     //air time units
@@ -234,7 +238,7 @@ public class DecalingUnits {
 
                     status = DecalingStatus.timeswap3;
                     statusDuration = 65f;
-
+                    parentizeEffects = true;
                     chargeEffect = DecalingFx.timeLaserCharge;
                     sideAngle = 15f;
                     sideWidth = 0f;
@@ -273,7 +277,7 @@ public class DecalingUnits {
 
                     status = DecalingStatus.timeswap3;
                     statusDuration = 65f;
-
+                    parentizeEffects = true;
                     chargeEffect = DecalingFx.timeLaserCharge;
                     sideAngle = 15f;
                     sideWidth = 0f;
@@ -419,6 +423,168 @@ public class DecalingUnits {
                  statusDuration = 40;
              }};
          }});
+     }};
+     //the boss
+     timeEntity = new UnitType("time-entity"){{
+         hovering = true;
+         constructor = UnitEntity::create;
+
+         drag = 0.1f;
+         speed = 8f;
+         rotateSpeed = 8f;
+         outlineColor = DecalPal.decalOutline;
+         accel = 0.06f;
+         health = 30000f;
+         armor = 10f;
+         hitSize = 26f;
+         engineOffset = 6f;
+         engineSize = 0f;
+         itemCapacity = 0;
+         useEngineElevation = false;
+         researchCostMultiplier = 0f;
+
+         abilities.add(new MoveEffectAbility(0f, 0f, DecalPal.darkTime, Fx.missileTrail, 4f)
+                 , new MoveEffectAbility(3f, -2f, DecalPal.darkTime, Fx.missileTrailShort, 4f)
+                 , new MoveEffectAbility(-3f, -2f, DecalPal.darkTime, Fx.missileTrailShort, 4f));
+             parts.add(new HaloPart(){{
+                 progress = PartProgress.life;
+                 color = DecalPal.darkTime;
+                 layer = Layer.effect;
+                 y = 0;
+
+                 haloRotation = 0f;
+                 shapes = 5;
+                 triLength = 14f;
+                 haloRadius = 17f;
+                 tri = false;
+                 radius = 8f;
+             }},
+                     new HaloPart(){{
+                         progress = PartProgress.life;
+                         color = DecalPal.darkTime;
+                         layer = Layer.effect;
+                         y = 0;
+                         haloRotateSpeed = -4;
+
+                         shapes = 4;
+                         triLengthTo = 8f;
+                         haloRotation = 45f;
+                         haloRadius = 8f;
+                         tri = true;
+                         radius = 6f;
+                     }},
+         new HaloPart(){{
+             progress = PartProgress.life;
+             color = DecalPal.darkTime;
+             layer = Layer.effect;
+             y = 0;
+             haloRotateSpeed = 4;
+
+             shapes = 4;
+             triLengthTo = 8f;
+             haloRotation = 45f;
+             haloRadius = 8f;
+             tri = true;
+             radius = 6f;
+         }},
+                     new ShapePart(){{
+                         progress = PartProgress.life;
+                         color = Color.black.a(1);
+                         circle = true;
+                         hollow = false;
+                         stroke = 1.6f;
+                         radius = 4f;
+                         layer = Layer.effect;
+                         y = 0;
+                         rotateSpeed = 0;
+                     }}
+                     );
+             parts.add(new ShapePart(){{
+                 progress = PartProgress.life;
+                 color = DecalPal.darkTime;
+                 circle = true;
+                 hollow = true;
+                 stroke = 1.5f;
+                 radius = 6f;
+                 layer = Layer.effect;
+                 y = 0;
+                 rotateSpeed = 0;
+             }});
+
+         weapons.add(new Weapon("time-weapon"){{
+             shootSound = Sounds.blaster;
+             y = 0f;
+             x = 0f;
+             top = true;
+             mirror = false;
+             reload = 20f;
+             inaccuracy = 360f;
+             shootCone = 360f;
+
+             shoot.shots = 4;
+             bullet = new BasicBulletType(6f, 40){{
+                 homingPower = 0.3f;
+                 homingDelay = 4f;
+                 width = 10f;
+                 height = 16f;
+                 lifetime = 50f;
+                 shootEffect = Fx.sparkShoot;
+                 smokeEffect = Fx.shootBigSmoke;
+                 hitColor = backColor = trailColor = DecalPal.darkTime;
+                 frontColor = Color.white;
+                 trailWidth = 1.8f;
+                 trailLength = 7;
+                 hitEffect = despawnEffect = Fx.hitBulletColor;
+                 status = DecalingStatus.timeCrack;
+                 statusDuration = 50;
+             }};
+             parts.add(new ShapePart(){{
+                 progress = PartProgress.life;
+                 color = DecalPal.darkTime;
+                 circle = true;
+                 hollow = false;
+                 radius = 1f;
+                 layer = Layer.effect;
+                 y = 1.8f;
+                 rotateSpeed = 0;
+             }});
+         }},
+                 new Weapon("LASOR"){{
+                     shootSound = Sounds.laserblast;
+                     chargeSound = Sounds.lasercharge;
+                     reload = 500f;
+                     x = 0f;
+                     y = 2f;
+                     top = true;
+                     mirror = false;
+                     shootY = 1.3f;
+                     shoot.firstShotDelay = DecalingFx.smallTimeLaserCharge.lifetime;
+                     shootStatus = StatusEffects.unmoving;
+                     shootStatusDuration = DecalingFx.smallTimeLaserCharge.lifetime;
+                     cooldownTime = 500f;
+                     bullet = new LaserBulletType(){{
+                         length = 240f;
+                         damage = 200f;
+                         width = 20f;
+
+                         lifetime = 65f;
+
+                         lightningSpacing = 20f;
+                         lightningLength = 3;
+                         lightningDelay = 1f;
+                         lightningLengthRand = 15;
+                         lightningDamage = 100;
+                         lightningAngleRand = 40f;
+                         largeHit = true;
+                         lightColor = lightningColor = DecalPal.darkTime;
+                         parentizeEffects = true;
+                         chargeEffect = DecalingFx.smallTimeLaserCharge;
+                         sideAngle = 15f;
+                         sideWidth = 0f;
+                         sideLength = 0f;
+                         colors = new Color[]{DecalPal.darkTime.cpy().a(0.4f), DecalPal.darkTime, Color.white};
+                     }};
+                 }});
      }};
     decray = new UnitType("decray"){{
         controller = u -> new BuilderAI();
@@ -745,7 +911,7 @@ public class DecalingUnits {
          faceTarget = true;
          circleTarget = false;
          constructor = BuildingTetherPayloadUnit::create;
-         engineOffset = 4f;
+         engineOffset = 5.4f;
          engineSize = 2.2f;
          outlineColor = DecalPal.decalOutline;
          weapons.add(new Weapon("main-weapon"){{
@@ -792,6 +958,108 @@ public class DecalingUnits {
                  buildingDamageMultiplier = 0.01f;
              }};
          }});
+     }};
+     recuperate = new UnitType("recuperate"){{
+         controller = u -> new BuilderAI();
+         envEnabled = Env.underwater;
+         hitSize = 8;
+         flying = true;
+         drag = 0.08f;
+         accel = 0.1f;
+         range = 160f;
+         speed = 4.7f;
+         health = 140;
+         armor = 3;
+         mineWalls = true;
+         mineSpeed = 5.6f;
+         mineTier = 3;
+         buildSpeed = 1.3f;
+         engineSize = 0f;
+         engineOffset = 0f;
+         constructor = UnitEntity::create;
+         outlineColor = DecalPal.tantrosOutline;
+         itemCapacity = 40;
+         setEnginesMirror(
+                 new UnitEngine(4.8f, -5.2f, 2f, -45f)
+         );
+
+         weapons.add(new Weapon("main-weap"){{
+             reload = 40f;
+             x = 0f;
+             y = 0f;
+             top = false;
+             mirror = false;
+             bullet = new MissileBulletType(5f, 20){{
+                 height = 13f;
+                 width = 6f;
+                 lifetime = 70f;
+                 weaveMag = 3.4f;
+                 weaveRandom = true;
+                 weaveScale = 10;
+                 buildingDamageMultiplier = 0.01f;
+                 shootSound = Sounds.missile;
+                 trailLength = 30;
+                 homingRange = 100;
+                 hitEffect = Fx.blastExplosion;
+                 despawnEffect = Fx.blastExplosion;
+             }};
+         }});
+     }};
+     harvone = new UnitType("harvone"){{
+         controller = u -> new MinerAI(){{
+           mineItems = Seq.with(DecalingItems.nickel, DecalingItems.cadmium);
+           targetItem = DecalingItems.nickel;
+         }};
+         hitSize = 4;
+         envEnabled = Env.underwater;
+
+         defaultCommand = UnitCommand.mineCommand;
+
+         flying = true;
+         drag = 0.08f;
+         accel = 0.09f;
+         speed = 3.5f;
+         armor = 2;
+         health = 70;
+         engineSize = 1.2f;
+         engineOffset = 3.5f;
+         range = 50f;
+         isEnemy = false;
+         mineWalls = true;
+         itemCapacity = 25;
+
+         ammoType = new PowerAmmoType(500);
+         constructor = UnitEntity::create;
+         mineTier = 3;
+         mineSpeed = 3.5f;
+     }};
+     lysis = new UnitType("lysis"){{
+         controller = u -> new MinerAI(){{
+             mineItems = Seq.with(DecalingItems.oblite);
+             targetItem = DecalingItems.oblite;
+         }};
+         envEnabled = Env.underwater;
+         hitSize = 10;
+
+         defaultCommand = UnitCommand.mineCommand;
+
+         flying = true;
+         drag = 0.08f;
+         accel = 0.09f;
+         speed = 3.5f;
+         armor = 2;
+         health = 460;
+         engineSize = 2.1f;
+         engineOffset = 4.6f;
+         range = 50f;
+         isEnemy = false;
+         mineWalls = true;
+         itemCapacity = 40;
+
+         ammoType = new PowerAmmoType(1000);
+         constructor = UnitEntity::create;
+         mineTier = 4;
+         mineSpeed = 5f;
      }};
  }
 }

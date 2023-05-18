@@ -2,6 +2,7 @@ package decal.content;
 
 import arc.struct.*;
 import arc.util.*;
+import decal.world.blocks.campaning.TimeMachine;
 import mindustry.content.*;
 import mindustry.entities.bullet.*;
 import mindustry.game.Objectives.*;
@@ -15,7 +16,7 @@ import static decal.content.DecalingSectors.*;
 
 public class DecalinTechTree {
     public void load(){
-        DecalingPlanets.decalin.techTree = nodeRoot("decalin", DecalingBlocks.coreDry, true, () -> {
+        DecalingPlanets.decalin.techTree = nodeRoot("decalin", DecalingPlanets.decalin, true, () -> {
             nodeProduce(DecalingItems.oldmateria, () -> {
                 nodeProduce(DecalingItems.timefragment, () -> {
                     nodeProduce(DecalingItems.timeEssence, () -> {
@@ -60,6 +61,8 @@ public class DecalinTechTree {
                     node(DecalingBlocks.viliniteWall, () -> {
                         node(DecalingBlocks.viliniteWallLarge, () -> {
                         });
+                        node(DecalingBlocks.mirrorWall, () -> {
+                        });
                     });
                 });
                 node(DecalingBlocks.decalwalllarge, () -> {
@@ -69,13 +72,17 @@ public class DecalinTechTree {
                 node(DecalingBlocks.starflood, Seq.with(new Produce(DecalingItems.timefragment)), () -> {
                     node(DecalingBlocks.interleet, Seq.with(new SectorComplete(forgotLand)), () -> {
                         node(DecalingBlocks.crystalFer, () -> {
+                            node(DecalingBlocks.rollIn, () -> {
+                                node(DecalingBlocks.paradox, Seq.with(new OnSector(orbitalCenter)),() -> {
+                                });
+                            });
                             node(DecalingBlocks.decaynir, () -> {
                             });
                         });
                         node(DecalingBlocks.confronter, Seq.with(new SectorComplete(repairTerminal)),() -> {
                             node(DecalingBlocks.missileter, Seq.with(new Produce(DecalingItems.viliniteAlloy)),() -> {
                                 node(DecalingBlocks.orbitalCannon, Seq.with(new SectorComplete(orbitalCenter)),() -> {
-                                    node(DecalingBlocks.prototypeRift, Seq.with(new OnSector(orbitalCenter)),() -> {
+                                    node(DecalingBlocks.prototypeRift, Seq.with(new OnSector(timeSiege)),() -> {
 
                                     });
                                 });
@@ -97,6 +104,8 @@ public class DecalinTechTree {
                 });
             });
             node(DecalingBlocks.mover, () -> {
+                node(DecalingBlocks.decaySorter, () -> {
+                });
                 node(DecalingBlocks.lightLink, () -> {
                     node(DecalingBlocks.mediumLink, Seq.with(new SectorComplete(forgotLand)),() -> {
                         node(DecalingBlocks.heavyLink, Seq.with(new SectorComplete(highPeaks)),() -> {
@@ -115,9 +124,15 @@ public class DecalinTechTree {
                     node(DecalingBlocks.decayAssembler, Seq.with(new SectorComplete(orbitalCenter)),() -> {
                         node(DecalingUnits.destroy, () -> {
                         });
+                        node(DecalingUnits.obliterate, Seq.with(new Research(DecalingBlocks.decayModule)),() -> {
+                        });
+                        node(DecalingUnits.annihilate, Seq.with(new Research(DecalingBlocks.decayModule)),() -> {
+                        });
                     });
                 });
                 node(DecalingUnits.clear, () -> {
+                });
+                node(DecalingUnits.refate, Seq.with(new SectorComplete(junkyard)),() -> {
                 });
                 node(DecalingBlocks.timeFactory, Seq.with(new SectorComplete(forgotLand)),() -> {
                     node(DecalingUnits.hour, () -> {
@@ -152,14 +167,22 @@ public class DecalinTechTree {
                         node(highPeaks, Seq.with(new SectorComplete(repairTerminal)),() -> {
                             node(orbitalCenter, Seq.with(new SectorComplete(highPeaks)),() -> {
                                 node(timeSiege, Seq.with(new SectorComplete(orbitalCenter)),() -> {
+                                    node(dimensionRift, Seq.with(new SectorComplete(timeSiege), new DecalingObjectives.ActivateTimeMachine(DecalingBlocks.timeMachine)),() -> {
 
+                                    });
+                                    node(DecalingPlanets.oldDecalin, Seq.with(new DecalingObjectives.ActivateTimeMachine(DecalingBlocks.timeMachine), new Research(DecalingBlocks.timeMachine)),() -> {
+                                    });
                                 });
                             });
                         });
                     });
                 });
             });
-            node(DecalingBlocks.coreDecay, Seq.with(new SectorComplete(repairTerminal)),() -> {
+            node(DecalingBlocks.coreDry, () -> {
+                node(DecalingBlocks.coreDecay, Seq.with(new SectorComplete(repairTerminal)),() -> {
+                });
+                node(DecalingBlocks.werehouse, Seq.with(new OnSector(repairTerminal)),() -> {
+                });
             });
             node(DecalingBlocks.timeMachine, Seq.with(new SectorComplete(timeSiege)),() -> {
             });
