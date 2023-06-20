@@ -1,6 +1,7 @@
 package decal.world.blocks.defence;
 
 import arc.scene.ui.layout.*;
+import arc.util.Nullable;
 import decal.content.*;
 import mindustry.content.Blocks;
 import mindustry.gen.*;
@@ -11,7 +12,7 @@ import mindustry.world.blocks.defense.turrets.*;
 
 import static mindustry.Vars.world;
 public class ModesPowerTurret extends PowerTurret{
-    public Block modeTurret;
+    public @Nullable Block modeTurret;
 
     public ModesPowerTurret(String name, Block modeTurret){
         super(name);

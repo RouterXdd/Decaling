@@ -4,5 +4,5 @@ author: "RouterXdd/[red]EXPUNGED[]"
 main: "decal.Decaling"
 description: "Decaying is destroying all thing. Or not?"
 version: 1.0
-minGameVersion: 143
+minGameVersion: 145
 java: true

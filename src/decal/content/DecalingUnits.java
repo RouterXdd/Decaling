@@ -13,6 +13,7 @@ import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.type.ammo.*;
+import mindustry.type.unit.MissileUnitType;
 import mindustry.type.weapons.*;
 import mindustry.world.meta.*;
 import mindustry.content.*;
@@ -22,7 +23,7 @@ import decal.world.abilities.*;
 public class DecalingUnits {
  public static UnitType
  //time
- hour, clock, timer, day, year, timeAssemblyDrone, pause, timeEntity,
+ hour, clock, timer, day, year, timeAssemblyDrone, pause, resume, timeEntity,
  //core
  decray, melair,
  //decay
@@ -34,7 +35,7 @@ public class DecalingUnits {
  //ice
  iceliner,
  //tantros
- recuperate, harvone, lysis
+ recuperate, harvone, lysis, reef, ornicus, vertex
     ;
  public static void load(){
     //air time units
@@ -423,6 +424,82 @@ public class DecalingUnits {
                  statusDuration = 40;
              }};
          }});
+     }};
+     resume = new UnitType("resume"){{
+         health = 2140;
+         speed = 2f;
+         hitSize = 14f;
+         drag = 0.08f;
+         accel = 0.1f;
+         flying = true;
+         range = 220f;
+         deathExplosionEffect = DecalingFx.resumeDespawn;
+         constructor = UnitEntity::create;
+         engineOffset = 12.4f;
+         engineSize = 0f;
+         outlineColor = DecalPal.decalOutline;
+         immunities.add(DecalingStatus.decaling);
+         immunities.add(DecalingStatus.timeCrack);
+         parts.add(new HaloPart(){{
+                       progress = PartProgress.life;
+                       color = DecalPal.darkTime;
+                       layer = Layer.effect + 6;
+                       y = 2;
+
+                       haloRotation = 0f;
+                       shapes = 2;
+                       hollow = false;
+                       triLength = 18f;
+                       haloRadius = 1.5f;
+                       tri = true;
+                       radius = 2.5f;
+                       haloRotateSpeed = 8;
+
+                   }},
+                 new HaloPart(){{
+                     progress = PartProgress.life;
+                     color = DecalPal.darkTime;
+                     layer = Layer.effect + 6;
+                     y = 2;
+
+                     haloRotation = 0f;
+                     shapes = 2;
+                     hollow = false;
+                     triLength = 2f;
+                     shapeRotation = 180f;
+                     haloRadius = 1.5f;
+                     tri = true;
+                     radius = 2.5f;
+                     haloRotateSpeed = 8;
+
+                 }});
+         weapons.add(
+                 new Weapon("decal-resume-weapon"){{
+                     shootSound = Sounds.blaster;
+                     reload = 4f;
+                     x = 4f;
+                     y = 2f;
+                     top = false;
+                     layerOffset = -1;
+                     rotate = true;
+                     rotationLimit = 40;
+                     bullet = new BasicBulletType(5, 3){{
+                         homingPower = 0.3f;
+                         homingDelay = 5f;
+                         width = 6f;
+                         height = 10f;
+                         lifetime = 30f;
+                         shootEffect = Fx.sparkShoot;
+                         smokeEffect = Fx.shootBigSmoke;
+                         hitColor = backColor = trailColor = DecalPal.darkTime;
+                         frontColor = Color.white;
+                         trailWidth = 1.2f;
+                         trailLength = 4;
+                         hitEffect = despawnEffect = Fx.hitBulletColor;
+                         status = DecalingStatus.timeCrack;
+                         statusDuration = 30;
+                     }};
+                 }});
      }};
      //the boss
      timeEntity = new UnitType("time-entity"){{
@@ -1060,6 +1137,125 @@ public class DecalingUnits {
          constructor = UnitEntity::create;
          mineTier = 4;
          mineSpeed = 5f;
+     }};
+     reef = new UnitType("reef"){{
+         envEnabled = Env.underwater | Env.terrestrial;
+         hitSize = 12;
+         flying = false;
+         range = 100f;
+         rotateSpeed = 9;
+         speed = 1.4f;
+         health = 600;
+         armor = 2;
+         itemCapacity = 45;
+         constructor = MechUnit::create;
+         outlineColor = DecalPal.tantrosOutline;
+
+         weapons.add(new Weapon("main-weap"){{
+             reload = 15f;
+             x = 0f;
+             y = 0f;
+             top = false;
+             mirror = false;
+             inaccuracy = 10;
+             bullet = new MissileBulletType(5f, 10){{
+                 height = 9f;
+                 width = 5f;
+                 lifetime = 20f;
+                 shootSound = Sounds.missile;
+                 trailLength = 20;
+                 hitEffect = Fx.flakExplosion;
+                 despawnEffect = Fx.flakExplosion;
+             }};
+         }});
+     }};
+     ornicus = new UnitType("ornicus"){{
+         envEnabled = Env.underwater | Env.terrestrial;
+         hitSize = 18;
+         flying = false;
+         rotateSpeed = 7;
+         speed = 0.7f;
+         health = 1445;
+         armor = 8;
+         itemCapacity = 90;
+         constructor = MechUnit::create;
+         outlineColor = DecalPal.tantrosOutline;
+
+         weapons.add(new Weapon("decal-pulse-weapon"){{
+             reload = 30f;
+             x = 6f;
+             y = 0f;
+             shootY = 5f;
+             top = true;
+             mirror = true;
+             rotate = true;
+             bullet = new SapBulletType(){{
+                 length = 50f;
+                 width = 0.5f;
+                 damage = 20;
+                 knockback = 1.6f;
+                 lifetime = 40f;
+                 shootSound = Sounds.sap;
+                 hitEffect = Fx.sapped;
+                 despawnEffect = Fx.none;
+                 hitColor = color = DecalPal.lightGreen;
+             }};
+         }});
+     }};
+     vertex = new UnitType("vertex"){{
+         envEnabled = Env.underwater;
+         hitSize = 15;
+         flying = true;
+         drag = 0.07f;
+         accel = 0.16f;
+         range = 160f;
+         speed = 2.6f;
+         health = 360;
+         armor = 5;
+         rotateSpeed = 3;
+         engineSize = 0f;
+         engineOffset = 0f;
+         constructor = UnitEntity::create;
+         outlineColor = DecalPal.tantrosOutline;
+         itemCapacity = 40;
+
+         weapons.add(new Weapon("main-weap"){{
+             reload = 50f;
+             x = 0f;
+             y = 3f;
+             top = false;
+             mirror = false;
+             bullet = new MissileBulletType(5f, 20){{
+                 ammoMultiplier = 1f;
+                 damage = 0f;
+                 speed = 1000f;
+                 spawnUnit = new MissileUnitType("vertex-torpedo"){{
+                     speed = 4f;
+                     rotateSpeed = 1.7f;
+                     maxRange = 50f;
+                     lifetime = 40f;
+                     outlineColor = DecalPal.tantrosOutline;
+                     engineColor = trailColor = DecalPal.oxygenColor;
+                     trailLength = 7;
+                     health = 130;
+                     hitSize = 3;
+                     fogRadius = 3;
+                     loopSoundVolume = 0.1f;
+                     constructor = TimedKillUnit::create;
+                     useUnitCap = false;
+
+                     weapons.add(new Weapon() {{
+                         shootCone = 360f;
+                         mirror = false;
+                         reload = 1f;
+                         shootOnDeath = true;
+                         killShooter = true;
+                         bullet = new ExplosionBulletType(48f, 30f) {{
+                         }};
+                     }});
+                 }};
+             }};
+         }});
      }};
  }
 }

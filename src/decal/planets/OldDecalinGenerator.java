@@ -429,7 +429,7 @@ public class OldDecalinGenerator extends PlanetGenerator{
 
         trimDark();
 
-        median(2);
+        median(3);
 
         inverseFloodFill(tiles.getn(spawn.x, spawn.y));
 

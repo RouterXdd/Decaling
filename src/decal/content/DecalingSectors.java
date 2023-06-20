@@ -5,7 +5,7 @@ import static decal.content.DecalingPlanets.*;
 
 public class DecalingSectors {
     public static SectorPreset
-    forgotLand, sectureBase, repairTerminal, highPeaks, orbitalCenter, timeSiege, junkyard, dimensionRift;
+    forgotLand, sectureBase, repairTerminal, highPeaks, orbitalCenter, timeSiege, junkyard, trainPath, dimensionRift;
 
     public static void load(){
         forgotLand = new SectorPreset("forgot-land", decalin, 16){{
@@ -31,6 +31,10 @@ public class DecalingSectors {
         junkyard = new SectorPreset("junkyard", decalin, 62){{
             captureWave = 30;
             difficulty = 6;
+        }};
+        trainPath = new SectorPreset("train-path", decalin, 49){{
+            captureWave = 35;
+            difficulty = 7;
         }};
         timeSiege = new SectorPreset("time-siege", decalin, 156){{
             alwaysUnlocked = true;

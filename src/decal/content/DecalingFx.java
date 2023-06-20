@@ -65,6 +65,16 @@ public class DecalingFx{
         stroke(e.fin() * 2f);
         Lines.square(e.x, e.y, 4f, 0);
     }),
+            crystal = new Effect(30f, 30f, e -> {
+                color(DecalPal.ancident);
+                stroke(e.fin() * 2.2f);
+                Lines.square(e.x, e.y, 5f, 45);
+            }),
+            ancientCapture = new Effect(26f, 30f, e -> {
+                color(DecalPal.ancident);
+                stroke(e.fin() * 2.4f);
+                Lines.square(e.x, e.y, 4f - e.finpow() * e.rotation, 45);
+            }),
     regen = new Effect(50f, 30f, e -> {
         color(DecalPal.vilinite);
         rand.setSeed(e.id);
@@ -100,6 +110,70 @@ public class DecalingFx{
                 color(DecalPal.darkTime);
                 stroke(e.fout() * 2f);
                 Lines.square(e.x, e.y, 6f, 45);
+            }),
+            resumeDespawn = new Effect(16, e -> {
+                e.scaled(7, i -> {
+                    stroke(3f * i.fout());
+                    Lines.circle(e.x, e.y, 3f + i.fin() * 10f);
+                });
+
+                color(Color.gray);
+
+                randLenVectors(e.id, 6, 2f + 19f * e.finpow(), (x, y) -> {
+                    Fill.circle(e.x + x, e.y + y, e.fout() * 3f + 0.5f);
+                    Fill.circle(e.x + x / 2f, e.y + y / 2f, e.fout());
+                });
+
+                color(DecalPal.darkTime, DecalPal.darkTime, Color.gray, e.fin());
+                stroke(1.5f * e.fout());
+
+                randLenVectors(e.id + 1, 8, 1f + 23f * e.finpow(), (x, y) -> {
+                    lineAngle(e.x + x, e.y + y, Mathf.angle(x, y), 1f + e.fout() * 3f);
+                });
+                color(DecalPal.darkTime);
+                stroke(e.fin() * 2f);
+                Lines.circle(e.x, e.y, 2f + e.fout() * 80f);
+
+                color(DecalPal.darkTime);
+                alpha(e.fout(Interp.pow4Out));
+                float size = 10f + e.fout(Interp.pow10In) * 30f;
+                Draw.rect(Icon.cancel.getRegion(), e.x, e.y, size, size);
+            }),
+            NickelbreakBlock = new Effect(12, e -> {
+                color(DecalPal.nickelColor);
+                stroke(3f - e.fin() * 2f);
+                Lines.square(e.x, e.y, tilesize / 2f * e.rotation + e.fin() * 3f);
+
+                randLenVectors(e.id, 2 + (int)(e.rotation * 4), e.rotation * 2f + (tilesize * e.rotation) * e.finpow(), (x, y) -> {
+                    Fill.square(e.x + x, e.y + y, 1f + e.fout() * (3f + e.rotation), 45);
+                });
+            }),
+            ZincbreakBlock = new Effect(12, e -> {
+                color(DecalPal.zincColor);
+                stroke(3f - e.fin() * 2f);
+                Lines.square(e.x, e.y, tilesize / 2f * e.rotation + e.fin() * 3f);
+
+                randLenVectors(e.id, 2 + (int)(e.rotation * 4), e.rotation * 2f + (tilesize * e.rotation) * e.finpow(), (x, y) -> {
+                    Fill.square(e.x + x, e.y + y, 1f + e.fout() * (3f + e.rotation), 45);
+                });
+            }),
+            OxygenbreakBlock = new Effect(12, e -> {
+                color(DecalPal.oxygenColor);
+                stroke(3f - e.fin() * 2f);
+                Lines.square(e.x, e.y, tilesize / 2f * e.rotation + e.fin() * 3f);
+
+                randLenVectors(e.id, 2 + (int)(e.rotation * 4), e.rotation * 2f + (tilesize * e.rotation) * e.finpow(), (x, y) -> {
+                    Fill.square(e.x + x, e.y + y, 1f + e.fout() * (3f + e.rotation), 45);
+                });
+            }),
+            ArgusbreakBlock = new Effect(12, e -> {
+                color(DecalPal.argusColor);
+                stroke(3f - e.fin() * 2f);
+                Lines.square(e.x, e.y, tilesize / 2f * e.rotation + e.fin() * 3f);
+
+                randLenVectors(e.id, 2 + (int)(e.rotation * 4), e.rotation * 2f + (tilesize * e.rotation) * e.finpow(), (x, y) -> {
+                    Fill.square(e.x + x, e.y + y, 1f + e.fout() * (3f + e.rotation), 45);
+                });
             }),
     launchMissile = new Effect(50, e -> {
         color(Pal.engine);

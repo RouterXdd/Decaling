@@ -1,6 +1,7 @@
 package decal.content;
 
 import arc.graphics.*;
+import decal.Decaling;
 import decal.graphics.*;
 import decal.world.meta.*;
 import mindustry.*;
@@ -32,9 +33,8 @@ public class DecalingPlanets {
             generator = new DecalinPlanetGenerator();
             meshLoader = () -> new HexMesh(this, 5);
              cloudMeshLoader = () -> new MultiMesh(
-                     new HexSkyMesh(this, 6, 0.1f, 0.23f, 5, Color.valueOf("393939").a(0.75f), 2, 0.45f, 1.13f, 0.45f),
-                     new HexSkyMesh(this, 3, 0.2f, 0.19f, 5, Color.valueOf("555555").a(0.65f), 3, 0.25f, 1.22f, 0.45f),
-                     new HexSkyMesh(this, 2, 0.3f, 0.27f, 5, Color.valueOf("686868").a(0.55f), 4, 0.35f, 1.35f, 0.45f)
+                     new HexSkyMesh(this, 6, 0.13f, 0.12f, 5, Color.valueOf("393939").a(0.75f), 2, 0.45f, 1.13f, 0.45f),
+                     new HexSkyMesh(this, 2, 0.26f, 0.15f, 5, Color.valueOf("686868").a(0.55f), 4, 0.35f, 1.35f, 0.45f)
              );
              iconColor = DecalPal.decalOutline;
             accessible = true;
@@ -214,7 +214,9 @@ public class DecalingPlanets {
             startSector = 64;
             landCloudColor = Pal.neoplasm1.cpy().a(0.4f);
         }};
-        decalin.hiddenItems.addAll(Vars.content.items()).removeAll(decalinItems);
-        tantros.hiddenItems.addAll(Vars.content.items()).removeAll(tantrosItems);
-        oldDecalin.hiddenItems.addAll(Vars.content.items()).removeAll(oldDecalinItems);
+        decalin.itemWhitelist.addAll(decalinItems);
+        if (!Decaling.tantrosCombabil()) {
+            tantros.itemWhitelist.addAll(tantrosItems);
+        }
+        oldDecalin.itemWhitelist.addAll(oldDecalinItems);
 }}

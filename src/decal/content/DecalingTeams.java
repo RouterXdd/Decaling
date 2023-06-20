@@ -5,12 +5,13 @@ import mindustry.game.Team;
 import mindustry.graphics.Pal;
 
 public class DecalingTeams {
-    public static Team decayed, oldCrux, shared, neoplastic;
+    public static Team decayed, oldCrux, shared, yellow, neoplastic;
 
     public static void load() {
         decayed = newTeam(12, "decayed", Color.valueOf("333333"));
         oldCrux = newTeam(13, "old-crux", Color.valueOf("f31f1f"));
         shared = newTeam(14, "unknown", Color.valueOf("937232"));
+        yellow = newTeam(15, "yellow", Color.valueOf("ccd70c"));
         neoplastic = newTeam(6, "neoplastic", Pal.neoplasm1);
     }
 

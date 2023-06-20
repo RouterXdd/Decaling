@@ -14,6 +14,9 @@ public class DecStat implements Comparable<Stat> {
             repairChance = new Stat("repairChance"),
             healAmount = new Stat("healAmount"),
             mirrorChance = new Stat("mirrorChance"),
+            decay = new Stat("decay"),
+            corruptTime = new Stat("corruptTime"),
+            corruptBlock = new Stat("corruptBlock"),
             Yinsability = new Stat("Y glitch"),
             Xinsability = new Stat("X glitch");
 

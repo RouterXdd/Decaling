@@ -1,5 +1,6 @@
 package decal.content;
 
+import arc.Core;
 import arc.graphics.*;
 import arc.math.*;
 import arc.struct.*;
@@ -12,8 +13,10 @@ import decal.world.blocks.storage.*;
 import decal.graphics.*;
 import decal.world.blocks.defence.*;
 import decal.world.bullets.*;
+import decal.world.consumers.*;
 import decal.world.meta.*;
 import mindustry.entities.*;
+import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.part.*;
 import mindustry.entities.pattern.*;
@@ -43,24 +46,22 @@ public class DecalingBlocks{
 
     //environment
     decayfloor, decaywall, oreFragment, decaystone, oreMateria, decaystoneWall, purIce, purIceWall, crystalBoulder, neoplasmaLiquidFloor, neoFloor,
-    neoWall, roughNeoFloor, oreIod, nickelWallOre, cadmiunWallOre, obliteWallOre, purVent, redVent,
+    neoWall, roughNeoFloor, oreIod, nickelWallOre, cadmiunWallOre, obliteWallOre, purVent, redVent, smallPurVent, smallRedVent, zincedFloor, zincedWall,
+    ancientFloor,
 
     //defence
     decalwall, decalwalllarge, timewall, timewallLarge, decayBarrier, viliniteWall, viliniteWallLarge, mirrorWall, mirrorWallLarge, iodWall,
 
-    //breakers
-
-
     //crafting
-    changer, repairer, recreator, vilineForge, pressureClet, timeElectric, recycler, decayIncinerator,
+    changer, repairer, recreator, vilineForge, pressureClet, timeElectric, recycler, decayIncinerator, corrupter, zincExtractor,
 
     //production
     test, oreCrusher, tectonicBomber,
 
-    cliffBore,
+    cliffBore, cliffHarvester, drillStation,
 
     //power
-    decayconsider, wire, largeWire, timeDriver, armoredWire, largeArmoredWire, hydrothermalPP,
+    decayconsider, wire, largeWire, timeDriver, DReactor, armoredWire, largeArmoredWire, bouyNode, hydrotermalTurbine, hydrothermalPP,
 
     //storage
     coreDry, coreDecay, werehouse, coreBorn, coreRuin,
@@ -79,8 +80,9 @@ public class DecalingBlocks{
 
     icelinerSpawner,
 
-    wreck,
+    wreck, pressure, devastator,
 
+    ancidentEmp,
     //units
     timeFactory, decayFactory, timeRefabricator, decayRefabricator,timeAssembler,decayAssembler, decayModule, decayModuleT2, wallConstructor,
 
@@ -170,6 +172,32 @@ public class DecalingBlocks{
             parent = Blocks.redmat;
             effectColor = DecalPal.volcanoRedColor;
             attributes.set(DecalingAttributes.volcano, 1);
+        }};
+        smallPurVent = new SteamVent("small-pur-vent"){{
+            blendGroup = Blocks.bluemat;
+            parent = Blocks.bluemat;
+            attributes.set(Attribute.steam, 1);
+            variants = 1;
+        }};
+        smallRedVent = new SteamVent("small-red-vent"){{
+            blendGroup = Blocks.redmat;
+            parent = Blocks.redmat;
+            attributes.set(Attribute.steam, 1);
+            variants = 1;
+        }};
+        zincedFloor = new Floor("zinced-floor"){{
+            attributes.set(DecalingAttributes.zinc, 0.5f);
+            variants = 2;
+        }};
+        zincedWall = new StaticWall("zinced-wall"){{
+            variants = 2;
+            Blocks.redmat.asFloor().wall = Blocks.darksand;
+            Blocks.bluemat.asFloor().wall = Blocks.darksand;
+            zincedFloor.asFloor().wall = this;
+        }};
+        ancientFloor = new Floor("ancient-floor") {{
+            variants = 0;
+            this.asFloor().wall = Blocks.darkMetal;
         }};
 
         crystalBoulder = new Prop("crystal-boulder"){{
@@ -310,7 +338,7 @@ public class DecalingBlocks{
             craftTime = 64f;
             size = 3;
             itemCapacity = 10;
-            drawer = new DrawMulti(new DrawDefault(),new DrawPistons(){{sinMag = 10f;}}, new DrawFlame());
+            drawer = new DrawMulti(new DrawDefault(), new DrawPistons(){{sinMag = 5f;}}, new DrawFlame());
 
             consumePower(2.1f);
             consumeItems(with(Items.graphite, 2, Items.silicon, 3, DecalingItems.timefragment, 2));
@@ -396,6 +424,36 @@ public class DecalingBlocks{
             envEnabled |= Env.space;
             consumePower(2f);
         }};
+        //Mixtech block lol
+        corrupter = new FloorPlacer("corrupter", DecalingBlocks.decayfloor){{
+            requirements(Category.production, with(Items.beryllium, 440, Items.silicon, 350, Items.plastanium, 220, Items.thorium, 140));
+            scaledHealth = 60;
+            size = 3;
+            consumeItems(with(Items.sand, 5, Items.graphite, 2));
+            researchCostMultiplier = 0;
+            consumePower(7);
+            drawer = new DrawMulti(new DrawDefault(), new DrawBlurSpin("-rotator", 0.8f * 6f), new DrawBlurSpin("-rotator2", -0.8f * 6f));
+        }};
+        zincExtractor = new AttributeCrafter("zinc-extractor"){{
+            requirements(Category.crafting, with(DecalingItems.nickel, 560, DecalingItems.oxygen, 280, DecalingItems.cadmium, 410, DecalingItems.oblite, 126));
+            craftEffect = Fx.smeltsmoke;
+            breakEffect = DecalingFx.ZincbreakBlock;
+            outputItem = new ItemStack(DecalingItems.zincum, 8);
+            health = 900;
+            craftTime = 300f;
+            size = 5;
+            hasPower = true;
+            hasLiquids = false;
+            itemCapacity = 30;
+            boostScale = 0.1f;
+            drawer = new DrawMulti(new DrawBlurSpin("-rotator", 0.8f * 9f), new DrawDefault(), new DrawRegion("-top"));
+            ambientSound = Sounds.machine;
+            ambientSoundVolume = 0.1f;
+            attribute = DecalingAttributes.zinc;
+
+            consumeItems(with(DecalingItems.cadmium, 3, Items.sand, 5));
+            consumePower(5f);
+        }};
         //production
         test = new RotateDrill("driller"){{
             requirements(Category.production, with(DecalingItems.oldmateria, 25));
@@ -419,6 +477,7 @@ public class DecalingBlocks{
             consumePower(0.75f);
         }};
         cliffBore = new BeamDrill("cliff-bore"){{
+            breakEffect = DecalingFx.NickelbreakBlock;
             requirements(Category.production, with(DecalingItems.nickel, 40, DecalingItems.cadmium, 30));
             health = 270;
 
@@ -430,6 +489,29 @@ public class DecalingBlocks{
             researchCost = with(DecalingItems.nickel, 40, DecalingItems.cadmium, 30);
 
             consumeLiquid(DecalingLiquids.deuterium, 1f / 60f).boost();
+        }};
+        cliffHarvester = new BeamDrill("cliff-harvester"){{
+            requirements(Category.production, with(DecalingItems.nickel, 90, DecalingItems.cadmium, 120, DecalingItems.oxygen, 80));
+            health = 480;
+
+            drillTime = 180f;
+            tier = 4;
+            size = 3;
+            range = 3;
+            fogRadius = 3;
+
+            consumeLiquid(DecalingLiquids.deuterium, 5f / 60f).boost();
+            breakEffect = DecalingFx.NickelbreakBlock;
+        }};
+        drillStation = new BurstDrill("drill-station"){{
+            requirements(Category.production, with(DecalingItems.oldmateria, 50, DecalingItems.cadmium, 40));
+            breakEffect = DecalingFx.NickelbreakBlock;
+            health = 750;
+            size = 3;
+            tier = 3;
+            drillTime = 250;
+            consumePower(0.9f);
+            consumeLiquid(DecalingLiquids.deuterium, 10f / 60f).boost();
         }};
 
         //power
@@ -505,6 +587,55 @@ public class DecalingBlocks{
             powerProduction = 4.8f;
             fogRadius = 3;
         }};
+        if(false)
+        DReactor = new ConsumeGenerator("decay-reactor"){{
+            requirements(Category.power, with(DecalingItems.oldmateria, 420, Items.silicon, 260, Items.lead, 320, DecalingItems.viliniteAlloy, 100));
+            size = 3;
+            powerProduction = 5f;
+            itemDuration = 60 * 20f;
+            envEnabled = Env.any;
+            generateEffect = Fx.generatespark;
+
+            drawer = new DrawMulti(new DrawDefault(), new DrawWarmupRegion());
+            consume(new ConsumeItemDecay());
+        }};
+        bouyNode = new BeamNode("bouy-node"){{
+            requirements(Category.power, with(DecalingItems.nickel, 10));
+            breakEffect = DecalingFx.NickelbreakBlock;
+            consumesPower = outputsPower = true;
+            laserColor1 = Color.valueOf("69C7FF");
+            laserColor2 = Color.valueOf("7591cc");
+            laserEnd = Core.atlas.find("decal-bouy-power-beam-end");
+            health = 110;
+            range = 12;
+            fogRadius = 1;
+            researchCost = with(DecalingItems.nickel, 30);
+
+            consumePowerBuffered(2000f);
+        }};
+        hydrotermalTurbine = new ThermalGenerator("hydrothermal-turbine"){{
+            requirements(Category.power, with(DecalingItems.nickel, 80, DecalingItems.cadmium, 50));
+            breakEffect = DecalingFx.NickelbreakBlock;
+            attribute = Attribute.steam;
+            displayEfficiencyScale = 1f / 9f;
+            minEfficiency = 9f - 0.0001f;
+            powerProduction = 1f;
+            displayEfficiency = false;
+            generateEffect = Fx.turbinegenerate;
+            effectChance = 0.22f;
+            size = 3;
+            ambientSound = Sounds.hum;
+            ambientSoundVolume = 0.06f;
+
+            drawer = new DrawMulti(new DrawDefault(), new DrawBlurSpin("-rotator", 0.6f * 9f){{
+                blurThresh = 0.01f;
+            }});
+
+            hasLiquids = true;
+            outputLiquid = new LiquidStack(Liquids.hydrogen, 2f / 300f);
+            liquidCapacity = 10f;
+            fogRadius = 5;
+        }};
         hydrothermalPP = new ThermalGenerator("hydrothermal-power-plant"){{
             requirements(Category.power, with(DecalingItems.nickel, 500, DecalingItems.cadmium, 350, DecalingItems.oxygen, 230, DecalingItems.oblite, 160));
             attribute = DecalingAttributes.volcano;
@@ -517,13 +648,14 @@ public class DecalingBlocks{
             size = 5;
             ambientSound = Sounds.hum;
             ambientSoundVolume = 0.06f;
+            breakEffect = DecalingFx.NickelbreakBlock;
 
             drawer = new DrawMulti(new DrawDefault(), new DrawBlurSpin("-rotator", 0.8f * 9f){{
                 blurThresh = 0.01f;
             }});
 
             hasLiquids = true;
-            outputLiquid = new LiquidStack(DecalingLiquids.deuterium, 5f / 220f);
+            outputLiquid = new LiquidStack(DecalingLiquids.deuterium, 5f / 300f);
             liquidCapacity = 100f;
             fogRadius = 5;
         }};
@@ -559,9 +691,6 @@ public class DecalingBlocks{
             size = 2;
             itemCapacity = 400;
             scaledHealth = 55;
-            consumesPower = false;
-            conductivePower = true;
-            consumePowerBuffered(500f);
         }};
         coreBorn = new CoreBlock("core-born"){{
             requirements(Category.effect, with(DecalingItems.iod, 1200));
@@ -577,6 +706,7 @@ public class DecalingBlocks{
         }};
         coreRuin = new CoreBlock("core-ruin"){{
             requirements(Category.effect, with(DecalingItems.nickel, 1700, DecalingItems.cadmium, 800));
+            breakEffect = DecalingFx.NickelbreakBlock;
             alwaysUnlocked = true;
 
             isFirstTier = true;
@@ -660,13 +790,17 @@ public class DecalingBlocks{
             requirements(Category.distribution, with(DecalingItems.nickel, 3));
             health = 20;
             researchCost = with(DecalingItems.nickel, 30);
-            speed = 2f;
+            speed = 0.12f;
+            displayedSpeed = 4f;
+            bridgeReplacement = DecalingBlocks.NDB;
+            breakEffect = DecalingFx.NickelbreakBlock;
         }};
         NDB = new DuctBridge("ndb"){{
             requirements(Category.distribution, with(DecalingItems.nickel, 10, DecalingItems.cadmium, 3));
             health = 100;
             speed = 2f;
             researchCostMultiplier = 0.4f;
+            breakEffect = DecalingFx.NickelbreakBlock;
         }};
         //turrets
         cluster = new ItemTurret("cluster"){{
@@ -856,7 +990,7 @@ public class DecalingBlocks{
                             rotateSpeed = 4f;
                             maxRange = 6f;
                             lifetime = 60f * 1.55f;
-                            outlineColor = Pal.darkOutline;
+                            outlineColor = DecalPal.decalOutline;
                             engineColor = trailColor = DecalPal.vilinite;
                             health = 60;
                             loopSoundVolume = 0.1f;
@@ -916,12 +1050,12 @@ public class DecalingBlocks{
                         decayDamage = 0.2f;
                     }});
             drawer = new DrawTurret("decay-"){{
-                parts.add(new RegionPart("-recoil"){{
-                    progress = PartProgress.reload;
-                    moveY = -2.3f;
-                    mirror = false;
-                    heatColor = Color.red;
-                }});
+                    parts.add(new RegionPart("-recoil"){{
+                        progress = PartProgress.reload;
+                        recoilIndex = 0;
+                        moveY = -2f;
+                        mirror = true;
+                    }});
             }};
         }};
         preletT1 = new UpgradeblePowerTurret("prelet-t1"){{
@@ -1076,7 +1210,7 @@ public class DecalingBlocks{
                 trailColor = DecalPal.darkTime;
             }};
 
-            drawer = new DrawTurret("decal-"){{
+            drawer = new DrawTurret("decay-"){{
                 var heatp = DrawPart.PartProgress.warmup.blend(p -> Mathf.absin(2f, 1f) * p.warmup, 0.2f);
                 parts.add(new RegionPart("-mid"){{
                             heatProgress = heatp;
@@ -1403,6 +1537,7 @@ public class DecalingBlocks{
             requirements(Category.turret, with(
                     DecalingItems.nickel, 120, DecalingItems.cadmium, 70
             ));
+            breakEffect = DecalingFx.NickelbreakBlock;
             scaledHealth = 200;
             size = 3;
             reload = 30f;
@@ -1447,12 +1582,200 @@ public class DecalingBlocks{
             drawer = new DrawTurret("tantros-");
             researchCost = with(DecalingItems.nickel, 240, DecalingItems.cadmium, 140);
         }};
+        pressure = new ItemTurret("pressure"){{
+            requirements(Category.turret, with(
+                    DecalingItems.nickel, 60,
+                    DecalingItems.cadmium, 46,
+                    DecalingItems.oxygen, 52
+            ));
+            breakEffect = DecalingFx.OxygenbreakBlock;
+            scaledHealth = 120;
+            targetInterval = 0;
+            size = 2;
+            reload = 60f;
+            range = 200f;
+            recoil = 1.2f;
+            outlineColor = DecalPal.tantrosOutline;
+            ammoPerShot = 3;
+            ammo(
+                    DecalingItems.oxygen, new BasicBulletType(){{
+                        ammoMultiplier = 1f;
+                        damage = 0f;
+                        speed = 1000f;
+                        spawnUnit = new MissileUnitType("pressure-torpedo"){{
+                            speed = 5f;
+                            rotateSpeed = 0.3f;
+                            maxRange = 6f;
+                            lifetime = 40f;
+                            outlineColor = DecalPal.tantrosOutline;
+                            engineColor = trailColor = DecalPal.oxygenColor;
+                            health = 180;
+                            loopSoundVolume = 0.1f;
+                            constructor = TimedKillUnit::create;
+                            immunities.add(DecalingStatus.decaling);
+                            useUnitCap = false;
+                            fogRadius = 6;
+                            abilities.add(new MoveEffectAbility(){{
+                                teamColor = true;
+                            }});
+
+                            weapons.add(new Weapon() {{
+                                shootCone = 360f;
+                                mirror = false;
+                                reload = 1f;
+                                shootOnDeath = true;
+                                killShooter = true;
+                                bullet = new ExplosionBulletType(35f, 15f) {{
+                                    shootEffect = Fx.massiveExplosion;
+                                }};
+                            }});
+                        }};
+                    }});
+            drawer = new DrawTurret("tantros-");
+        }};
+        devastator = new ItemTurret("devastator"){{
+            requirements(Category.turret, with(
+                    DecalingItems.nickel, 1500,
+                    DecalingItems.cadmium, 1000,
+                    DecalingItems.zincum, 600,
+                    DecalingItems.oxygen, 1200,
+                    DecalingItems.oblite, 500
+            ));
+            breakEffect = DecalingFx.NickelbreakBlock;
+            scaledHealth = 540;
+            targetInterval = 0;
+            size = 5;
+            reload = 500f;
+            range = 1400f;
+            recoil = 3f;
+            outlineColor = DecalPal.tantrosOutline;
+            ammoPerShot = 10;
+            ammo(
+                    DecalingItems.oblite, new BasicBulletType(){{
+                        ammoMultiplier = 1f;
+                        damage = 0f;
+                        speed = 1000f;
+                        spawnUnit = new MissileUnitType("devastator-torpedo"){{
+                            hitSize = 7;
+                            speed = 2f;
+                            rotateSpeed = 0.3f;
+                            maxRange = 80f;
+                            lifetime = 700f;
+                            outlineColor = DecalPal.tantrosOutline;
+                            engineColor = trailColor = DecalPal.oxygenColor;
+                            health = 550;
+                            fogRadius = 6;
+                            loopSoundVolume = 0.1f;
+                            constructor = TimedKillUnit::create;
+                            useUnitCap = false;
+                            abilities.add(new MoveEffectAbility(){{
+                                teamColor = true;
+                            }});
+
+                            weapons.add(new Weapon() {{
+                                shootCone = 360f;
+                                mirror = false;
+                                reload = 1f;
+                                shootOnDeath = true;
+                                killShooter = true;
+                                bullet = new ExplosionBulletType(1750f, 100f) {{
+                                    shootEffect = Fx.impactReactorExplosion;
+                                }};
+                            }});
+                        }};
+                    }});
+            drawer = new DrawTurret("tantros-");
+        }};
+        ancidentEmp = new CapturePowerTurret("ancident-emp"){{
+            requirements(Category.turret, BuildVisibility.sandboxOnly, with(
+                    Items.surgeAlloy, 900,
+                    Items.carbide, 300
+            ));
+            shootCone = 360;
+            rotateSpeed = 0;
+            scaledHealth = 540;
+            size = 2;
+            reload = 180f;
+            range = 300f;
+            recoil = 0f;
+            consumesPower = false;
+            outlineColor = Pal.darkOutline;
+            shootY = 0f;
+            shoot = new ShootSpread(360,1);
+            float movePistons = 4.2f;
+            drawer = new DrawTurret("ancident-"){{
+                parts.addAll(
+                        new RegionPart("-piston"){{
+                            progress = PartProgress.warmup;
+                            under = true;
+                            mirror = false;
+                            y = 0;
+                            x = 0;
+                            moveY = movePistons;
+                            moveX = movePistons;
+                            moves.add(new PartMove(
+                                    PartProgress.recoil, -movePistons + 1, -movePistons +1, 0f
+                            ));
+                        }},
+                new RegionPart("-piston2"){{
+                    progress = PartProgress.warmup;
+                    under = true;
+                    mirror = false;
+                    y = 0;
+                    x = 0;
+                    moveY = -movePistons;
+                    moveX = -movePistons;
+                    moves.add(new PartMove(
+                            PartProgress.recoil, movePistons - 1, movePistons -1, 0f
+                    ));
+                }},
+                        new RegionPart("-piston3"){{
+                            progress = PartProgress.warmup;
+                            under = true;
+                            mirror = false;
+                            y = 0;
+                            x = 0;
+                            moveY = -movePistons;
+                            moveX = movePistons;
+                            moves.add(new PartMove(
+                                    PartProgress.recoil, -movePistons + 1, movePistons -1, 0f
+                            ));
+                        }},
+                        new RegionPart("-piston4"){{
+                            progress = PartProgress.warmup;
+                            under = true;
+                            mirror = false;
+                            y = 0;
+                            x = 0;
+                            moveY = movePistons;
+                            moveX = -movePistons;
+                            moves.add(new PartMove(
+                                    PartProgress.recoil, movePistons -1, -movePistons + 1, 0f
+                            ));
+                        }}
+                );
+            }};
+            shootType = new BasicBulletType(){{
+                damage = 10f;
+                height = 6f;
+                drag = 0.1f;
+                speed = 80f;
+                lifetime = 5f;
+                despawnEffect = hitEffect = DecalingFx.crystal;
+
+                lightColor = hitColor = frontColor = backColor = DecalPal.ancident;
+
+                status = DecalingStatus.crystallized;
+                statusDuration = 100f;
+
+            }};
+        }};
         //units
         timeFactory = new UnitFactory("time-factory"){{
             requirements(Category.units, with(Items.silicon, 200, Items.graphite, 300, DecalingItems.timefragment, 60));
             size = 3;
-            configurable = false;
             plans.add(new UnitPlan(DecalingUnits.hour, 60f * 40f, with(DecalingItems.timefragment, 20, Items.silicon, 40)));
+            plans.add(new UnitPlan(DecalingUnits.pause, 60f * 60f, with(DecalingItems.timefragment, 30, Items.silicon, 30, Items.lead, 25)));
             regionSuffix = "-decay";
             fogRadius = 3;
             researchCostMultiplier = 0.65f;
@@ -1551,6 +1874,7 @@ public class DecalingBlocks{
             filter = Seq.with(DecalingBlocks.decalwalllarge, DecalingBlocks.timewallLarge, DecalingBlocks.viliniteWallLarge);
         }};
         harvoneFactory = new UnitFactory("harvone-factory"){{
+            breakEffect = DecalingFx.NickelbreakBlock;
             requirements(Category.units, with(DecalingItems.nickel, 300, DecalingItems.cadmium, 100));
             size = 3;
             plans.add(

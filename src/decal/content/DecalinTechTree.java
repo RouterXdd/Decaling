@@ -76,7 +76,7 @@ public class DecalinTechTree {
                                 node(DecalingBlocks.paradox, Seq.with(new OnSector(orbitalCenter)),() -> {
                                 });
                             });
-                            node(DecalingBlocks.decaynir, () -> {
+                            node(DecalingBlocks.decaynir,Seq.with(new OnSector(trainPath)),() -> {
                             });
                         });
                         node(DecalingBlocks.confronter, Seq.with(new SectorComplete(repairTerminal)),() -> {
@@ -165,6 +165,9 @@ public class DecalinTechTree {
 
                         });
                         node(highPeaks, Seq.with(new SectorComplete(repairTerminal)),() -> {
+                            node(trainPath, Seq.with(new SectorComplete(highPeaks)),() -> {
+
+                            });
                             node(orbitalCenter, Seq.with(new SectorComplete(highPeaks)),() -> {
                                 node(timeSiege, Seq.with(new SectorComplete(orbitalCenter)),() -> {
                                     node(dimensionRift, Seq.with(new SectorComplete(timeSiege), new DecalingObjectives.ActivateTimeMachine(DecalingBlocks.timeMachine)),() -> {
@@ -185,6 +188,8 @@ public class DecalinTechTree {
                 });
             });
             node(DecalingBlocks.timeMachine, Seq.with(new SectorComplete(timeSiege)),() -> {
+            });
+            node(DecalingBlocks.corrupter, Seq.with(new SectorComplete(forgotLand)),() -> {
             });
         });
     }

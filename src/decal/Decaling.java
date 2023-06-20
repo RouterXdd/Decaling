@@ -30,6 +30,9 @@ public class Decaling extends Mod{
     public Decaling(){
         Events.run(FileTreeInitEvent.class, () -> Core.app.post(DecalingShaders::init));
         Log.info("Loaded Decaling constructor.");
+        Events.on(ClientLoadEvent.class, e -> {
+            loadSettings();
+        });
     }
     @Override
     public void init(){
@@ -84,6 +87,14 @@ public class Decaling extends Mod{
         new DecalingSectors().load();
         new DecalinTechTree().load();
         new OldDecalinTechTree().load();
+    }
+    void loadSettings(){
+        ui.settings.addCategory(bundle.get("setting.decay-title"), "decal-settings-ui", t -> {
+            t.checkPref("decal-tantros-compatibility", true);
+        });
+    }
+    public static boolean tantrosCombabil(){
+        return settings.getBool("decal-tantros-compatibility", true);
     }
 
 }

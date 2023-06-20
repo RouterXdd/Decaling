@@ -15,7 +15,7 @@ import static mindustry.Vars.*;
 
 public class DecalingStatus {
         public static StatusEffect
-        decaling, timeswap1, timeswap2, timeswap3, rush, timeCrack, timeStop, anotherTimeline, errorTest;
+        decaling, timeswap1, timeswap2, timeswap3, rush, timeCrack, timeStop, anotherTimeline, errorTest, crystallized;
    public static void load(){
     decaling = new StatusEffect("decaying"){{
             color = Color.valueOf("3a3a3a");
@@ -60,6 +60,13 @@ public class DecalingStatus {
        }};
         errorTest = new ErrorStatus("error-test"){{
            color = DecalPal.icelin;
+       }};
+       crystallized = new StatusEffect("crystallized"){{
+           color = DecalPal.ancident;
+           damageMultiplier = 0.9f;
+           healthMultiplier = 0.85f;
+           speedMultiplier = 0.7f;
+           effect = DecalingFx.crystal;
        }};
     }
 }

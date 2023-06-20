@@ -2,23 +2,25 @@ package decal.content;
 
 import arc.graphics.*;
 import arc.struct.*;
+import decal.world.type.DecayItem;
 import mindustry.type.*;
 import decal.graphics.*;
 
 import static mindustry.content.Items.*;
 
 public class DecalingItems {
-     public static Item oldmateria, decaygraphite, timefragment, viliniteAlloy, timeEssence, reliteplate, iod, nickel, cadmium, oxygen, zincum, oblite;
+     public static Item oldmateria, decaygraphite, timefragment, viliniteAlloy, timeEssence, reliteplate, iod, nickel, cadmium, oxygen, zincum, oblite, argus, alumenComposite, tarite;
 
     public static final Seq<Item> decalinItems = new Seq<>();
     public static final Seq<Item> oldDecalinItems = new Seq<>();
     public static final Seq<Item> oldTantrosItems = new Seq<>();
     public static final Seq<Item> tantrosItems = new Seq<>();
     public static void load(){
-        oldmateria = new Item("oldmateria", Color.valueOf("1a1a1a")){{
+        oldmateria = new DecayItem("oldmateria", Color.valueOf("1a1a1a")){{
             hardness = 1;
             cost = 0.8f;
             healthScaling = 0.86f;
+            decay = 1;
         }};
         decaygraphite = new Item("decay-graphite", Color.valueOf("2d2d2d")){{
             hardness = 2;
@@ -77,6 +79,23 @@ public class DecalingItems {
             hardness = 4;
             cost = 2.1f;
         }};
+        argus = new Item("argus", Color.valueOf("71d96b")){{
+            hardness = 5;
+            cost = 2.7f;
+            explosiveness = 0.7f;
+        }};
+        alumenComposite = new Item("alumen-composite", Color.valueOf("dcc6c6")){{
+            hardness = 4;
+            cost = 2.1f;
+            flammability = 2;
+            explosiveness = 4;
+            radioactivity = 0.4f;
+        }};
+        tarite = new Item("tarite", Color.valueOf("7a5c47")){{
+            hardness = 4;
+            cost = 1.5f;
+            healthScaling = 1.46f;
+        }};
         decalinItems.addAll(
                 oldmateria, timefragment, decaygraphite, lead, silicon, graphite, viliniteAlloy, timeEssence, reliteplate
         );
@@ -84,7 +103,7 @@ public class DecalingItems {
                 iod, coal
         );
         tantrosItems.addAll(
-                nickel, cadmium, zincum, oxygen, oblite
+                nickel, cadmium, zincum, oxygen, oblite, argus, alumenComposite
         );
     }
 }

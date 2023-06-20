@@ -252,9 +252,7 @@ public class DecalinBase {
         tryPlace(part, x, y, team, null);
     }
 
-    public static void tryPlace(BasePart part, int x, int y, Team team, @Nullable Intc2 posc){
-        if (part == null) return;
-
+    public static boolean tryPlace(BasePart part, int x, int y, Team team, @Nullable Intc2 posc){
         int rotation = Mathf.range(2);
         axis.set((int)(part.schematic.width / 2f), (int)(part.schematic.height / 2f));
         Schematic result = Schematics.rotate(part.schematic, rotation);
@@ -268,7 +266,7 @@ public class DecalinBase {
         for(Schematic.Stile tile : result.tiles){
             int realX = tile.x + cx, realY = tile.y + cy;
             if(isTaken(tile.block, realX, realY)){
-                return;
+                return false;
             }
 
             if(posc != null){
@@ -312,6 +310,7 @@ public class DecalinBase {
             }
         }
 
+        return true;
     }
 
     static void set(Tile tile, Item item){
