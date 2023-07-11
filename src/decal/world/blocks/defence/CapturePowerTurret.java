@@ -55,7 +55,7 @@ public class CapturePowerTurret extends PowerTurret {
 
                 //building does not exist on client yet
                 if(!net.client()){
-                    //core is invincible for several seconds to prevent recapture
+                    //turret is invincible for several seconds to prevent recapture
                     ((CapturePowerTurret.CapturePowerTurretBuild)tile.build).iframes = captureInvicibility;
                 }
         }

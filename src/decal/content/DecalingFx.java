@@ -67,13 +67,42 @@ public class DecalingFx{
     }),
             crystal = new Effect(30f, 30f, e -> {
                 color(DecalPal.ancident);
-                stroke(e.fin() * 2.2f);
+                stroke(2f - e.fin() * 2.2f);
                 Lines.square(e.x, e.y, 5f, 45);
             }),
-            ancientCapture = new Effect(26f, 30f, e -> {
+            crystalFade = new Effect(30f, 30f, e -> {
                 color(DecalPal.ancident);
-                stroke(e.fin() * 2.4f);
-                Lines.square(e.x, e.y, 4f - e.finpow() * e.rotation, 45);
+                stroke(2f - e.fin() * 2.2f);
+                Lines.square(e.x, e.y, 5f - e.finpow() * 4f, e.rotation + 45f);
+            }),
+            bigCrystal = new Effect(42f, 30f, e -> {
+                color(DecalPal.ancident);
+                stroke(2.6f - e.fin() * 2.2f);
+                Lines.square(e.x, e.y, 5f + e.finpow() * 6f,45 * e.fin() * 3);
+                color(DecalPal.ancident);
+                stroke(2f - e.fin() * 2.2f);
+                Lines.square(e.x, e.y, 3f, 45);
+            }),
+            crystalExplosion = new Effect(50f, 30f, e -> {
+                color(DecalPal.ancident);
+                stroke(2.6f - e.fin() * 2.2f);
+                Lines.square(e.x, e.y, 6f - e.finpow() * 5f,45 * e.fin() * -3);
+            }),
+            crystalShoot = new Effect(8, e -> {
+                color(DecalPal.ancident, Pal.bulletYellow, e.fin());
+                float w = 2f + 7 * e.fout();
+                Drawf.tri(e.x, e.y, w, 17f * e.fout(), e.rotation);
+                Drawf.tri(e.x, e.y, w, 4f * e.fout(), e.rotation + 180f);
+            }),
+            ancientCapture = new Effect(35f, 30f, e -> {
+                color(DecalPal.ancident);
+                stroke(2f - e.fin() * 2.2f);
+                Lines.square(e.x, e.y, 6f - e.finpow() * e.rotation * 2f, 45);
+            }),
+            viliniteCraft = new Effect(20f, 30f, e -> {
+                color(DecalPal.vilinite);
+                stroke(2f + e.fin() * 2.2f);
+                Drawf.square(e.x, e.y, 6f - e.finpow() * e.rotation * 2f, 45);
             }),
     regen = new Effect(50f, 30f, e -> {
         color(DecalPal.vilinite);
@@ -138,6 +167,24 @@ public class DecalingFx{
                 alpha(e.fout(Interp.pow4Out));
                 float size = 10f + e.fout(Interp.pow10In) * 30f;
                 Draw.rect(Icon.cancel.getRegion(), e.x, e.y, size, size);
+            }),
+            shadowTeleport = new Effect(60f, 80f, e -> {
+                color(Color.black);
+                randLenVectors(e.id, 20 + (int)(e.rotation * 4), e.rotation * 2f + e.rotation * e.finpow(), (x, y) -> {
+                    Fill.circle(e.x + x, e.y + y, 1f + e.fout() * (3f + e.rotation));
+                });
+            }),
+            shadowDeath = new Effect(60f, 80f, e -> {
+                color(Color.white);
+                randLenVectors(e.id, 20 + (int)(e.rotation * 4), e.rotation * 9f + e.rotation * e.finpow(), (x, y) -> {
+                    Fill.circle(e.x + x, e.y + y, 1f + e.fout() * (2f + e.rotation));
+                });
+            }),
+            apparitionMove = new Effect(40f, 70f, e ->{
+                color(Color.white);
+                alpha(e.fout(Interp.pow4Out));
+                float size = 10f + e.fout() * 30f;
+                Draw.rect("decal-apparition-trail", e.x, e.y, size, size);
             }),
             NickelbreakBlock = new Effect(12, e -> {
                 color(DecalPal.nickelColor);

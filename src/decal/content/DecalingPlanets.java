@@ -22,7 +22,7 @@ import static mindustry.content.Planets.*;
 public class DecalingPlanets {
     public static Planet
     //Present time
-    decalin, deathPlanet,
+    decalin, ancientMachine,
     //Past time
     oldSun, oldSerpulo, oldErekir, oldTantros, oldDecalin;
     public static void load(){
@@ -55,6 +55,31 @@ public class DecalingPlanets {
                 r.weather.add(abuse);
             };
              unlockedOnLand.add(DecalingBlocks.coreDry);
+        }};
+        ancientMachine = new Planet("ancient-machine", sun, 0.9f, 2){{
+            defaultCore = DecalingBlocks.coreReturn;
+            sectorSeed = 3;
+            generator = new AMGenerator();
+            meshLoader = () -> new HexMesh(this, 6);
+            cloudMeshLoader = () -> new MultiMesh(
+                    new HexSkyMesh(this, 4, 12f, 0.15f, 3, DecalPal.ancident.a(0.7f), 2, 0.45f, 1.2f, 1f)
+            );
+            iconColor = DecalPal.ancident;
+            accessible = true;
+            alwaysUnlocked = true;
+            atmosphereColor = Color.valueOf("393939");
+            startSector = 8;
+            atmosphereRadIn = 0.01f;
+            atmosphereRadOut = 0.3f;
+            clearSectorOnLose = true;
+            ruleSetter = r -> {
+                r.loadout = ItemStack.list(copper, 400, lead, 400, silicon, 250);
+                r.waveTeam = DecalingTeams.yellow;
+                r.showSpawns = true;
+                r.fog = false;
+                r.onlyDepositCore = false;
+            };
+            unlockedOnLand.add(DecalingBlocks.coreReturn);
         }};
         oldSun = new Planet("old-sun", sun, 4f){{
             radius = 4f;

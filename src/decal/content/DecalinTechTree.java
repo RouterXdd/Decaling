@@ -58,10 +58,14 @@ public class DecalinTechTree {
                     });
                     node(DecalingBlocks.timewallLarge, () -> {
                     });
+                    node(DecalingBlocks.automaticDoor, () -> {
+                    });
                     node(DecalingBlocks.viliniteWall, () -> {
                         node(DecalingBlocks.viliniteWallLarge, () -> {
                         });
                         node(DecalingBlocks.mirrorWall, () -> {
+                            node(DecalingBlocks.mirrorWallLarge, () -> {
+                            });
                         });
                     });
                 });
@@ -188,8 +192,6 @@ public class DecalinTechTree {
                 });
             });
             node(DecalingBlocks.timeMachine, Seq.with(new SectorComplete(timeSiege)),() -> {
-            });
-            node(DecalingBlocks.corrupter, Seq.with(new SectorComplete(forgotLand)),() -> {
             });
         });
     }

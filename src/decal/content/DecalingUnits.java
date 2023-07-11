@@ -3,6 +3,7 @@ package decal.content;
 import arc.graphics.*;
 import arc.struct.*;
 import decal.world.meta.*;
+import decal.world.units.*;
 import mindustry.ai.*;
 import mindustry.ai.types.*;
 import mindustry.entities.abilities.*;
@@ -13,7 +14,7 @@ import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.type.ammo.*;
-import mindustry.type.unit.MissileUnitType;
+import mindustry.type.unit.*;
 import mindustry.type.weapons.*;
 import mindustry.world.meta.*;
 import mindustry.content.*;
@@ -35,7 +36,11 @@ public class DecalingUnits {
  //ice
  iceliner,
  //tantros
- recuperate, harvone, lysis, reef, ornicus, vertex
+ recuperate, harvone, lysis, reef, ornicus, vertex,
+ //ancient
+ retor,
+ //bosses
+ shadow, apparition
     ;
  public static void load(){
     //air time units
@@ -747,6 +752,7 @@ public class DecalingUnits {
             x = 5f;
             y = 0f;
             top = false;
+            rotate = false;
             ejectEffect = Fx.casing1;
             bullet = new BasicBulletType(2.5f, 9){{
                 width = 7f;
@@ -831,17 +837,17 @@ public class DecalingUnits {
          immunities.add(DecalingStatus.decaling);
          abilities.add(new DecayField(130f, 2f));
          weapons.add(new Weapon("decal-artillery-decay-weapon"){{
-             reload = 100f;
+             reload = 75f;
              x = 8f;
-             y = -6f;
+             y = -4f;
              top = false;
              mirror = true;
              ejectEffect = Fx.casing1;
-             bullet = new BasicBulletType(4f, 80){{
-                 drag = -0.06f;
-                 width = 12f;
-                 height = 16f;
-                 lifetime = 140f;
+             bullet = new ShrapnelBulletType(){{
+                 width = 7f;
+                 length = 26;
+                 lifetime = 30f;
+                 damage = 60;
                  pierce = true;
                  pierceCap = 3;
                  pierceBuilding = true;
@@ -956,7 +962,6 @@ public class DecalingUnits {
      }};
      transporter = new UnitType("transporter"){{
          controller = u -> new CargoAI();
-         envEnabled = DecalingEnv.neolaspmatic;
 
          flying = true;
          drag = 0.07f;
@@ -988,8 +993,8 @@ public class DecalingUnits {
          faceTarget = true;
          circleTarget = false;
          constructor = BuildingTetherPayloadUnit::create;
-         engineOffset = 5.4f;
-         engineSize = 2.2f;
+         engineOffset = 5.8f;
+         engineSize = 2.6f;
          outlineColor = DecalPal.decalOutline;
          weapons.add(new Weapon("main-weapon"){{
              reload = 40f;
@@ -1250,10 +1255,225 @@ public class DecalingUnits {
                          reload = 1f;
                          shootOnDeath = true;
                          killShooter = true;
-                         bullet = new ExplosionBulletType(48f, 30f) {{
-                         }};
+                         bullet = new ExplosionBulletType(48f, 30f);
                      }});
                  }};
+             }};
+         }});
+     }};
+     retor = new UnitType("retor"){{
+         hitSize = 8;
+         flying = true;
+         drag = 0.08f;
+         accel = 0.1f;
+         range = 40f;
+         speed = 3.2f;
+         health = 1240;
+         armor = 7;
+         engineSize = 2.8f;
+         engineOffset = 7f;
+         constructor = UnitEntity::create;
+         outlineColor = Pal.darkOutline;
+         itemCapacity = 20;
+
+         weapons.add(new Weapon("main-weap"){{
+             reload = 50f;
+             x = 0f;
+             y = 3f;
+             top = false;
+             mirror = false;
+             bullet = new LaserBulletType(){{
+                 length = 34f;
+                 damage = 80;
+                 width = 6f;
+                 lifetime = 10f;
+                 shootSound = Sounds.lasershoot;
+                 colors = new Color[]{DecalPal.ancident.a(0.35f), DecalPal.ancident.a(0.5f), DecalPal.ancident.a(0.6f), Color.white, Color.white};
+                 hitEffect = Fx.hitLancer;
+                 despawnEffect = Fx.hitLancer;
+             }};
+         }});
+     }};
+     shadow = new ShadowBossType("shadow"){{
+         envEnabled = Env.any;
+         health = 40000;
+         armor = 200;
+         speed = 2f;
+         hitSize = 30f;
+         drag = 0.3f;
+         flying = true;
+         faceTarget = true;
+         constructor = UnitEntity::create;
+         immunities.addAll();
+         engineOffset = 0f;
+         engineSize = 0f;
+         outlineColor = Color.black;
+         range = 200;
+         outlineRadius = 0;
+         createWreck = false;
+         deathExplosionEffect = DecalingFx.shadowDeath;
+         shadowElevation = 0;
+         parts.add(new HaloPart(){{
+             progress = PartProgress.life;
+             color = Color.black;
+             layer = Layer.effect + 6;
+
+             haloRotation = 0f;
+             shapes = 3;
+             hollow = false;
+             triLength = 18f;
+             haloRadius = 0.8f;
+             tri = true;
+             radius = 2.6f;
+             haloRotateSpeed = 8;
+
+         }},
+                 new HaloPart(){{
+                     progress = PartProgress.life;
+                     color = Color.black;
+                     layer = Layer.effect + 6;
+
+                     haloRotation = 0f;
+                     shapes = 3;
+                     hollow = false;
+                     triLength = 18f;
+                     haloRadius = 0.8f;
+                     tri = true;
+                     radius = 2.6f;
+                     haloRotateSpeed = -8;
+
+                 }});
+         weapons.add(new Weapon("shadow-weapon1"){{
+             reload = 200f;
+             x = 0f;
+             y = 0f;
+             top = false;
+             shoot.shots = 5;
+             shoot.shotDelay = 5;
+             bullet = new BulletType(){{
+                 damage = 0f;
+                 speed = 0f;
+                 lifetime = 0f;
+                 hitEffect = Fx.none;
+                 spawnUnit = new MissileUnitType("shadow-bullet"){{
+                     speed = 2.4f;
+                     rotateSpeed = 3f;
+                     maxRange = 50f;
+                     lifetime = 160f;
+                     engineOffset = 0f;
+                     engineSize = 0f;
+                     outlineColor = Color.black;
+                     outlineRadius = 0;
+                     health = 400;
+                     hitSize = 5;
+                     fogRadius = 3;
+                     constructor = TimedKillUnit::create;
+                     useUnitCap = false;
+                     parts.add(new HaloPart(){{
+                                   progress = PartProgress.life;
+                                   color = Color.black;
+                                   layer = Layer.effect + 6;
+
+                                   haloRotation = 0f;
+                                   shapes = 2;
+                                   hollow = false;
+                                   triLength = 9f;
+                                   haloRadius = 0.8f;
+                                   tri = true;
+                                   radius = 2f;
+                                   haloRotateSpeed = 8;
+
+                               }});
+                     weapons.add(new Weapon() {{
+                         shootCone = 360f;
+                         mirror = false;
+                         reload = 1f;
+                         shootOnDeath = true;
+                         bullet = new ExplosionBulletType(80f, 40f);
+                     }});
+                 }};
+             }};
+         }},
+                 new Weapon("shadow-weapon2"){{
+                     reload = 760f;
+                     x = 0f;
+                     y = 0f;
+                     top = false;
+                     shoot.shots = 8;
+                     shoot.shotDelay = 4;
+                     bullet = new BulletType(){{
+                         damage = 0f;
+                         speed = 0f;
+                         lifetime = 0f;
+                         hitEffect = Fx.none;
+                         spawnUnit = new UnitType("shadow-swarmling"){{
+                             speed = 2f;
+                             range = 8;
+                             crushDamage = 0.02f;
+                             rotateSpeed = 1.4f;
+                             engineOffset = 0f;
+                             engineSize = 0f;
+                             outlineColor = Color.black;
+                             outlineRadius = 0;
+                             health = 500;
+                             armor = 10;
+                             hitSize = 8;
+                             allowLegStep = false;
+                             fogRadius = 6;
+                             constructor = MechUnit::create;
+                             useUnitCap = false;
+
+                             weapons.add(new Weapon() {{
+                                 x = 0;
+                                 y = 3;
+                                 shootCone = 20f;
+                                 mirror = false;
+                                 reload = 20f;
+                                 bullet = new BasicBulletType(5f, 30f){{
+                                     width = 0.1f;
+                                     height = 0.1f;
+                                     lifetime = 2;
+                                 }};
+                             }});
+                         }};
+                     }};
+                 }});
+     }};
+     apparition = new UnitType("apparition"){{
+         controller = u -> new FlyingAI();
+         envEnabled = Env.any;
+         health = 20000;
+         range = 1;
+         armor = 300;
+         speed = 1.2f;
+         hitSize = 26f;
+         drag = 0.2f;
+         flying = true;
+         faceTarget = false;
+         constructor = UnitEntity::create;
+         immunities.addAll();
+         engineOffset = 0f;
+         engineSize = 0f;
+         outlineColor = Color.black;
+         outlineRadius = 0;
+         createWreck = false;
+         deathExplosionEffect = DecalingFx.shadowDeath;
+         shadowElevation = 0;
+         targetFlags = new BlockFlag[]{BlockFlag.core, null};
+         weapons.add(new Weapon("main-weap"){{
+             reload = 100f;
+             x = 0f;
+             y = 0f;
+             top = false;
+             mirror = false;
+             bullet = new BasicBulletType(){{
+                 height = 1f;
+                 damage = 400;
+                 width = 1f;
+                 lifetime = 1f;
+                 shootSound = Sounds.lasershoot;
+                 hitEffect = Fx.hitLancer;
+                 despawnEffect = Fx.hitLancer;
              }};
          }});
      }};

@@ -74,6 +74,7 @@ public class Decaling extends Mod{
 
     @Override
     public void loadContent(){
+        new DecalingIcons().load();
         new DecalingTeams().load();
         new DecalingAttributes().load();
         new DecalingItems().load();
@@ -87,14 +88,18 @@ public class Decaling extends Mod{
         new DecalingSectors().load();
         new DecalinTechTree().load();
         new OldDecalinTechTree().load();
+        new AMTechTree().load();
     }
     void loadSettings(){
         ui.settings.addCategory(bundle.get("setting.decay-title"), "decal-settings-ui", t -> {
             t.checkPref("decal-tantros-compatibility", true);
+            t.checkPref("decal-show-messages", true);
         });
     }
     public static boolean tantrosCombabil(){
         return settings.getBool("decal-tantros-compatibility", true);
     }
-
+    public static boolean showMessages(){
+        return settings.getBool("decal-show-messages", true);
+    }
 }

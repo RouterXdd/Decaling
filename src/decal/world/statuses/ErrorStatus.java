@@ -22,6 +22,8 @@ public class ErrorStatus extends StatusEffect{
 
     @Override
     public void update(Unit unit, float time) {
+        Yinsability = Mathf.random(-1, 1);
+        Xinsability = Mathf.random(-1, 1);
         if(Mathf.chance(insabilityChance)) {
             unit.move(unit.y + Yinsability, unit.x + Xinsability);
         }

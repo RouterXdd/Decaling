@@ -41,6 +41,7 @@ public class DecalingSectors {
             captureWave = 60;
             difficulty = 10;
             startWaveTimeMultiplier = 0.7f;
+            uiIcon = fullIcon = DecalingIcons.timeSiegeIcon;
         }};
         dimensionRift = new SectorPreset("dimension-rift", decalin, 214){{
             captureWave = 50;

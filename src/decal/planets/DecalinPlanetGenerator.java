@@ -8,14 +8,13 @@ import arc.util.*;
 import arc.util.noise.*;
 import decal.content.*;
 import mindustry.ai.*;
-import mindustry.ai.Astar.*;
 import mindustry.content.*;
 import mindustry.game.*;
 import mindustry.graphics.g3d.PlanetGrid.*;
 import mindustry.maps.generators.*;
 import mindustry.type.*;
 import mindustry.world.*;
-import mindustry.world.blocks.environment.Floor;
+import mindustry.world.blocks.environment.*;
 
 import static mindustry.Vars.*;
 

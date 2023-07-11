@@ -47,10 +47,10 @@ public class DecalingBlocks{
     //environment
     decayfloor, decaywall, oreFragment, decaystone, oreMateria, decaystoneWall, purIce, purIceWall, crystalBoulder, neoplasmaLiquidFloor, neoFloor,
     neoWall, roughNeoFloor, oreIod, nickelWallOre, cadmiunWallOre, obliteWallOre, purVent, redVent, smallPurVent, smallRedVent, zincedFloor, zincedWall,
-    ancientFloor,
+    ancientFloor, ancientMetal,
 
     //defence
-    decalwall, decalwalllarge, timewall, timewallLarge, decayBarrier, viliniteWall, viliniteWallLarge, mirrorWall, mirrorWallLarge, iodWall,
+    decalwall, decalwalllarge, timewall, timewallLarge, decayBarrier, automaticDoor, viliniteWall, viliniteWallLarge, mirrorWall, mirrorWallLarge, iodWall,
 
     //crafting
     changer, repairer, recreator, vilineForge, pressureClet, timeElectric, recycler, decayIncinerator, corrupter, zincExtractor,
@@ -64,7 +64,7 @@ public class DecalingBlocks{
     decayconsider, wire, largeWire, timeDriver, DReactor, armoredWire, largeArmoredWire, bouyNode, hydrotermalTurbine, hydrothermalPP,
 
     //storage
-    coreDry, coreDecay, werehouse, coreBorn, coreRuin,
+    coreDry, coreDecay, werehouse, coreBorn, coreRuin, coreReturn,
 
     //distribution
     lightLink, mediumLink, heavyLink ,mover, decaySorter, test2,
@@ -74,7 +74,7 @@ public class DecalingBlocks{
     NIC,NDB,
 
     //turrets
-    cluster, starflood, interleet, confronter, missileter, decaynir, preletT1, preletT2, crystalFer, rollIn, paradox, orbitalCannon, metalBlast, metalBlastV2, prototypeRift,
+    cluster, starflood, interleet, confronter, missileter, decaynir, preletT1, preletT2, crystalFer, rollIn, paradox, wormhole, orbitalCannon, metalBlast, metalBlastV2, prototypeRift,
 
     neoShooter, unstable,
 
@@ -82,7 +82,7 @@ public class DecalingBlocks{
 
     wreck, pressure, devastator,
 
-    ancidentEmp,
+    ancidentEmp, ancientZenithal, point,
     //units
     timeFactory, decayFactory, timeRefabricator, decayRefabricator,timeAssembler,decayAssembler, decayModule, decayModuleT2, wallConstructor,
 
@@ -197,7 +197,10 @@ public class DecalingBlocks{
         }};
         ancientFloor = new Floor("ancient-floor") {{
             variants = 0;
-            this.asFloor().wall = Blocks.darkMetal;
+        }};
+        ancientMetal = new StaticWall("ancient-metal") {{
+            variants = 0;
+            ancientFloor.asFloor().wall = this;
         }};
 
         crystalBoulder = new Prop("crystal-boulder"){{
@@ -245,6 +248,11 @@ public class DecalingBlocks{
 
                 consumePower(5.5f);
             }};
+        automaticDoor = new AutoDoor("automatic-door"){{
+            requirements(Category.defense, with(DecalingItems.oldmateria, 12, DecalingItems.decaygraphite, 8, Items.silicon, 6));
+            health = 3240;
+            size = 2;
+        }};
         viliniteWall = new DecalingWall("vilinite-wall"){{
             requirements(Category.defense, with(DecalingItems.viliniteAlloy, 6));
             health = 1280;
@@ -333,7 +341,7 @@ public class DecalingBlocks{
                     Items.silicon, 60
             ));
             health = 210;
-            craftEffect = Fx.smeltsmoke;
+            craftEffect = DecalingFx.viliniteCraft;
             outputItem = new ItemStack(DecalingItems.viliniteAlloy, 1);
             craftTime = 64f;
             size = 3;
@@ -717,6 +725,18 @@ public class DecalingBlocks{
 
             unitCapModifier = 14;
         }};
+        coreReturn = new CoreBlock("core-return"){{
+            requirements(Category.effect, with(Items.copper, 1400, Items.beryllium, 900, Items.silicon, 1100));
+            alwaysUnlocked = true;
+
+            isFirstTier = true;
+            unitType = UnitTypes.beta;
+            health = 4200;
+            itemCapacity = 6000;
+            size = 3;
+
+            unitCapModifier = 18;
+        }};
         //distribution
         lightLink = new TransferLink("light-link") {{
             requirements(Category.distribution, ItemStack.with(
@@ -951,7 +971,7 @@ public class DecalingBlocks{
             drawer = new DrawTurret("decay-");
             shootType = new ContinuousFlameBulletType(){{
                 damage = 4f;
-                length = 96f;
+                length = 98f;
                 healPercent = 3f;
                 collidesTeam = true;
                 lifetime = 45f;
@@ -1240,7 +1260,7 @@ public class DecalingBlocks{
 
             unitSort = UnitSorts.farthest;
 
-            consumePower(6);
+            consumePower(8);
             consumeItem(DecalingItems.timefragment, 8);
         }};
         paradox = new ItemTurret("paradox"){{
@@ -1291,6 +1311,61 @@ public class DecalingBlocks{
             }};
             ammoPerShot = 5;
             maxAmmo = 30;
+        }};
+        wormhole = new PowerMultiTurret("wormhole"){{
+            requirements(Category.turret, with(
+                    DecalingItems.oldmateria, 1100,
+                    Items.lead, 1200,
+                    Items.silicon, 900,
+                    DecalingItems.decaygraphite, 540,
+                    DecalingItems.timefragment, 800,
+                    DecalingItems.viliniteAlloy, 680
+            ));
+            scaledHealth = 170;
+            size = 4;
+            range = 190;
+            unitType = new UnitType("wormhole-turret"){{
+                health = 1;
+                speed = 0f;
+                hitSize = 14f;
+                range = 190f;
+                hidden = true;
+                internal = true;
+                faceTarget = true;
+                circleTarget = false;
+                constructor = BlockUnitUnit::create;
+                outlineColor = DecalPal.decalOutline;
+                rotateSpeed = 4;
+                weapons.add(new Weapon("missiles-mount"){{
+                    reload = 80f;
+                    x = 4f;
+                    y = 0f;
+                    top = false;
+                    ejectEffect = Fx.casing1;
+                    mirror = true;
+                    alternate = false;
+                    bullet = new BasicBulletType(3.8f, 40){{
+                        width = 11f;
+                        height = 14f;
+                        lifetime = 50f;
+                        pierce = true;
+                        pierceCap = 3;
+                    }};
+                }});
+                weapons.add(new Weapon("main-weapon"){{
+                    reload = 30f;
+                    x = 0f;
+                    y = 2f;
+                    top = false;
+                    ejectEffect = Fx.casing1;
+                    mirror = false;
+                    bullet = new BasicBulletType(4f, 30){{
+                        width = 7f;
+                        height = 10f;
+                        lifetime = 30f;
+                    }};
+                }});
+            }};
         }};
 
         orbitalCannon = new ItemTurret("omega-cannon"){{
@@ -1767,6 +1842,78 @@ public class DecalingBlocks{
 
                 status = DecalingStatus.crystallized;
                 statusDuration = 100f;
+
+            }};
+        }};
+        ancientZenithal = new CapturePowerTurret("ancient-zenithal"){{
+            requirements(Category.turret, BuildVisibility.sandboxOnly, with(
+                    Items.surgeAlloy, 1100,
+                    Items.tungsten, 860,
+                    Items.carbide, 600
+            ));
+            shootCone = 24;
+            rotateSpeed = 3;
+            scaledHealth = 580;
+            size = 3;
+            reload = 62f;
+            range = 240f;
+            recoil = 2f;
+            consumesPower = false;
+            outlineColor = Pal.darkOutline;
+            shootSound = Sounds.bang;
+            shootEffect = DecalingFx.crystalShoot;
+            shoot = new ShootBarrel(){{
+                barrels = new float[]{
+                        2f, 0f, 0f,
+                        -2f, 0f, 0f,
+                };
+            }};
+            drawer = new DrawTurret("ancident-");
+            shootType = new BasicBulletType(8f, 50f){{
+                width = 7f;
+                height = 13f;
+                lifetime = 30f;
+                splashDamage = 40f;
+                splashDamageRadius = 50f;
+                despawnEffect = hitEffect = DecalingFx.bigCrystal;
+
+                lightColor = hitColor = frontColor = backColor = DecalPal.ancident;
+
+                status = DecalingStatus.crystallized;
+                statusDuration = 200f;
+
+            }};
+        }};
+        point = new CapturePowerTurret("point"){{
+            requirements(Category.turret, BuildVisibility.sandboxOnly, with(
+                    Items.surgeAlloy, 830,
+                    Items.tungsten, 760,
+                    Items.carbide, 520
+            ));
+            shootCone = 30;
+            rotateSpeed = 5;
+            scaledHealth = 340;
+            size = 2;
+            reload = 90f;
+            range = 190f;
+            recoil = 3f;
+            consumesPower = false;
+            outlineColor = Pal.darkOutline;
+            shootSound = Sounds.shootSmite;
+            shootEffect = DecalingFx.crystalShoot;
+            minRange = 5f;
+            drawer = new DrawTurret("ancident-");
+            shootType = new LightPointBulletType(){{
+                lifetime = 30f;
+                damage = 120f;
+                splashDamage = 50f;
+                splashDamageRadius = 30f;
+                despawnEffect = hitEffect = DecalingFx.bigCrystal;
+
+                lightColor = hitColor = DecalPal.ancident;
+
+                status = DecalingStatus.crystallized;
+                statusDuration = 300f;
 
             }};
         }};

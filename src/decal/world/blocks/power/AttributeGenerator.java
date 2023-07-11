@@ -58,19 +58,20 @@ public class AttributeGenerator extends PowerGenerator {
             float s = 0.3f;
             float ts = 0.6f;
             super.draw();
-            Drawf.spinSprite(rotatorRegion, x, y, rotatorAngle);
-
-            Draw.rect(topRegion, x, y);
-
-            Draw.z(Layer.blockAfterCracks);
             if(drawHeat){
                 Draw.color(DecalPal.darkTime);
-                Draw.alpha(warmup * ts * (1f - s + Mathf.absin(Time.time, 3f, s)));
+                Draw.alpha(warmup * ts * (1f - s + Mathf.absin(Time.time, 4f, s)));
                 Draw.blend(Blending.additive);
                 Draw.rect(heatRegion, x, y);
                 Draw.blend();
                 Draw.color();
             }
+            Drawf.spinSprite(rotatorRegion, x, y, rotatorAngle);
+
+            Draw.rect(topRegion, x, y);
+
+            Draw.z(Layer.blockAfterCracks);
+
         }
     }
 }

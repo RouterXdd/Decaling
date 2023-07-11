@@ -3,7 +3,7 @@ package decal.content;
 import arc.*;
 import arc.graphics.*;
 import arc.math.*;
-import decal.world.statuses.ErrorStatus;
+import decal.world.statuses.*;
 import mindustry.game.EventType.*;
 import mindustry.game.*;
 import mindustry.graphics.*;

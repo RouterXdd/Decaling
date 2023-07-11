@@ -23,4 +23,20 @@ public class DecalingObjectives {
             return Core.bundle.format("requirement.activate", content.localizedName);
         }
     }
+    public static class ShadowDefeat implements Objective {
+        public UnlockableContent content;
+
+        public ShadowDefeat(UnlockableContent content) {
+            this.content = content;
+        }
+        @Override
+        public boolean complete() {
+            return content.unlocked();
+        }
+
+        @Override
+        public String display() {
+            return Core.bundle.format("requirement.kill", content.localizedName);
+        }
+    }
 }
